@@ -51,6 +51,7 @@ dependencies:
   lucide_icons: ^0.257.0
   cryptography: ^2.9.0
   archive: ^4.0.9
+  image: 4.10.2
   pdf: ^3.12.0
   printing: ^5.14.3
   file_picker: ^13.3.2
