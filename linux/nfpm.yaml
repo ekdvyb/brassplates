@@ -1,0 +1,23 @@
+name: brassplates
+arch: amd64
+platform: linux
+version: ${VERSION}
+section: utils
+priority: optional
+maintainer: ZEROBUG INC
+description: BRASSPLATES - local-first encrypted personal IT workspace
+vendor: ZEROBUG INC
+homepage: https://github.com/ekdvyb/brassplates
+license: Proprietary
+depends:
+  - libgtk-3-0
+contents:
+  - src: build/linux/x64/release/bundle
+    dst: /opt/brassplates
+  - src: linux/brassplates.desktop
+    dst: /usr/share/applications/brassplates.desktop
+  - src: assets/icons/app_icon.png
+    dst: /usr/share/icons/hicolor/512x512/apps/brassplates.png
+  - src: /opt/brassplates/brassplates
+    dst: /usr/bin/brassplates
+    type: symlink
