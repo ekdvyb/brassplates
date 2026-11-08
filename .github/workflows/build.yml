@@ -65,12 +65,16 @@ jobs:
           EOF
       - run: flutter build apk --release
       - run: flutter build appbundle --release
+      - name: Stage Android artifacts
+        run: |
+          VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //; s/+.*//')
+          mkdir -p dist
+          cp build/app/outputs/flutter-apk/app-release.apk "dist/brassplates-${VERSION}.apk"
+          cp build/app/outputs/bundle/release/app-release.aab "dist/brassplates-${VERSION}.aab"
       - uses: actions/upload-artifact@v4
         with:
           name: android
-          path: |
-            build/app/outputs/flutter-apk/app-release.apk
-            build/app/outputs/bundle/release/app-release.aab
+          path: dist/*
           if-no-files-found: error
 
   windows:
