@@ -98,7 +98,8 @@ jobs:
         shell: pwsh
         run: |
           choco install innosetup --no-progress -y
-          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" windows/installer/brassplates.iss
+          $version = ((Get-Content pubspec.yaml | Where-Object { $_ -match '^version:' }) -replace 'version:\s*', '').Split('+')[0]
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "/DAppVersion=$version" windows/installer/brassplates.iss
       - uses: actions/upload-artifact@v4
         with:
           name: windows
