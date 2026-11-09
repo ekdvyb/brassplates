@@ -45,7 +45,7 @@ class TrashScreen extends ConsumerWidget {
                   return const EmptyState(
                     icon: Icons.delete_outline,
                     title: 'Trash is empty',
-                    message: 'Deleted notes, how-tos, tasks, projects, servers and diagrams appear here.',
+                    message: 'Deleted notes and tasks appear here.',
                   );
                 }
                 return ListView.separated(
@@ -155,23 +155,13 @@ class TrashScreen extends ConsumerWidget {
 
   String _label(String type) => switch (type) {
     'note' => 'Note',
-    'howto' => 'How-To',
     'task' => 'Task',
-    'project' => 'Project',
-    'server' => 'Server',
-    'diagram' => 'Diagram',
-    'stencil' => 'Stencil',
     _ => type,
   };
 
   IconData _icon(String type) => switch (type) {
     'note' => Icons.sticky_note_2_outlined,
-    'howto' => Icons.menu_book_outlined,
     'task' => Icons.checklist_rounded,
-    'project' => Icons.flag_outlined,
-    'server' => Icons.dns_outlined,
-    'diagram' => Icons.account_tree_outlined,
-    'stencil' => Icons.category_outlined,
     _ => Icons.delete_outline,
   };
 }

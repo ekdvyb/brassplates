@@ -171,6 +171,9 @@ class NotesRepository extends RepositoryBase {
       await (db.delete(db.revisions)
             ..where((t) => t.entityType.equals('note') & t.entityId.equals(id)))
           .go();
+      await (db.delete(db.attachments)
+            ..where((t) => t.entityType.equals('note') & t.entityId.equals(id)))
+          .go();
       await (db.delete(db.notes)..where((t) => t.id.equals(id))).go();
     });
   }

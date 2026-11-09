@@ -68,7 +68,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
         children: [
           const SectionHeader(
             title: 'Search',
-            subtitle: 'Full-text search across notes, how-tos, tasks, projects, servers and diagrams.',
+            subtitle: 'Full-text search across your notes and tasks.',
           ),
           const SizedBox(height: 14),
           TextField(
@@ -123,10 +123,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                 : _query.trim().isEmpty
                 ? const EmptyState(
                     icon: Icons.search,
-                    title: 'Search your entire workspace',
+                    title: 'Search your notes and tasks',
                     message:
-                        'Try a server name, an IP address, a procedure, a tag or a phrase. '
-                        'Search also covers diagram labels and metadata.',
+                        'Try a title, a word from the body, a tag or a phrase.',
                   )
                 : filtered.isEmpty
                 ? EmptyState(
@@ -185,21 +184,13 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
   String _label(String type) => switch (type) {
     'notes' => 'Note',
-    'how_tos' => 'How-To',
     'tasks' => 'Task',
-    'projects' => 'Project',
-    'servers' => 'Server',
-    'diagrams' => 'Diagram',
     _ => type,
   };
 
   IconData _icon(String type) => switch (type) {
     'notes' => Icons.sticky_note_2_outlined,
-    'how_tos' => Icons.menu_book_outlined,
     'tasks' => Icons.checklist_rounded,
-    'projects' => Icons.flag_outlined,
-    'servers' => Icons.dns_outlined,
-    'diagrams' => Icons.account_tree_outlined,
     _ => Icons.search,
   };
 
@@ -207,16 +198,8 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     switch (hit.entityType) {
       case 'notes':
         context.go('/notes/${hit.entityId}');
-      case 'how_tos':
-        context.go('/howto/${hit.entityId}');
-      case 'diagrams':
-        context.go('/diagrams/${hit.entityId}');
       case 'tasks':
         context.go('/tasks');
-      case 'projects':
-        context.go('/planning');
-      case 'servers':
-        context.go('/servers');
     }
   }
 }

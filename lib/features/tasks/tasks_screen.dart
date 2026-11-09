@@ -12,6 +12,20 @@ final _tasksProvider = StreamProvider.autoDispose<List<Task>>(
   (ref) => ref.watch(tasksRepositoryProvider).watchActive(),
 );
 
+/// Opens the task editor. Shared by the Tasks screen, the sidebar and the
+/// dashboard so "new task" works from anywhere.
+Future<void> showTaskEditor(
+  BuildContext context,
+  WidgetRef ref, {
+  Task? task,
+}) async {
+  final saved = await showDialog<bool>(
+    context: context,
+    builder: (context) => _TaskFormDialog(task: task),
+  );
+  if (saved == true) ref.invalidate(_tasksProvider);
+}
+
 class TasksScreen extends ConsumerStatefulWidget {
   const TasksScreen({super.key});
 
@@ -165,13 +179,7 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
     await _move(task, next);
   }
 
-  Future<void> _editTask([Task? task]) async {
-    final saved = await showDialog<bool>(
-      context: context,
-      builder: (context) => _TaskFormDialog(task: task),
-    );
-    if (saved == true) ref.invalidate(_tasksProvider);
-  }
+  Future<void> _editTask([Task? task]) => showTaskEditor(context, ref, task: task);
 
   Future<void> _delete(Task task) async {
     final ok = await confirmDialog(
@@ -606,9 +614,7 @@ class _TaskFormDialogState extends ConsumerState<_TaskFormDialog> {
           reminderAt: task.reminderAt,
           subtasks: subtasks,
           tagsCsv: _tags.text.trim(),
-          linkedServerId: task.linkedServerId,
           linkedNoteId: task.linkedNoteId,
-          linkedDiagramId: task.linkedDiagramId,
         );
         if (task.status != _status) {
           await repo.move(

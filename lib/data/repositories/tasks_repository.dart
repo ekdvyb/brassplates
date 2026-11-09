@@ -63,9 +63,7 @@ class TasksRepository extends RepositoryBase {
     DateTime? reminderAt,
     List<Map<String, dynamic>> subtasks = const [],
     String tagsCsv = '',
-    String? linkedServerId,
     String? linkedNoteId,
-    String? linkedDiagramId,
   }) async {
     final stamp = now;
     final row = Task(
@@ -77,9 +75,7 @@ class TasksRepository extends RepositoryBase {
       dueDate: dueDate,
       reminderAt: reminderAt,
       subtasksJson: jsonEncode(subtasks),
-      linkedServerId: linkedServerId,
       linkedNoteId: linkedNoteId,
-      linkedDiagramId: linkedDiagramId,
       tagsCsv: tagsCsv,
       sortOrder: stamp.millisecondsSinceEpoch,
       createdAt: stamp,
@@ -102,9 +98,7 @@ class TasksRepository extends RepositoryBase {
     DateTime? reminderAt,
     required List<Map<String, dynamic>> subtasks,
     required String tagsCsv,
-    String? linkedServerId,
     String? linkedNoteId,
-    String? linkedDiagramId,
   }) async {
     await (db.update(db.tasks)..where((t) => t.id.equals(task.id))).write(
       TasksCompanion(
@@ -115,9 +109,7 @@ class TasksRepository extends RepositoryBase {
         reminderAt: Value(reminderAt),
         subtasksJson: Value(jsonEncode(subtasks)),
         tagsCsv: Value(tagsCsv),
-        linkedServerId: Value(linkedServerId),
         linkedNoteId: Value(linkedNoteId),
-        linkedDiagramId: Value(linkedDiagramId),
         updatedAt: Value(now),
         version: Value(task.version + 1),
         syncStatus: const Value(SyncState.pending),

@@ -1,13 +1,11 @@
 #define AppName "BRASSPLATES"
-#define AppVersion "1.0.0"
-#define Publisher "ZEROBUG INC"
+#define AppVersion "1.1.0"
 #define ExeName "brassplates.exe"
 
 [Setup]
 AppId={{7A6C2B1E-6F2A-4C8E-9B5D-2E8D4A9C1F30}
 AppName={#AppName}
 AppVersion={#AppVersion}
-AppPublisher={#Publisher}
 DefaultDirName={autopf}\{#AppName}
 DefaultGroupName={#AppName}
 DisableProgramGroupPage=yes

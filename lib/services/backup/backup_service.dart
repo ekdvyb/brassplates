@@ -29,13 +29,8 @@ class BackupService {
     'folders',
     'tags',
     'notes',
-    'how_tos',
     'tasks',
-    'projects',
-    'milestones',
-    'servers',
     'diagrams',
-    'stencils',
     'revisions',
     'attachments',
     'settings',
@@ -60,8 +55,8 @@ class BackupService {
     }
     return {
       'format': 'brassplates-backup',
-      'formatVersion': 1,
-      'appVersion': '1.0.0',
+      'formatVersion': 2,
+      'appVersion': '1.1.0',
       'createdAt': DateTime.now().toUtc().toIso8601String(),
       'tables': data,
       'files': attachments,
@@ -195,8 +190,16 @@ class BackupService {
     await dir.create(recursive: true);
     for (final file in files) {
       final map = (file as Map).cast<String, dynamic>();
-      final target = File(p.join(dir.path, map['name'] as String));
+      final name = map['name'] as String;
+      final target = File(p.join(dir.path, name));
       await target.writeAsBytes(unb64(map['bytes'] as String));
+      // The backup stores the picture next to its attachment id, but the old
+      // absolute path belongs to the other device. Repoint it here.
+      final attachmentId = p.basenameWithoutExtension(name);
+      await db.customStatement(
+        'UPDATE attachments SET local_path = ? WHERE id = ?',
+        [target.path, attachmentId],
+      );
     }
     return imported;
   }

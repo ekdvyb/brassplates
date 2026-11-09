@@ -4,19 +4,15 @@ import '../models/enums.dart';
 class DashboardStats {
   const DashboardStats({
     required this.notes,
-    required this.howTos,
     required this.openTasks,
-    required this.serversOnline,
-    required this.serversTotal,
-    required this.diagrams,
+    required this.doneTasks,
+    required this.pictures,
   });
 
   final int notes;
-  final int howTos;
   final int openTasks;
-  final int serversOnline;
-  final int serversTotal;
-  final int diagrams;
+  final int doneTasks;
+  final int pictures;
 }
 
 class DashboardRepository {
@@ -33,28 +29,20 @@ class DashboardRepository {
     final notes = await _count(
       'SELECT COUNT(*) FROM notes WHERE deleted_at IS NULL',
     );
-    final howTos = await _count(
-      'SELECT COUNT(*) FROM how_tos WHERE deleted_at IS NULL',
-    );
     final openTasks = await _count(
       "SELECT COUNT(*) FROM tasks WHERE deleted_at IS NULL AND status != '${TaskStatus.done.name}'",
     );
-    final diagrams = await _count(
-      'SELECT COUNT(*) FROM diagrams WHERE deleted_at IS NULL',
+    final doneTasks = await _count(
+      "SELECT COUNT(*) FROM tasks WHERE deleted_at IS NULL AND status = '${TaskStatus.done.name}'",
     );
-    final serversTotal = await _count(
-      'SELECT COUNT(*) FROM servers WHERE deleted_at IS NULL',
-    );
-    final serversOnline = await _count(
-      "SELECT COUNT(*) FROM servers WHERE deleted_at IS NULL AND status = '${ServerStatus.online.name}'",
+    final pictures = await _count(
+      'SELECT COUNT(*) FROM attachments WHERE deleted_at IS NULL',
     );
     return DashboardStats(
       notes: notes,
-      howTos: howTos,
       openTasks: openTasks,
-      serversOnline: serversOnline,
-      serversTotal: serversTotal,
-      diagrams: diagrams,
+      doneTasks: doneTasks,
+      pictures: pictures,
     );
   }
 }

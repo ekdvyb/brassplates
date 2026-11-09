@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import '../core/constants.dart';
 import '../core/utils.dart';
 import '../features/diagrams/diagram_model.dart';
+import '../features/tasks/tasks_screen.dart';
 import '../widgets/common.dart';
 import 'providers.dart';
 import 'theme.dart';
@@ -20,19 +21,21 @@ class _Destination {
 }
 
 const _destinations = <_Destination>[
-  _Destination('/dashboard', 'Dashboard', Icons.dashboard_outlined),
+  _Destination('/dashboard', 'Home', Icons.home_outlined),
   _Destination('/notes', 'Notes', Icons.sticky_note_2_outlined),
-  _Destination('/howto', 'How-To Library', Icons.menu_book_outlined),
   _Destination('/tasks', 'Tasks', Icons.checklist_rounded),
-  _Destination('/planning', 'Planning', Icons.flag_outlined),
-  _Destination('/servers', 'Servers', Icons.dns_outlined),
   _Destination('/diagrams', 'Diagrams', Icons.account_tree_outlined),
   _Destination('/search', 'Search', Icons.search),
   _Destination('/trash', 'Trash', Icons.delete_outline),
   _Destination('/settings', 'Settings', Icons.settings_outlined),
 ];
 
-const _primaryMobile = <String>['/dashboard', '/notes', '/tasks', '/diagrams'];
+const _primaryMobile = <String>[
+  '/dashboard',
+  '/notes',
+  '/tasks',
+  '/diagrams',
+];
 
 int _selectedIndex(String path) {
   for (var i = 0; i < _destinations.length; i++) {
@@ -92,11 +95,11 @@ class AppShell extends ConsumerWidget {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.menu_book_outlined),
-              title: const Text('New how-to'),
+              leading: const Icon(Icons.add_task),
+              title: const Text('New task'),
               onTap: () {
                 Navigator.pop(context);
-                context.go('/howto');
+                showTaskEditor(context, ref);
               },
             ),
           ],
@@ -124,7 +127,7 @@ class AppShell extends ConsumerWidget {
       child: Focus(autofocus: true, child: child),
     );
 
-    if (width >= 1050) {
+    if (width >= 900) {
       return Scaffold(
         body: Row(
           children: [
@@ -136,7 +139,7 @@ class AppShell extends ConsumerWidget {
       );
     }
 
-    if (width >= 720) {
+    if (width >= 700) {
       return Scaffold(
         body: Row(
           children: [
@@ -148,19 +151,6 @@ class AppShell extends ConsumerWidget {
               leading: const Padding(
                 padding: EdgeInsets.symmetric(vertical: 14),
                 child: BrandMark(size: 34, showText: false),
-              ),
-              trailing: Expanded(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: IconButton(
-                      tooltip: 'New note (Ctrl+N)',
-                      onPressed: () => _newNote(context, ref),
-                      icon: const Icon(Icons.add),
-                    ),
-                  ),
-                ),
               ),
               destinations: [
                 for (final destination in _destinations)
@@ -194,6 +184,7 @@ class AppShell extends ConsumerWidget {
             onPressed: () => _newMenu(context, ref),
           ),
           PopupMenuButton<String>(
+            tooltip: 'More',
             onSelected: (value) => context.go(value),
             itemBuilder: (context) => [
               for (final destination in _destinations)
@@ -221,10 +212,7 @@ class AppShell extends ConsumerWidget {
           }
         },
         destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.dashboard_outlined),
-            label: 'Home',
-          ),
+          NavigationDestination(icon: Icon(Icons.home_outlined), label: 'Home'),
           NavigationDestination(
             icon: Icon(Icons.sticky_note_2_outlined),
             label: 'Notes',
@@ -255,7 +243,7 @@ class _Sidebar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
-      width: 250,
+      width: 240,
       color: context.colors.surfaceContainerLow,
       child: SafeArea(
         child: Column(
@@ -335,7 +323,7 @@ class _Sidebar extends ConsumerWidget {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    '${AppInfo.name} ${AppInfo.version} · ${AppInfo.publisher}',
+                    '${AppInfo.name} ${AppInfo.version}',
                     textAlign: TextAlign.center,
                     style: context.theme.textTheme.labelSmall?.copyWith(
                       color: context.colors.onSurface.withValues(alpha: 0.4),
@@ -372,7 +360,7 @@ class SyncCard extends ConsumerWidget {
       ),
       child: Row(
         children: [
-          Icon(Icons.cloud_outlined, size: 18, color: color),
+          Icon(Icons.sync, size: 18, color: color),
           const SizedBox(width: 8),
           Expanded(
             child: Column(
@@ -382,11 +370,12 @@ class SyncCard extends ConsumerWidget {
                 Text(
                   status.syncing
                       ? 'Syncing…'
-                      : status.pending > 0
-                      ? '${status.pending} pending'
-                      : status.lastSync == null
-                      ? 'Not synced yet'
-                      : 'Synced ${timeAgo(status.lastSync)}',
+                      : status.message ??
+                            (status.pending > 0
+                                ? '${status.pending} pending'
+                                : status.lastSync == null
+                                ? 'Not synced yet'
+                                : 'Synced ${timeAgo(status.lastSync)}'),
                   style: context.theme.textTheme.labelSmall?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
@@ -456,7 +445,7 @@ class _SyncDotState extends ConsumerState<SyncDot> {
       onPressed: status.syncing
           ? null
           : () => ref.read(syncStatusProvider.notifier).run(),
-      icon: Icon(Icons.cloud_outlined, color: color),
+      icon: Icon(Icons.sync, color: color),
     );
   }
 }

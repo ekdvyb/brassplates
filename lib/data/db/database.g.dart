@@ -1872,815 +1872,6 @@ class NotesCompanion extends UpdateCompanion<Note> {
   }
 }
 
-class $HowTosTable extends HowTos with TableInfo<$HowTosTable, HowTo> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $HowTosTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<String> id = GeneratedColumn<String>(
-    'id',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _titleMeta = const VerificationMeta('title');
-  @override
-  late final GeneratedColumn<String> title = GeneratedColumn<String>(
-    'title',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _categoryMeta = const VerificationMeta(
-    'category',
-  );
-  @override
-  late final GeneratedColumn<String> category = GeneratedColumn<String>(
-    'category',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-    defaultValue: const Constant('Servers'),
-  );
-  @override
-  late final GeneratedColumnWithTypeConverter<HowToDifficulty, String>
-  difficulty = GeneratedColumn<String>(
-    'difficulty',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-    defaultValue: Constant(HowToDifficulty.easy.name),
-  ).withConverter<HowToDifficulty>($HowTosTable.$converterdifficulty);
-  static const VerificationMeta _stepsJsonMeta = const VerificationMeta(
-    'stepsJson',
-  );
-  @override
-  late final GeneratedColumn<String> stepsJson = GeneratedColumn<String>(
-    'steps_json',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-    defaultValue: const Constant('[]'),
-  );
-  static const VerificationMeta _tagsCsvMeta = const VerificationMeta(
-    'tagsCsv',
-  );
-  @override
-  late final GeneratedColumn<String> tagsCsv = GeneratedColumn<String>(
-    'tags_csv',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-    defaultValue: const Constant(''),
-  );
-  static const VerificationMeta _lastTestedMeta = const VerificationMeta(
-    'lastTested',
-  );
-  @override
-  late final GeneratedColumn<DateTime> lastTested = GeneratedColumn<DateTime>(
-    'last_tested',
-    aliasedName,
-    true,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _relatedServerIdsMeta = const VerificationMeta(
-    'relatedServerIds',
-  );
-  @override
-  late final GeneratedColumn<String> relatedServerIds = GeneratedColumn<String>(
-    'related_server_ids',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-    defaultValue: const Constant('[]'),
-  );
-  static const VerificationMeta _createdAtMeta = const VerificationMeta(
-    'createdAt',
-  );
-  @override
-  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-    'created_at',
-    aliasedName,
-    false,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
-    'updatedAt',
-  );
-  @override
-  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
-    'updated_at',
-    aliasedName,
-    false,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _deletedAtMeta = const VerificationMeta(
-    'deletedAt',
-  );
-  @override
-  late final GeneratedColumn<DateTime> deletedAt = GeneratedColumn<DateTime>(
-    'deleted_at',
-    aliasedName,
-    true,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: false,
-  );
-  @override
-  late final GeneratedColumnWithTypeConverter<SyncState, String> syncStatus =
-      GeneratedColumn<String>(
-        'sync_status',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: Constant(SyncState.pending.name),
-      ).withConverter<SyncState>($HowTosTable.$convertersyncStatus);
-  static const VerificationMeta _versionMeta = const VerificationMeta(
-    'version',
-  );
-  @override
-  late final GeneratedColumn<int> version = GeneratedColumn<int>(
-    'version',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultValue: const Constant(1),
-  );
-  static const VerificationMeta _deviceIdMeta = const VerificationMeta(
-    'deviceId',
-  );
-  @override
-  late final GeneratedColumn<String> deviceId = GeneratedColumn<String>(
-    'device_id',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-    defaultValue: const Constant(''),
-  );
-  @override
-  List<GeneratedColumn> get $columns => [
-    id,
-    title,
-    category,
-    difficulty,
-    stepsJson,
-    tagsCsv,
-    lastTested,
-    relatedServerIds,
-    createdAt,
-    updatedAt,
-    deletedAt,
-    syncStatus,
-    version,
-    deviceId,
-  ];
-  @override
-  String get aliasedName => _alias ?? actualTableName;
-  @override
-  String get actualTableName => $name;
-  static const String $name = 'how_tos';
-  @override
-  VerificationContext validateIntegrity(
-    Insertable<HowTo> instance, {
-    bool isInserting = false,
-  }) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    } else if (isInserting) {
-      context.missing(_idMeta);
-    }
-    if (data.containsKey('title')) {
-      context.handle(
-        _titleMeta,
-        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_titleMeta);
-    }
-    if (data.containsKey('category')) {
-      context.handle(
-        _categoryMeta,
-        category.isAcceptableOrUnknown(data['category']!, _categoryMeta),
-      );
-    }
-    if (data.containsKey('steps_json')) {
-      context.handle(
-        _stepsJsonMeta,
-        stepsJson.isAcceptableOrUnknown(data['steps_json']!, _stepsJsonMeta),
-      );
-    }
-    if (data.containsKey('tags_csv')) {
-      context.handle(
-        _tagsCsvMeta,
-        tagsCsv.isAcceptableOrUnknown(data['tags_csv']!, _tagsCsvMeta),
-      );
-    }
-    if (data.containsKey('last_tested')) {
-      context.handle(
-        _lastTestedMeta,
-        lastTested.isAcceptableOrUnknown(data['last_tested']!, _lastTestedMeta),
-      );
-    }
-    if (data.containsKey('related_server_ids')) {
-      context.handle(
-        _relatedServerIdsMeta,
-        relatedServerIds.isAcceptableOrUnknown(
-          data['related_server_ids']!,
-          _relatedServerIdsMeta,
-        ),
-      );
-    }
-    if (data.containsKey('created_at')) {
-      context.handle(
-        _createdAtMeta,
-        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_createdAtMeta);
-    }
-    if (data.containsKey('updated_at')) {
-      context.handle(
-        _updatedAtMeta,
-        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_updatedAtMeta);
-    }
-    if (data.containsKey('deleted_at')) {
-      context.handle(
-        _deletedAtMeta,
-        deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta),
-      );
-    }
-    if (data.containsKey('version')) {
-      context.handle(
-        _versionMeta,
-        version.isAcceptableOrUnknown(data['version']!, _versionMeta),
-      );
-    }
-    if (data.containsKey('device_id')) {
-      context.handle(
-        _deviceIdMeta,
-        deviceId.isAcceptableOrUnknown(data['device_id']!, _deviceIdMeta),
-      );
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  HowTo map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return HowTo(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}id'],
-      )!,
-      title: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}title'],
-      )!,
-      category: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}category'],
-      )!,
-      difficulty: $HowTosTable.$converterdifficulty.fromSql(
-        attachedDatabase.typeMapping.read(
-          DriftSqlType.string,
-          data['${effectivePrefix}difficulty'],
-        )!,
-      ),
-      stepsJson: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}steps_json'],
-      )!,
-      tagsCsv: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}tags_csv'],
-      )!,
-      lastTested: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}last_tested'],
-      ),
-      relatedServerIds: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}related_server_ids'],
-      )!,
-      createdAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}created_at'],
-      )!,
-      updatedAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}updated_at'],
-      )!,
-      deletedAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}deleted_at'],
-      ),
-      syncStatus: $HowTosTable.$convertersyncStatus.fromSql(
-        attachedDatabase.typeMapping.read(
-          DriftSqlType.string,
-          data['${effectivePrefix}sync_status'],
-        )!,
-      ),
-      version: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}version'],
-      )!,
-      deviceId: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}device_id'],
-      )!,
-    );
-  }
-
-  @override
-  $HowTosTable createAlias(String alias) {
-    return $HowTosTable(attachedDatabase, alias);
-  }
-
-  static JsonTypeConverter2<HowToDifficulty, String, String>
-  $converterdifficulty = const EnumNameConverter<HowToDifficulty>(
-    HowToDifficulty.values,
-  );
-  static JsonTypeConverter2<SyncState, String, String> $convertersyncStatus =
-      const EnumNameConverter<SyncState>(SyncState.values);
-}
-
-class HowTo extends DataClass implements Insertable<HowTo> {
-  final String id;
-  final String title;
-  final String category;
-  final HowToDifficulty difficulty;
-  final String stepsJson;
-  final String tagsCsv;
-  final DateTime? lastTested;
-  final String relatedServerIds;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final DateTime? deletedAt;
-  final SyncState syncStatus;
-  final int version;
-  final String deviceId;
-  const HowTo({
-    required this.id,
-    required this.title,
-    required this.category,
-    required this.difficulty,
-    required this.stepsJson,
-    required this.tagsCsv,
-    this.lastTested,
-    required this.relatedServerIds,
-    required this.createdAt,
-    required this.updatedAt,
-    this.deletedAt,
-    required this.syncStatus,
-    required this.version,
-    required this.deviceId,
-  });
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<String>(id);
-    map['title'] = Variable<String>(title);
-    map['category'] = Variable<String>(category);
-    {
-      map['difficulty'] = Variable<String>(
-        $HowTosTable.$converterdifficulty.toSql(difficulty),
-      );
-    }
-    map['steps_json'] = Variable<String>(stepsJson);
-    map['tags_csv'] = Variable<String>(tagsCsv);
-    if (!nullToAbsent || lastTested != null) {
-      map['last_tested'] = Variable<DateTime>(lastTested);
-    }
-    map['related_server_ids'] = Variable<String>(relatedServerIds);
-    map['created_at'] = Variable<DateTime>(createdAt);
-    map['updated_at'] = Variable<DateTime>(updatedAt);
-    if (!nullToAbsent || deletedAt != null) {
-      map['deleted_at'] = Variable<DateTime>(deletedAt);
-    }
-    {
-      map['sync_status'] = Variable<String>(
-        $HowTosTable.$convertersyncStatus.toSql(syncStatus),
-      );
-    }
-    map['version'] = Variable<int>(version);
-    map['device_id'] = Variable<String>(deviceId);
-    return map;
-  }
-
-  HowTosCompanion toCompanion(bool nullToAbsent) {
-    return HowTosCompanion(
-      id: Value(id),
-      title: Value(title),
-      category: Value(category),
-      difficulty: Value(difficulty),
-      stepsJson: Value(stepsJson),
-      tagsCsv: Value(tagsCsv),
-      lastTested: lastTested == null && nullToAbsent
-          ? const Value.absent()
-          : Value(lastTested),
-      relatedServerIds: Value(relatedServerIds),
-      createdAt: Value(createdAt),
-      updatedAt: Value(updatedAt),
-      deletedAt: deletedAt == null && nullToAbsent
-          ? const Value.absent()
-          : Value(deletedAt),
-      syncStatus: Value(syncStatus),
-      version: Value(version),
-      deviceId: Value(deviceId),
-    );
-  }
-
-  factory HowTo.fromJson(
-    Map<String, dynamic> json, {
-    ValueSerializer? serializer,
-  }) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return HowTo(
-      id: serializer.fromJson<String>(json['id']),
-      title: serializer.fromJson<String>(json['title']),
-      category: serializer.fromJson<String>(json['category']),
-      difficulty: $HowTosTable.$converterdifficulty.fromJson(
-        serializer.fromJson<String>(json['difficulty']),
-      ),
-      stepsJson: serializer.fromJson<String>(json['stepsJson']),
-      tagsCsv: serializer.fromJson<String>(json['tagsCsv']),
-      lastTested: serializer.fromJson<DateTime?>(json['lastTested']),
-      relatedServerIds: serializer.fromJson<String>(json['relatedServerIds']),
-      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
-      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
-      deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
-      syncStatus: $HowTosTable.$convertersyncStatus.fromJson(
-        serializer.fromJson<String>(json['syncStatus']),
-      ),
-      version: serializer.fromJson<int>(json['version']),
-      deviceId: serializer.fromJson<String>(json['deviceId']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<String>(id),
-      'title': serializer.toJson<String>(title),
-      'category': serializer.toJson<String>(category),
-      'difficulty': serializer.toJson<String>(
-        $HowTosTable.$converterdifficulty.toJson(difficulty),
-      ),
-      'stepsJson': serializer.toJson<String>(stepsJson),
-      'tagsCsv': serializer.toJson<String>(tagsCsv),
-      'lastTested': serializer.toJson<DateTime?>(lastTested),
-      'relatedServerIds': serializer.toJson<String>(relatedServerIds),
-      'createdAt': serializer.toJson<DateTime>(createdAt),
-      'updatedAt': serializer.toJson<DateTime>(updatedAt),
-      'deletedAt': serializer.toJson<DateTime?>(deletedAt),
-      'syncStatus': serializer.toJson<String>(
-        $HowTosTable.$convertersyncStatus.toJson(syncStatus),
-      ),
-      'version': serializer.toJson<int>(version),
-      'deviceId': serializer.toJson<String>(deviceId),
-    };
-  }
-
-  HowTo copyWith({
-    String? id,
-    String? title,
-    String? category,
-    HowToDifficulty? difficulty,
-    String? stepsJson,
-    String? tagsCsv,
-    Value<DateTime?> lastTested = const Value.absent(),
-    String? relatedServerIds,
-    DateTime? createdAt,
-    DateTime? updatedAt,
-    Value<DateTime?> deletedAt = const Value.absent(),
-    SyncState? syncStatus,
-    int? version,
-    String? deviceId,
-  }) => HowTo(
-    id: id ?? this.id,
-    title: title ?? this.title,
-    category: category ?? this.category,
-    difficulty: difficulty ?? this.difficulty,
-    stepsJson: stepsJson ?? this.stepsJson,
-    tagsCsv: tagsCsv ?? this.tagsCsv,
-    lastTested: lastTested.present ? lastTested.value : this.lastTested,
-    relatedServerIds: relatedServerIds ?? this.relatedServerIds,
-    createdAt: createdAt ?? this.createdAt,
-    updatedAt: updatedAt ?? this.updatedAt,
-    deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
-    syncStatus: syncStatus ?? this.syncStatus,
-    version: version ?? this.version,
-    deviceId: deviceId ?? this.deviceId,
-  );
-  HowTo copyWithCompanion(HowTosCompanion data) {
-    return HowTo(
-      id: data.id.present ? data.id.value : this.id,
-      title: data.title.present ? data.title.value : this.title,
-      category: data.category.present ? data.category.value : this.category,
-      difficulty: data.difficulty.present
-          ? data.difficulty.value
-          : this.difficulty,
-      stepsJson: data.stepsJson.present ? data.stepsJson.value : this.stepsJson,
-      tagsCsv: data.tagsCsv.present ? data.tagsCsv.value : this.tagsCsv,
-      lastTested: data.lastTested.present
-          ? data.lastTested.value
-          : this.lastTested,
-      relatedServerIds: data.relatedServerIds.present
-          ? data.relatedServerIds.value
-          : this.relatedServerIds,
-      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
-      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
-      deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
-      syncStatus: data.syncStatus.present
-          ? data.syncStatus.value
-          : this.syncStatus,
-      version: data.version.present ? data.version.value : this.version,
-      deviceId: data.deviceId.present ? data.deviceId.value : this.deviceId,
-    );
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('HowTo(')
-          ..write('id: $id, ')
-          ..write('title: $title, ')
-          ..write('category: $category, ')
-          ..write('difficulty: $difficulty, ')
-          ..write('stepsJson: $stepsJson, ')
-          ..write('tagsCsv: $tagsCsv, ')
-          ..write('lastTested: $lastTested, ')
-          ..write('relatedServerIds: $relatedServerIds, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('updatedAt: $updatedAt, ')
-          ..write('deletedAt: $deletedAt, ')
-          ..write('syncStatus: $syncStatus, ')
-          ..write('version: $version, ')
-          ..write('deviceId: $deviceId')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(
-    id,
-    title,
-    category,
-    difficulty,
-    stepsJson,
-    tagsCsv,
-    lastTested,
-    relatedServerIds,
-    createdAt,
-    updatedAt,
-    deletedAt,
-    syncStatus,
-    version,
-    deviceId,
-  );
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is HowTo &&
-          other.id == this.id &&
-          other.title == this.title &&
-          other.category == this.category &&
-          other.difficulty == this.difficulty &&
-          other.stepsJson == this.stepsJson &&
-          other.tagsCsv == this.tagsCsv &&
-          other.lastTested == this.lastTested &&
-          other.relatedServerIds == this.relatedServerIds &&
-          other.createdAt == this.createdAt &&
-          other.updatedAt == this.updatedAt &&
-          other.deletedAt == this.deletedAt &&
-          other.syncStatus == this.syncStatus &&
-          other.version == this.version &&
-          other.deviceId == this.deviceId);
-}
-
-class HowTosCompanion extends UpdateCompanion<HowTo> {
-  final Value<String> id;
-  final Value<String> title;
-  final Value<String> category;
-  final Value<HowToDifficulty> difficulty;
-  final Value<String> stepsJson;
-  final Value<String> tagsCsv;
-  final Value<DateTime?> lastTested;
-  final Value<String> relatedServerIds;
-  final Value<DateTime> createdAt;
-  final Value<DateTime> updatedAt;
-  final Value<DateTime?> deletedAt;
-  final Value<SyncState> syncStatus;
-  final Value<int> version;
-  final Value<String> deviceId;
-  final Value<int> rowid;
-  const HowTosCompanion({
-    this.id = const Value.absent(),
-    this.title = const Value.absent(),
-    this.category = const Value.absent(),
-    this.difficulty = const Value.absent(),
-    this.stepsJson = const Value.absent(),
-    this.tagsCsv = const Value.absent(),
-    this.lastTested = const Value.absent(),
-    this.relatedServerIds = const Value.absent(),
-    this.createdAt = const Value.absent(),
-    this.updatedAt = const Value.absent(),
-    this.deletedAt = const Value.absent(),
-    this.syncStatus = const Value.absent(),
-    this.version = const Value.absent(),
-    this.deviceId = const Value.absent(),
-    this.rowid = const Value.absent(),
-  });
-  HowTosCompanion.insert({
-    required String id,
-    required String title,
-    this.category = const Value.absent(),
-    this.difficulty = const Value.absent(),
-    this.stepsJson = const Value.absent(),
-    this.tagsCsv = const Value.absent(),
-    this.lastTested = const Value.absent(),
-    this.relatedServerIds = const Value.absent(),
-    required DateTime createdAt,
-    required DateTime updatedAt,
-    this.deletedAt = const Value.absent(),
-    this.syncStatus = const Value.absent(),
-    this.version = const Value.absent(),
-    this.deviceId = const Value.absent(),
-    this.rowid = const Value.absent(),
-  }) : id = Value(id),
-       title = Value(title),
-       createdAt = Value(createdAt),
-       updatedAt = Value(updatedAt);
-  static Insertable<HowTo> custom({
-    Expression<String>? id,
-    Expression<String>? title,
-    Expression<String>? category,
-    Expression<String>? difficulty,
-    Expression<String>? stepsJson,
-    Expression<String>? tagsCsv,
-    Expression<DateTime>? lastTested,
-    Expression<String>? relatedServerIds,
-    Expression<DateTime>? createdAt,
-    Expression<DateTime>? updatedAt,
-    Expression<DateTime>? deletedAt,
-    Expression<String>? syncStatus,
-    Expression<int>? version,
-    Expression<String>? deviceId,
-    Expression<int>? rowid,
-  }) {
-    return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (title != null) 'title': title,
-      if (category != null) 'category': category,
-      if (difficulty != null) 'difficulty': difficulty,
-      if (stepsJson != null) 'steps_json': stepsJson,
-      if (tagsCsv != null) 'tags_csv': tagsCsv,
-      if (lastTested != null) 'last_tested': lastTested,
-      if (relatedServerIds != null) 'related_server_ids': relatedServerIds,
-      if (createdAt != null) 'created_at': createdAt,
-      if (updatedAt != null) 'updated_at': updatedAt,
-      if (deletedAt != null) 'deleted_at': deletedAt,
-      if (syncStatus != null) 'sync_status': syncStatus,
-      if (version != null) 'version': version,
-      if (deviceId != null) 'device_id': deviceId,
-      if (rowid != null) 'rowid': rowid,
-    });
-  }
-
-  HowTosCompanion copyWith({
-    Value<String>? id,
-    Value<String>? title,
-    Value<String>? category,
-    Value<HowToDifficulty>? difficulty,
-    Value<String>? stepsJson,
-    Value<String>? tagsCsv,
-    Value<DateTime?>? lastTested,
-    Value<String>? relatedServerIds,
-    Value<DateTime>? createdAt,
-    Value<DateTime>? updatedAt,
-    Value<DateTime?>? deletedAt,
-    Value<SyncState>? syncStatus,
-    Value<int>? version,
-    Value<String>? deviceId,
-    Value<int>? rowid,
-  }) {
-    return HowTosCompanion(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      category: category ?? this.category,
-      difficulty: difficulty ?? this.difficulty,
-      stepsJson: stepsJson ?? this.stepsJson,
-      tagsCsv: tagsCsv ?? this.tagsCsv,
-      lastTested: lastTested ?? this.lastTested,
-      relatedServerIds: relatedServerIds ?? this.relatedServerIds,
-      createdAt: createdAt ?? this.createdAt,
-      updatedAt: updatedAt ?? this.updatedAt,
-      deletedAt: deletedAt ?? this.deletedAt,
-      syncStatus: syncStatus ?? this.syncStatus,
-      version: version ?? this.version,
-      deviceId: deviceId ?? this.deviceId,
-      rowid: rowid ?? this.rowid,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<String>(id.value);
-    }
-    if (title.present) {
-      map['title'] = Variable<String>(title.value);
-    }
-    if (category.present) {
-      map['category'] = Variable<String>(category.value);
-    }
-    if (difficulty.present) {
-      map['difficulty'] = Variable<String>(
-        $HowTosTable.$converterdifficulty.toSql(difficulty.value),
-      );
-    }
-    if (stepsJson.present) {
-      map['steps_json'] = Variable<String>(stepsJson.value);
-    }
-    if (tagsCsv.present) {
-      map['tags_csv'] = Variable<String>(tagsCsv.value);
-    }
-    if (lastTested.present) {
-      map['last_tested'] = Variable<DateTime>(lastTested.value);
-    }
-    if (relatedServerIds.present) {
-      map['related_server_ids'] = Variable<String>(relatedServerIds.value);
-    }
-    if (createdAt.present) {
-      map['created_at'] = Variable<DateTime>(createdAt.value);
-    }
-    if (updatedAt.present) {
-      map['updated_at'] = Variable<DateTime>(updatedAt.value);
-    }
-    if (deletedAt.present) {
-      map['deleted_at'] = Variable<DateTime>(deletedAt.value);
-    }
-    if (syncStatus.present) {
-      map['sync_status'] = Variable<String>(
-        $HowTosTable.$convertersyncStatus.toSql(syncStatus.value),
-      );
-    }
-    if (version.present) {
-      map['version'] = Variable<int>(version.value);
-    }
-    if (deviceId.present) {
-      map['device_id'] = Variable<String>(deviceId.value);
-    }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('HowTosCompanion(')
-          ..write('id: $id, ')
-          ..write('title: $title, ')
-          ..write('category: $category, ')
-          ..write('difficulty: $difficulty, ')
-          ..write('stepsJson: $stepsJson, ')
-          ..write('tagsCsv: $tagsCsv, ')
-          ..write('lastTested: $lastTested, ')
-          ..write('relatedServerIds: $relatedServerIds, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('updatedAt: $updatedAt, ')
-          ..write('deletedAt: $deletedAt, ')
-          ..write('syncStatus: $syncStatus, ')
-          ..write('version: $version, ')
-          ..write('deviceId: $deviceId, ')
-          ..write('rowid: $rowid')
-          ..write(')'))
-        .toString();
-  }
-}
-
 class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
   @override
   final GeneratedDatabase attachedDatabase;
@@ -2770,34 +1961,12 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
   );
-  static const VerificationMeta _linkedServerIdMeta = const VerificationMeta(
-    'linkedServerId',
-  );
-  @override
-  late final GeneratedColumn<String> linkedServerId = GeneratedColumn<String>(
-    'linked_server_id',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
   static const VerificationMeta _linkedNoteIdMeta = const VerificationMeta(
     'linkedNoteId',
   );
   @override
   late final GeneratedColumn<String> linkedNoteId = GeneratedColumn<String>(
     'linked_note_id',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _linkedDiagramIdMeta = const VerificationMeta(
-    'linkedDiagramId',
-  );
-  @override
-  late final GeneratedColumn<String> linkedDiagramId = GeneratedColumn<String>(
-    'linked_diagram_id',
     aliasedName,
     true,
     type: DriftSqlType.string,
@@ -2904,9 +2073,7 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
     dueDate,
     reminderAt,
     subtasksJson,
-    linkedServerId,
     linkedNoteId,
-    linkedDiagramId,
     tagsCsv,
     sortOrder,
     createdAt,
@@ -2971,30 +2138,12 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
         ),
       );
     }
-    if (data.containsKey('linked_server_id')) {
-      context.handle(
-        _linkedServerIdMeta,
-        linkedServerId.isAcceptableOrUnknown(
-          data['linked_server_id']!,
-          _linkedServerIdMeta,
-        ),
-      );
-    }
     if (data.containsKey('linked_note_id')) {
       context.handle(
         _linkedNoteIdMeta,
         linkedNoteId.isAcceptableOrUnknown(
           data['linked_note_id']!,
           _linkedNoteIdMeta,
-        ),
-      );
-    }
-    if (data.containsKey('linked_diagram_id')) {
-      context.handle(
-        _linkedDiagramIdMeta,
-        linkedDiagramId.isAcceptableOrUnknown(
-          data['linked_diagram_id']!,
-          _linkedDiagramIdMeta,
         ),
       );
     }
@@ -3089,17 +2238,9 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
         DriftSqlType.string,
         data['${effectivePrefix}subtasks_json'],
       )!,
-      linkedServerId: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}linked_server_id'],
-      ),
       linkedNoteId: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}linked_note_id'],
-      ),
-      linkedDiagramId: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}linked_diagram_id'],
       ),
       tagsCsv: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
@@ -3160,9 +2301,7 @@ class Task extends DataClass implements Insertable<Task> {
   final DateTime? dueDate;
   final DateTime? reminderAt;
   final String subtasksJson;
-  final String? linkedServerId;
   final String? linkedNoteId;
-  final String? linkedDiagramId;
   final String tagsCsv;
   final int sortOrder;
   final DateTime createdAt;
@@ -3180,9 +2319,7 @@ class Task extends DataClass implements Insertable<Task> {
     this.dueDate,
     this.reminderAt,
     required this.subtasksJson,
-    this.linkedServerId,
     this.linkedNoteId,
-    this.linkedDiagramId,
     required this.tagsCsv,
     required this.sortOrder,
     required this.createdAt,
@@ -3215,14 +2352,8 @@ class Task extends DataClass implements Insertable<Task> {
       map['reminder_at'] = Variable<DateTime>(reminderAt);
     }
     map['subtasks_json'] = Variable<String>(subtasksJson);
-    if (!nullToAbsent || linkedServerId != null) {
-      map['linked_server_id'] = Variable<String>(linkedServerId);
-    }
     if (!nullToAbsent || linkedNoteId != null) {
       map['linked_note_id'] = Variable<String>(linkedNoteId);
-    }
-    if (!nullToAbsent || linkedDiagramId != null) {
-      map['linked_diagram_id'] = Variable<String>(linkedDiagramId);
     }
     map['tags_csv'] = Variable<String>(tagsCsv);
     map['sort_order'] = Variable<int>(sortOrder);
@@ -3255,15 +2386,9 @@ class Task extends DataClass implements Insertable<Task> {
           ? const Value.absent()
           : Value(reminderAt),
       subtasksJson: Value(subtasksJson),
-      linkedServerId: linkedServerId == null && nullToAbsent
-          ? const Value.absent()
-          : Value(linkedServerId),
       linkedNoteId: linkedNoteId == null && nullToAbsent
           ? const Value.absent()
           : Value(linkedNoteId),
-      linkedDiagramId: linkedDiagramId == null && nullToAbsent
-          ? const Value.absent()
-          : Value(linkedDiagramId),
       tagsCsv: Value(tagsCsv),
       sortOrder: Value(sortOrder),
       createdAt: Value(createdAt),
@@ -3295,9 +2420,7 @@ class Task extends DataClass implements Insertable<Task> {
       dueDate: serializer.fromJson<DateTime?>(json['dueDate']),
       reminderAt: serializer.fromJson<DateTime?>(json['reminderAt']),
       subtasksJson: serializer.fromJson<String>(json['subtasksJson']),
-      linkedServerId: serializer.fromJson<String?>(json['linkedServerId']),
       linkedNoteId: serializer.fromJson<String?>(json['linkedNoteId']),
-      linkedDiagramId: serializer.fromJson<String?>(json['linkedDiagramId']),
       tagsCsv: serializer.fromJson<String>(json['tagsCsv']),
       sortOrder: serializer.fromJson<int>(json['sortOrder']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
@@ -3326,9 +2449,7 @@ class Task extends DataClass implements Insertable<Task> {
       'dueDate': serializer.toJson<DateTime?>(dueDate),
       'reminderAt': serializer.toJson<DateTime?>(reminderAt),
       'subtasksJson': serializer.toJson<String>(subtasksJson),
-      'linkedServerId': serializer.toJson<String?>(linkedServerId),
       'linkedNoteId': serializer.toJson<String?>(linkedNoteId),
-      'linkedDiagramId': serializer.toJson<String?>(linkedDiagramId),
       'tagsCsv': serializer.toJson<String>(tagsCsv),
       'sortOrder': serializer.toJson<int>(sortOrder),
       'createdAt': serializer.toJson<DateTime>(createdAt),
@@ -3351,9 +2472,7 @@ class Task extends DataClass implements Insertable<Task> {
     Value<DateTime?> dueDate = const Value.absent(),
     Value<DateTime?> reminderAt = const Value.absent(),
     String? subtasksJson,
-    Value<String?> linkedServerId = const Value.absent(),
     Value<String?> linkedNoteId = const Value.absent(),
-    Value<String?> linkedDiagramId = const Value.absent(),
     String? tagsCsv,
     int? sortOrder,
     DateTime? createdAt,
@@ -3371,13 +2490,7 @@ class Task extends DataClass implements Insertable<Task> {
     dueDate: dueDate.present ? dueDate.value : this.dueDate,
     reminderAt: reminderAt.present ? reminderAt.value : this.reminderAt,
     subtasksJson: subtasksJson ?? this.subtasksJson,
-    linkedServerId: linkedServerId.present
-        ? linkedServerId.value
-        : this.linkedServerId,
     linkedNoteId: linkedNoteId.present ? linkedNoteId.value : this.linkedNoteId,
-    linkedDiagramId: linkedDiagramId.present
-        ? linkedDiagramId.value
-        : this.linkedDiagramId,
     tagsCsv: tagsCsv ?? this.tagsCsv,
     sortOrder: sortOrder ?? this.sortOrder,
     createdAt: createdAt ?? this.createdAt,
@@ -3403,15 +2516,9 @@ class Task extends DataClass implements Insertable<Task> {
       subtasksJson: data.subtasksJson.present
           ? data.subtasksJson.value
           : this.subtasksJson,
-      linkedServerId: data.linkedServerId.present
-          ? data.linkedServerId.value
-          : this.linkedServerId,
       linkedNoteId: data.linkedNoteId.present
           ? data.linkedNoteId.value
           : this.linkedNoteId,
-      linkedDiagramId: data.linkedDiagramId.present
-          ? data.linkedDiagramId.value
-          : this.linkedDiagramId,
       tagsCsv: data.tagsCsv.present ? data.tagsCsv.value : this.tagsCsv,
       sortOrder: data.sortOrder.present ? data.sortOrder.value : this.sortOrder,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
@@ -3436,9 +2543,7 @@ class Task extends DataClass implements Insertable<Task> {
           ..write('dueDate: $dueDate, ')
           ..write('reminderAt: $reminderAt, ')
           ..write('subtasksJson: $subtasksJson, ')
-          ..write('linkedServerId: $linkedServerId, ')
           ..write('linkedNoteId: $linkedNoteId, ')
-          ..write('linkedDiagramId: $linkedDiagramId, ')
           ..write('tagsCsv: $tagsCsv, ')
           ..write('sortOrder: $sortOrder, ')
           ..write('createdAt: $createdAt, ')
@@ -3461,9 +2566,7 @@ class Task extends DataClass implements Insertable<Task> {
     dueDate,
     reminderAt,
     subtasksJson,
-    linkedServerId,
     linkedNoteId,
-    linkedDiagramId,
     tagsCsv,
     sortOrder,
     createdAt,
@@ -3485,9 +2588,7 @@ class Task extends DataClass implements Insertable<Task> {
           other.dueDate == this.dueDate &&
           other.reminderAt == this.reminderAt &&
           other.subtasksJson == this.subtasksJson &&
-          other.linkedServerId == this.linkedServerId &&
           other.linkedNoteId == this.linkedNoteId &&
-          other.linkedDiagramId == this.linkedDiagramId &&
           other.tagsCsv == this.tagsCsv &&
           other.sortOrder == this.sortOrder &&
           other.createdAt == this.createdAt &&
@@ -3507,9 +2608,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
   final Value<DateTime?> dueDate;
   final Value<DateTime?> reminderAt;
   final Value<String> subtasksJson;
-  final Value<String?> linkedServerId;
   final Value<String?> linkedNoteId;
-  final Value<String?> linkedDiagramId;
   final Value<String> tagsCsv;
   final Value<int> sortOrder;
   final Value<DateTime> createdAt;
@@ -3528,9 +2627,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
     this.dueDate = const Value.absent(),
     this.reminderAt = const Value.absent(),
     this.subtasksJson = const Value.absent(),
-    this.linkedServerId = const Value.absent(),
     this.linkedNoteId = const Value.absent(),
-    this.linkedDiagramId = const Value.absent(),
     this.tagsCsv = const Value.absent(),
     this.sortOrder = const Value.absent(),
     this.createdAt = const Value.absent(),
@@ -3550,9 +2647,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
     this.dueDate = const Value.absent(),
     this.reminderAt = const Value.absent(),
     this.subtasksJson = const Value.absent(),
-    this.linkedServerId = const Value.absent(),
     this.linkedNoteId = const Value.absent(),
-    this.linkedDiagramId = const Value.absent(),
     this.tagsCsv = const Value.absent(),
     this.sortOrder = const Value.absent(),
     required DateTime createdAt,
@@ -3575,9 +2670,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
     Expression<DateTime>? dueDate,
     Expression<DateTime>? reminderAt,
     Expression<String>? subtasksJson,
-    Expression<String>? linkedServerId,
     Expression<String>? linkedNoteId,
-    Expression<String>? linkedDiagramId,
     Expression<String>? tagsCsv,
     Expression<int>? sortOrder,
     Expression<DateTime>? createdAt,
@@ -3597,9 +2690,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
       if (dueDate != null) 'due_date': dueDate,
       if (reminderAt != null) 'reminder_at': reminderAt,
       if (subtasksJson != null) 'subtasks_json': subtasksJson,
-      if (linkedServerId != null) 'linked_server_id': linkedServerId,
       if (linkedNoteId != null) 'linked_note_id': linkedNoteId,
-      if (linkedDiagramId != null) 'linked_diagram_id': linkedDiagramId,
       if (tagsCsv != null) 'tags_csv': tagsCsv,
       if (sortOrder != null) 'sort_order': sortOrder,
       if (createdAt != null) 'created_at': createdAt,
@@ -3621,9 +2712,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
     Value<DateTime?>? dueDate,
     Value<DateTime?>? reminderAt,
     Value<String>? subtasksJson,
-    Value<String?>? linkedServerId,
     Value<String?>? linkedNoteId,
-    Value<String?>? linkedDiagramId,
     Value<String>? tagsCsv,
     Value<int>? sortOrder,
     Value<DateTime>? createdAt,
@@ -3643,9 +2732,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
       dueDate: dueDate ?? this.dueDate,
       reminderAt: reminderAt ?? this.reminderAt,
       subtasksJson: subtasksJson ?? this.subtasksJson,
-      linkedServerId: linkedServerId ?? this.linkedServerId,
       linkedNoteId: linkedNoteId ?? this.linkedNoteId,
-      linkedDiagramId: linkedDiagramId ?? this.linkedDiagramId,
       tagsCsv: tagsCsv ?? this.tagsCsv,
       sortOrder: sortOrder ?? this.sortOrder,
       createdAt: createdAt ?? this.createdAt,
@@ -3689,14 +2776,8 @@ class TasksCompanion extends UpdateCompanion<Task> {
     if (subtasksJson.present) {
       map['subtasks_json'] = Variable<String>(subtasksJson.value);
     }
-    if (linkedServerId.present) {
-      map['linked_server_id'] = Variable<String>(linkedServerId.value);
-    }
     if (linkedNoteId.present) {
       map['linked_note_id'] = Variable<String>(linkedNoteId.value);
-    }
-    if (linkedDiagramId.present) {
-      map['linked_diagram_id'] = Variable<String>(linkedDiagramId.value);
     }
     if (tagsCsv.present) {
       map['tags_csv'] = Variable<String>(tagsCsv.value);
@@ -3741,2490 +2822,9 @@ class TasksCompanion extends UpdateCompanion<Task> {
           ..write('dueDate: $dueDate, ')
           ..write('reminderAt: $reminderAt, ')
           ..write('subtasksJson: $subtasksJson, ')
-          ..write('linkedServerId: $linkedServerId, ')
           ..write('linkedNoteId: $linkedNoteId, ')
-          ..write('linkedDiagramId: $linkedDiagramId, ')
           ..write('tagsCsv: $tagsCsv, ')
           ..write('sortOrder: $sortOrder, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('updatedAt: $updatedAt, ')
-          ..write('deletedAt: $deletedAt, ')
-          ..write('syncStatus: $syncStatus, ')
-          ..write('version: $version, ')
-          ..write('deviceId: $deviceId, ')
-          ..write('rowid: $rowid')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $ProjectsTable extends Projects with TableInfo<$ProjectsTable, Project> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $ProjectsTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<String> id = GeneratedColumn<String>(
-    'id',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _titleMeta = const VerificationMeta('title');
-  @override
-  late final GeneratedColumn<String> title = GeneratedColumn<String>(
-    'title',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _descriptionMeta = const VerificationMeta(
-    'description',
-  );
-  @override
-  late final GeneratedColumn<String> description = GeneratedColumn<String>(
-    'description',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-    defaultValue: const Constant(''),
-  );
-  @override
-  late final GeneratedColumnWithTypeConverter<ProjectStatus, String> status =
-      GeneratedColumn<String>(
-        'status',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: Constant(ProjectStatus.active.name),
-      ).withConverter<ProjectStatus>($ProjectsTable.$converterstatus);
-  static const VerificationMeta _startDateMeta = const VerificationMeta(
-    'startDate',
-  );
-  @override
-  late final GeneratedColumn<DateTime> startDate = GeneratedColumn<DateTime>(
-    'start_date',
-    aliasedName,
-    true,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _endDateMeta = const VerificationMeta(
-    'endDate',
-  );
-  @override
-  late final GeneratedColumn<DateTime> endDate = GeneratedColumn<DateTime>(
-    'end_date',
-    aliasedName,
-    true,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _progressMeta = const VerificationMeta(
-    'progress',
-  );
-  @override
-  late final GeneratedColumn<int> progress = GeneratedColumn<int>(
-    'progress',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultValue: const Constant(0),
-  );
-  static const VerificationMeta _createdAtMeta = const VerificationMeta(
-    'createdAt',
-  );
-  @override
-  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-    'created_at',
-    aliasedName,
-    false,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
-    'updatedAt',
-  );
-  @override
-  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
-    'updated_at',
-    aliasedName,
-    false,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _deletedAtMeta = const VerificationMeta(
-    'deletedAt',
-  );
-  @override
-  late final GeneratedColumn<DateTime> deletedAt = GeneratedColumn<DateTime>(
-    'deleted_at',
-    aliasedName,
-    true,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: false,
-  );
-  @override
-  late final GeneratedColumnWithTypeConverter<SyncState, String> syncStatus =
-      GeneratedColumn<String>(
-        'sync_status',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: Constant(SyncState.pending.name),
-      ).withConverter<SyncState>($ProjectsTable.$convertersyncStatus);
-  static const VerificationMeta _versionMeta = const VerificationMeta(
-    'version',
-  );
-  @override
-  late final GeneratedColumn<int> version = GeneratedColumn<int>(
-    'version',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultValue: const Constant(1),
-  );
-  static const VerificationMeta _deviceIdMeta = const VerificationMeta(
-    'deviceId',
-  );
-  @override
-  late final GeneratedColumn<String> deviceId = GeneratedColumn<String>(
-    'device_id',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-    defaultValue: const Constant(''),
-  );
-  @override
-  List<GeneratedColumn> get $columns => [
-    id,
-    title,
-    description,
-    status,
-    startDate,
-    endDate,
-    progress,
-    createdAt,
-    updatedAt,
-    deletedAt,
-    syncStatus,
-    version,
-    deviceId,
-  ];
-  @override
-  String get aliasedName => _alias ?? actualTableName;
-  @override
-  String get actualTableName => $name;
-  static const String $name = 'projects';
-  @override
-  VerificationContext validateIntegrity(
-    Insertable<Project> instance, {
-    bool isInserting = false,
-  }) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    } else if (isInserting) {
-      context.missing(_idMeta);
-    }
-    if (data.containsKey('title')) {
-      context.handle(
-        _titleMeta,
-        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_titleMeta);
-    }
-    if (data.containsKey('description')) {
-      context.handle(
-        _descriptionMeta,
-        description.isAcceptableOrUnknown(
-          data['description']!,
-          _descriptionMeta,
-        ),
-      );
-    }
-    if (data.containsKey('start_date')) {
-      context.handle(
-        _startDateMeta,
-        startDate.isAcceptableOrUnknown(data['start_date']!, _startDateMeta),
-      );
-    }
-    if (data.containsKey('end_date')) {
-      context.handle(
-        _endDateMeta,
-        endDate.isAcceptableOrUnknown(data['end_date']!, _endDateMeta),
-      );
-    }
-    if (data.containsKey('progress')) {
-      context.handle(
-        _progressMeta,
-        progress.isAcceptableOrUnknown(data['progress']!, _progressMeta),
-      );
-    }
-    if (data.containsKey('created_at')) {
-      context.handle(
-        _createdAtMeta,
-        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_createdAtMeta);
-    }
-    if (data.containsKey('updated_at')) {
-      context.handle(
-        _updatedAtMeta,
-        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_updatedAtMeta);
-    }
-    if (data.containsKey('deleted_at')) {
-      context.handle(
-        _deletedAtMeta,
-        deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta),
-      );
-    }
-    if (data.containsKey('version')) {
-      context.handle(
-        _versionMeta,
-        version.isAcceptableOrUnknown(data['version']!, _versionMeta),
-      );
-    }
-    if (data.containsKey('device_id')) {
-      context.handle(
-        _deviceIdMeta,
-        deviceId.isAcceptableOrUnknown(data['device_id']!, _deviceIdMeta),
-      );
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  Project map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Project(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}id'],
-      )!,
-      title: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}title'],
-      )!,
-      description: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}description'],
-      )!,
-      status: $ProjectsTable.$converterstatus.fromSql(
-        attachedDatabase.typeMapping.read(
-          DriftSqlType.string,
-          data['${effectivePrefix}status'],
-        )!,
-      ),
-      startDate: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}start_date'],
-      ),
-      endDate: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}end_date'],
-      ),
-      progress: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}progress'],
-      )!,
-      createdAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}created_at'],
-      )!,
-      updatedAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}updated_at'],
-      )!,
-      deletedAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}deleted_at'],
-      ),
-      syncStatus: $ProjectsTable.$convertersyncStatus.fromSql(
-        attachedDatabase.typeMapping.read(
-          DriftSqlType.string,
-          data['${effectivePrefix}sync_status'],
-        )!,
-      ),
-      version: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}version'],
-      )!,
-      deviceId: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}device_id'],
-      )!,
-    );
-  }
-
-  @override
-  $ProjectsTable createAlias(String alias) {
-    return $ProjectsTable(attachedDatabase, alias);
-  }
-
-  static JsonTypeConverter2<ProjectStatus, String, String> $converterstatus =
-      const EnumNameConverter<ProjectStatus>(ProjectStatus.values);
-  static JsonTypeConverter2<SyncState, String, String> $convertersyncStatus =
-      const EnumNameConverter<SyncState>(SyncState.values);
-}
-
-class Project extends DataClass implements Insertable<Project> {
-  final String id;
-  final String title;
-  final String description;
-  final ProjectStatus status;
-  final DateTime? startDate;
-  final DateTime? endDate;
-  final int progress;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final DateTime? deletedAt;
-  final SyncState syncStatus;
-  final int version;
-  final String deviceId;
-  const Project({
-    required this.id,
-    required this.title,
-    required this.description,
-    required this.status,
-    this.startDate,
-    this.endDate,
-    required this.progress,
-    required this.createdAt,
-    required this.updatedAt,
-    this.deletedAt,
-    required this.syncStatus,
-    required this.version,
-    required this.deviceId,
-  });
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<String>(id);
-    map['title'] = Variable<String>(title);
-    map['description'] = Variable<String>(description);
-    {
-      map['status'] = Variable<String>(
-        $ProjectsTable.$converterstatus.toSql(status),
-      );
-    }
-    if (!nullToAbsent || startDate != null) {
-      map['start_date'] = Variable<DateTime>(startDate);
-    }
-    if (!nullToAbsent || endDate != null) {
-      map['end_date'] = Variable<DateTime>(endDate);
-    }
-    map['progress'] = Variable<int>(progress);
-    map['created_at'] = Variable<DateTime>(createdAt);
-    map['updated_at'] = Variable<DateTime>(updatedAt);
-    if (!nullToAbsent || deletedAt != null) {
-      map['deleted_at'] = Variable<DateTime>(deletedAt);
-    }
-    {
-      map['sync_status'] = Variable<String>(
-        $ProjectsTable.$convertersyncStatus.toSql(syncStatus),
-      );
-    }
-    map['version'] = Variable<int>(version);
-    map['device_id'] = Variable<String>(deviceId);
-    return map;
-  }
-
-  ProjectsCompanion toCompanion(bool nullToAbsent) {
-    return ProjectsCompanion(
-      id: Value(id),
-      title: Value(title),
-      description: Value(description),
-      status: Value(status),
-      startDate: startDate == null && nullToAbsent
-          ? const Value.absent()
-          : Value(startDate),
-      endDate: endDate == null && nullToAbsent
-          ? const Value.absent()
-          : Value(endDate),
-      progress: Value(progress),
-      createdAt: Value(createdAt),
-      updatedAt: Value(updatedAt),
-      deletedAt: deletedAt == null && nullToAbsent
-          ? const Value.absent()
-          : Value(deletedAt),
-      syncStatus: Value(syncStatus),
-      version: Value(version),
-      deviceId: Value(deviceId),
-    );
-  }
-
-  factory Project.fromJson(
-    Map<String, dynamic> json, {
-    ValueSerializer? serializer,
-  }) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return Project(
-      id: serializer.fromJson<String>(json['id']),
-      title: serializer.fromJson<String>(json['title']),
-      description: serializer.fromJson<String>(json['description']),
-      status: $ProjectsTable.$converterstatus.fromJson(
-        serializer.fromJson<String>(json['status']),
-      ),
-      startDate: serializer.fromJson<DateTime?>(json['startDate']),
-      endDate: serializer.fromJson<DateTime?>(json['endDate']),
-      progress: serializer.fromJson<int>(json['progress']),
-      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
-      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
-      deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
-      syncStatus: $ProjectsTable.$convertersyncStatus.fromJson(
-        serializer.fromJson<String>(json['syncStatus']),
-      ),
-      version: serializer.fromJson<int>(json['version']),
-      deviceId: serializer.fromJson<String>(json['deviceId']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<String>(id),
-      'title': serializer.toJson<String>(title),
-      'description': serializer.toJson<String>(description),
-      'status': serializer.toJson<String>(
-        $ProjectsTable.$converterstatus.toJson(status),
-      ),
-      'startDate': serializer.toJson<DateTime?>(startDate),
-      'endDate': serializer.toJson<DateTime?>(endDate),
-      'progress': serializer.toJson<int>(progress),
-      'createdAt': serializer.toJson<DateTime>(createdAt),
-      'updatedAt': serializer.toJson<DateTime>(updatedAt),
-      'deletedAt': serializer.toJson<DateTime?>(deletedAt),
-      'syncStatus': serializer.toJson<String>(
-        $ProjectsTable.$convertersyncStatus.toJson(syncStatus),
-      ),
-      'version': serializer.toJson<int>(version),
-      'deviceId': serializer.toJson<String>(deviceId),
-    };
-  }
-
-  Project copyWith({
-    String? id,
-    String? title,
-    String? description,
-    ProjectStatus? status,
-    Value<DateTime?> startDate = const Value.absent(),
-    Value<DateTime?> endDate = const Value.absent(),
-    int? progress,
-    DateTime? createdAt,
-    DateTime? updatedAt,
-    Value<DateTime?> deletedAt = const Value.absent(),
-    SyncState? syncStatus,
-    int? version,
-    String? deviceId,
-  }) => Project(
-    id: id ?? this.id,
-    title: title ?? this.title,
-    description: description ?? this.description,
-    status: status ?? this.status,
-    startDate: startDate.present ? startDate.value : this.startDate,
-    endDate: endDate.present ? endDate.value : this.endDate,
-    progress: progress ?? this.progress,
-    createdAt: createdAt ?? this.createdAt,
-    updatedAt: updatedAt ?? this.updatedAt,
-    deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
-    syncStatus: syncStatus ?? this.syncStatus,
-    version: version ?? this.version,
-    deviceId: deviceId ?? this.deviceId,
-  );
-  Project copyWithCompanion(ProjectsCompanion data) {
-    return Project(
-      id: data.id.present ? data.id.value : this.id,
-      title: data.title.present ? data.title.value : this.title,
-      description: data.description.present
-          ? data.description.value
-          : this.description,
-      status: data.status.present ? data.status.value : this.status,
-      startDate: data.startDate.present ? data.startDate.value : this.startDate,
-      endDate: data.endDate.present ? data.endDate.value : this.endDate,
-      progress: data.progress.present ? data.progress.value : this.progress,
-      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
-      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
-      deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
-      syncStatus: data.syncStatus.present
-          ? data.syncStatus.value
-          : this.syncStatus,
-      version: data.version.present ? data.version.value : this.version,
-      deviceId: data.deviceId.present ? data.deviceId.value : this.deviceId,
-    );
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('Project(')
-          ..write('id: $id, ')
-          ..write('title: $title, ')
-          ..write('description: $description, ')
-          ..write('status: $status, ')
-          ..write('startDate: $startDate, ')
-          ..write('endDate: $endDate, ')
-          ..write('progress: $progress, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('updatedAt: $updatedAt, ')
-          ..write('deletedAt: $deletedAt, ')
-          ..write('syncStatus: $syncStatus, ')
-          ..write('version: $version, ')
-          ..write('deviceId: $deviceId')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(
-    id,
-    title,
-    description,
-    status,
-    startDate,
-    endDate,
-    progress,
-    createdAt,
-    updatedAt,
-    deletedAt,
-    syncStatus,
-    version,
-    deviceId,
-  );
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is Project &&
-          other.id == this.id &&
-          other.title == this.title &&
-          other.description == this.description &&
-          other.status == this.status &&
-          other.startDate == this.startDate &&
-          other.endDate == this.endDate &&
-          other.progress == this.progress &&
-          other.createdAt == this.createdAt &&
-          other.updatedAt == this.updatedAt &&
-          other.deletedAt == this.deletedAt &&
-          other.syncStatus == this.syncStatus &&
-          other.version == this.version &&
-          other.deviceId == this.deviceId);
-}
-
-class ProjectsCompanion extends UpdateCompanion<Project> {
-  final Value<String> id;
-  final Value<String> title;
-  final Value<String> description;
-  final Value<ProjectStatus> status;
-  final Value<DateTime?> startDate;
-  final Value<DateTime?> endDate;
-  final Value<int> progress;
-  final Value<DateTime> createdAt;
-  final Value<DateTime> updatedAt;
-  final Value<DateTime?> deletedAt;
-  final Value<SyncState> syncStatus;
-  final Value<int> version;
-  final Value<String> deviceId;
-  final Value<int> rowid;
-  const ProjectsCompanion({
-    this.id = const Value.absent(),
-    this.title = const Value.absent(),
-    this.description = const Value.absent(),
-    this.status = const Value.absent(),
-    this.startDate = const Value.absent(),
-    this.endDate = const Value.absent(),
-    this.progress = const Value.absent(),
-    this.createdAt = const Value.absent(),
-    this.updatedAt = const Value.absent(),
-    this.deletedAt = const Value.absent(),
-    this.syncStatus = const Value.absent(),
-    this.version = const Value.absent(),
-    this.deviceId = const Value.absent(),
-    this.rowid = const Value.absent(),
-  });
-  ProjectsCompanion.insert({
-    required String id,
-    required String title,
-    this.description = const Value.absent(),
-    this.status = const Value.absent(),
-    this.startDate = const Value.absent(),
-    this.endDate = const Value.absent(),
-    this.progress = const Value.absent(),
-    required DateTime createdAt,
-    required DateTime updatedAt,
-    this.deletedAt = const Value.absent(),
-    this.syncStatus = const Value.absent(),
-    this.version = const Value.absent(),
-    this.deviceId = const Value.absent(),
-    this.rowid = const Value.absent(),
-  }) : id = Value(id),
-       title = Value(title),
-       createdAt = Value(createdAt),
-       updatedAt = Value(updatedAt);
-  static Insertable<Project> custom({
-    Expression<String>? id,
-    Expression<String>? title,
-    Expression<String>? description,
-    Expression<String>? status,
-    Expression<DateTime>? startDate,
-    Expression<DateTime>? endDate,
-    Expression<int>? progress,
-    Expression<DateTime>? createdAt,
-    Expression<DateTime>? updatedAt,
-    Expression<DateTime>? deletedAt,
-    Expression<String>? syncStatus,
-    Expression<int>? version,
-    Expression<String>? deviceId,
-    Expression<int>? rowid,
-  }) {
-    return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (title != null) 'title': title,
-      if (description != null) 'description': description,
-      if (status != null) 'status': status,
-      if (startDate != null) 'start_date': startDate,
-      if (endDate != null) 'end_date': endDate,
-      if (progress != null) 'progress': progress,
-      if (createdAt != null) 'created_at': createdAt,
-      if (updatedAt != null) 'updated_at': updatedAt,
-      if (deletedAt != null) 'deleted_at': deletedAt,
-      if (syncStatus != null) 'sync_status': syncStatus,
-      if (version != null) 'version': version,
-      if (deviceId != null) 'device_id': deviceId,
-      if (rowid != null) 'rowid': rowid,
-    });
-  }
-
-  ProjectsCompanion copyWith({
-    Value<String>? id,
-    Value<String>? title,
-    Value<String>? description,
-    Value<ProjectStatus>? status,
-    Value<DateTime?>? startDate,
-    Value<DateTime?>? endDate,
-    Value<int>? progress,
-    Value<DateTime>? createdAt,
-    Value<DateTime>? updatedAt,
-    Value<DateTime?>? deletedAt,
-    Value<SyncState>? syncStatus,
-    Value<int>? version,
-    Value<String>? deviceId,
-    Value<int>? rowid,
-  }) {
-    return ProjectsCompanion(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      description: description ?? this.description,
-      status: status ?? this.status,
-      startDate: startDate ?? this.startDate,
-      endDate: endDate ?? this.endDate,
-      progress: progress ?? this.progress,
-      createdAt: createdAt ?? this.createdAt,
-      updatedAt: updatedAt ?? this.updatedAt,
-      deletedAt: deletedAt ?? this.deletedAt,
-      syncStatus: syncStatus ?? this.syncStatus,
-      version: version ?? this.version,
-      deviceId: deviceId ?? this.deviceId,
-      rowid: rowid ?? this.rowid,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<String>(id.value);
-    }
-    if (title.present) {
-      map['title'] = Variable<String>(title.value);
-    }
-    if (description.present) {
-      map['description'] = Variable<String>(description.value);
-    }
-    if (status.present) {
-      map['status'] = Variable<String>(
-        $ProjectsTable.$converterstatus.toSql(status.value),
-      );
-    }
-    if (startDate.present) {
-      map['start_date'] = Variable<DateTime>(startDate.value);
-    }
-    if (endDate.present) {
-      map['end_date'] = Variable<DateTime>(endDate.value);
-    }
-    if (progress.present) {
-      map['progress'] = Variable<int>(progress.value);
-    }
-    if (createdAt.present) {
-      map['created_at'] = Variable<DateTime>(createdAt.value);
-    }
-    if (updatedAt.present) {
-      map['updated_at'] = Variable<DateTime>(updatedAt.value);
-    }
-    if (deletedAt.present) {
-      map['deleted_at'] = Variable<DateTime>(deletedAt.value);
-    }
-    if (syncStatus.present) {
-      map['sync_status'] = Variable<String>(
-        $ProjectsTable.$convertersyncStatus.toSql(syncStatus.value),
-      );
-    }
-    if (version.present) {
-      map['version'] = Variable<int>(version.value);
-    }
-    if (deviceId.present) {
-      map['device_id'] = Variable<String>(deviceId.value);
-    }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('ProjectsCompanion(')
-          ..write('id: $id, ')
-          ..write('title: $title, ')
-          ..write('description: $description, ')
-          ..write('status: $status, ')
-          ..write('startDate: $startDate, ')
-          ..write('endDate: $endDate, ')
-          ..write('progress: $progress, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('updatedAt: $updatedAt, ')
-          ..write('deletedAt: $deletedAt, ')
-          ..write('syncStatus: $syncStatus, ')
-          ..write('version: $version, ')
-          ..write('deviceId: $deviceId, ')
-          ..write('rowid: $rowid')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $MilestonesTable extends Milestones
-    with TableInfo<$MilestonesTable, Milestone> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $MilestonesTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<String> id = GeneratedColumn<String>(
-    'id',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _projectIdMeta = const VerificationMeta(
-    'projectId',
-  );
-  @override
-  late final GeneratedColumn<String> projectId = GeneratedColumn<String>(
-    'project_id',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _titleMeta = const VerificationMeta('title');
-  @override
-  late final GeneratedColumn<String> title = GeneratedColumn<String>(
-    'title',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _dueDateMeta = const VerificationMeta(
-    'dueDate',
-  );
-  @override
-  late final GeneratedColumn<DateTime> dueDate = GeneratedColumn<DateTime>(
-    'due_date',
-    aliasedName,
-    true,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _doneMeta = const VerificationMeta('done');
-  @override
-  late final GeneratedColumn<bool> done = GeneratedColumn<bool>(
-    'done',
-    aliasedName,
-    false,
-    type: DriftSqlType.bool,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'CHECK ("done" IN (0, 1))',
-    ),
-    defaultValue: const Constant(false),
-  );
-  static const VerificationMeta _linkedTaskIdsMeta = const VerificationMeta(
-    'linkedTaskIds',
-  );
-  @override
-  late final GeneratedColumn<String> linkedTaskIds = GeneratedColumn<String>(
-    'linked_task_ids',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-    defaultValue: const Constant('[]'),
-  );
-  static const VerificationMeta _createdAtMeta = const VerificationMeta(
-    'createdAt',
-  );
-  @override
-  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-    'created_at',
-    aliasedName,
-    false,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
-    'updatedAt',
-  );
-  @override
-  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
-    'updated_at',
-    aliasedName,
-    false,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _deletedAtMeta = const VerificationMeta(
-    'deletedAt',
-  );
-  @override
-  late final GeneratedColumn<DateTime> deletedAt = GeneratedColumn<DateTime>(
-    'deleted_at',
-    aliasedName,
-    true,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: false,
-  );
-  @override
-  late final GeneratedColumnWithTypeConverter<SyncState, String> syncStatus =
-      GeneratedColumn<String>(
-        'sync_status',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: Constant(SyncState.pending.name),
-      ).withConverter<SyncState>($MilestonesTable.$convertersyncStatus);
-  static const VerificationMeta _versionMeta = const VerificationMeta(
-    'version',
-  );
-  @override
-  late final GeneratedColumn<int> version = GeneratedColumn<int>(
-    'version',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultValue: const Constant(1),
-  );
-  static const VerificationMeta _deviceIdMeta = const VerificationMeta(
-    'deviceId',
-  );
-  @override
-  late final GeneratedColumn<String> deviceId = GeneratedColumn<String>(
-    'device_id',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-    defaultValue: const Constant(''),
-  );
-  @override
-  List<GeneratedColumn> get $columns => [
-    id,
-    projectId,
-    title,
-    dueDate,
-    done,
-    linkedTaskIds,
-    createdAt,
-    updatedAt,
-    deletedAt,
-    syncStatus,
-    version,
-    deviceId,
-  ];
-  @override
-  String get aliasedName => _alias ?? actualTableName;
-  @override
-  String get actualTableName => $name;
-  static const String $name = 'milestones';
-  @override
-  VerificationContext validateIntegrity(
-    Insertable<Milestone> instance, {
-    bool isInserting = false,
-  }) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    } else if (isInserting) {
-      context.missing(_idMeta);
-    }
-    if (data.containsKey('project_id')) {
-      context.handle(
-        _projectIdMeta,
-        projectId.isAcceptableOrUnknown(data['project_id']!, _projectIdMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_projectIdMeta);
-    }
-    if (data.containsKey('title')) {
-      context.handle(
-        _titleMeta,
-        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_titleMeta);
-    }
-    if (data.containsKey('due_date')) {
-      context.handle(
-        _dueDateMeta,
-        dueDate.isAcceptableOrUnknown(data['due_date']!, _dueDateMeta),
-      );
-    }
-    if (data.containsKey('done')) {
-      context.handle(
-        _doneMeta,
-        done.isAcceptableOrUnknown(data['done']!, _doneMeta),
-      );
-    }
-    if (data.containsKey('linked_task_ids')) {
-      context.handle(
-        _linkedTaskIdsMeta,
-        linkedTaskIds.isAcceptableOrUnknown(
-          data['linked_task_ids']!,
-          _linkedTaskIdsMeta,
-        ),
-      );
-    }
-    if (data.containsKey('created_at')) {
-      context.handle(
-        _createdAtMeta,
-        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_createdAtMeta);
-    }
-    if (data.containsKey('updated_at')) {
-      context.handle(
-        _updatedAtMeta,
-        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_updatedAtMeta);
-    }
-    if (data.containsKey('deleted_at')) {
-      context.handle(
-        _deletedAtMeta,
-        deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta),
-      );
-    }
-    if (data.containsKey('version')) {
-      context.handle(
-        _versionMeta,
-        version.isAcceptableOrUnknown(data['version']!, _versionMeta),
-      );
-    }
-    if (data.containsKey('device_id')) {
-      context.handle(
-        _deviceIdMeta,
-        deviceId.isAcceptableOrUnknown(data['device_id']!, _deviceIdMeta),
-      );
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  Milestone map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Milestone(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}id'],
-      )!,
-      projectId: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}project_id'],
-      )!,
-      title: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}title'],
-      )!,
-      dueDate: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}due_date'],
-      ),
-      done: attachedDatabase.typeMapping.read(
-        DriftSqlType.bool,
-        data['${effectivePrefix}done'],
-      )!,
-      linkedTaskIds: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}linked_task_ids'],
-      )!,
-      createdAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}created_at'],
-      )!,
-      updatedAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}updated_at'],
-      )!,
-      deletedAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}deleted_at'],
-      ),
-      syncStatus: $MilestonesTable.$convertersyncStatus.fromSql(
-        attachedDatabase.typeMapping.read(
-          DriftSqlType.string,
-          data['${effectivePrefix}sync_status'],
-        )!,
-      ),
-      version: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}version'],
-      )!,
-      deviceId: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}device_id'],
-      )!,
-    );
-  }
-
-  @override
-  $MilestonesTable createAlias(String alias) {
-    return $MilestonesTable(attachedDatabase, alias);
-  }
-
-  static JsonTypeConverter2<SyncState, String, String> $convertersyncStatus =
-      const EnumNameConverter<SyncState>(SyncState.values);
-}
-
-class Milestone extends DataClass implements Insertable<Milestone> {
-  final String id;
-  final String projectId;
-  final String title;
-  final DateTime? dueDate;
-  final bool done;
-  final String linkedTaskIds;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final DateTime? deletedAt;
-  final SyncState syncStatus;
-  final int version;
-  final String deviceId;
-  const Milestone({
-    required this.id,
-    required this.projectId,
-    required this.title,
-    this.dueDate,
-    required this.done,
-    required this.linkedTaskIds,
-    required this.createdAt,
-    required this.updatedAt,
-    this.deletedAt,
-    required this.syncStatus,
-    required this.version,
-    required this.deviceId,
-  });
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<String>(id);
-    map['project_id'] = Variable<String>(projectId);
-    map['title'] = Variable<String>(title);
-    if (!nullToAbsent || dueDate != null) {
-      map['due_date'] = Variable<DateTime>(dueDate);
-    }
-    map['done'] = Variable<bool>(done);
-    map['linked_task_ids'] = Variable<String>(linkedTaskIds);
-    map['created_at'] = Variable<DateTime>(createdAt);
-    map['updated_at'] = Variable<DateTime>(updatedAt);
-    if (!nullToAbsent || deletedAt != null) {
-      map['deleted_at'] = Variable<DateTime>(deletedAt);
-    }
-    {
-      map['sync_status'] = Variable<String>(
-        $MilestonesTable.$convertersyncStatus.toSql(syncStatus),
-      );
-    }
-    map['version'] = Variable<int>(version);
-    map['device_id'] = Variable<String>(deviceId);
-    return map;
-  }
-
-  MilestonesCompanion toCompanion(bool nullToAbsent) {
-    return MilestonesCompanion(
-      id: Value(id),
-      projectId: Value(projectId),
-      title: Value(title),
-      dueDate: dueDate == null && nullToAbsent
-          ? const Value.absent()
-          : Value(dueDate),
-      done: Value(done),
-      linkedTaskIds: Value(linkedTaskIds),
-      createdAt: Value(createdAt),
-      updatedAt: Value(updatedAt),
-      deletedAt: deletedAt == null && nullToAbsent
-          ? const Value.absent()
-          : Value(deletedAt),
-      syncStatus: Value(syncStatus),
-      version: Value(version),
-      deviceId: Value(deviceId),
-    );
-  }
-
-  factory Milestone.fromJson(
-    Map<String, dynamic> json, {
-    ValueSerializer? serializer,
-  }) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return Milestone(
-      id: serializer.fromJson<String>(json['id']),
-      projectId: serializer.fromJson<String>(json['projectId']),
-      title: serializer.fromJson<String>(json['title']),
-      dueDate: serializer.fromJson<DateTime?>(json['dueDate']),
-      done: serializer.fromJson<bool>(json['done']),
-      linkedTaskIds: serializer.fromJson<String>(json['linkedTaskIds']),
-      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
-      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
-      deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
-      syncStatus: $MilestonesTable.$convertersyncStatus.fromJson(
-        serializer.fromJson<String>(json['syncStatus']),
-      ),
-      version: serializer.fromJson<int>(json['version']),
-      deviceId: serializer.fromJson<String>(json['deviceId']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<String>(id),
-      'projectId': serializer.toJson<String>(projectId),
-      'title': serializer.toJson<String>(title),
-      'dueDate': serializer.toJson<DateTime?>(dueDate),
-      'done': serializer.toJson<bool>(done),
-      'linkedTaskIds': serializer.toJson<String>(linkedTaskIds),
-      'createdAt': serializer.toJson<DateTime>(createdAt),
-      'updatedAt': serializer.toJson<DateTime>(updatedAt),
-      'deletedAt': serializer.toJson<DateTime?>(deletedAt),
-      'syncStatus': serializer.toJson<String>(
-        $MilestonesTable.$convertersyncStatus.toJson(syncStatus),
-      ),
-      'version': serializer.toJson<int>(version),
-      'deviceId': serializer.toJson<String>(deviceId),
-    };
-  }
-
-  Milestone copyWith({
-    String? id,
-    String? projectId,
-    String? title,
-    Value<DateTime?> dueDate = const Value.absent(),
-    bool? done,
-    String? linkedTaskIds,
-    DateTime? createdAt,
-    DateTime? updatedAt,
-    Value<DateTime?> deletedAt = const Value.absent(),
-    SyncState? syncStatus,
-    int? version,
-    String? deviceId,
-  }) => Milestone(
-    id: id ?? this.id,
-    projectId: projectId ?? this.projectId,
-    title: title ?? this.title,
-    dueDate: dueDate.present ? dueDate.value : this.dueDate,
-    done: done ?? this.done,
-    linkedTaskIds: linkedTaskIds ?? this.linkedTaskIds,
-    createdAt: createdAt ?? this.createdAt,
-    updatedAt: updatedAt ?? this.updatedAt,
-    deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
-    syncStatus: syncStatus ?? this.syncStatus,
-    version: version ?? this.version,
-    deviceId: deviceId ?? this.deviceId,
-  );
-  Milestone copyWithCompanion(MilestonesCompanion data) {
-    return Milestone(
-      id: data.id.present ? data.id.value : this.id,
-      projectId: data.projectId.present ? data.projectId.value : this.projectId,
-      title: data.title.present ? data.title.value : this.title,
-      dueDate: data.dueDate.present ? data.dueDate.value : this.dueDate,
-      done: data.done.present ? data.done.value : this.done,
-      linkedTaskIds: data.linkedTaskIds.present
-          ? data.linkedTaskIds.value
-          : this.linkedTaskIds,
-      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
-      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
-      deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
-      syncStatus: data.syncStatus.present
-          ? data.syncStatus.value
-          : this.syncStatus,
-      version: data.version.present ? data.version.value : this.version,
-      deviceId: data.deviceId.present ? data.deviceId.value : this.deviceId,
-    );
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('Milestone(')
-          ..write('id: $id, ')
-          ..write('projectId: $projectId, ')
-          ..write('title: $title, ')
-          ..write('dueDate: $dueDate, ')
-          ..write('done: $done, ')
-          ..write('linkedTaskIds: $linkedTaskIds, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('updatedAt: $updatedAt, ')
-          ..write('deletedAt: $deletedAt, ')
-          ..write('syncStatus: $syncStatus, ')
-          ..write('version: $version, ')
-          ..write('deviceId: $deviceId')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(
-    id,
-    projectId,
-    title,
-    dueDate,
-    done,
-    linkedTaskIds,
-    createdAt,
-    updatedAt,
-    deletedAt,
-    syncStatus,
-    version,
-    deviceId,
-  );
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is Milestone &&
-          other.id == this.id &&
-          other.projectId == this.projectId &&
-          other.title == this.title &&
-          other.dueDate == this.dueDate &&
-          other.done == this.done &&
-          other.linkedTaskIds == this.linkedTaskIds &&
-          other.createdAt == this.createdAt &&
-          other.updatedAt == this.updatedAt &&
-          other.deletedAt == this.deletedAt &&
-          other.syncStatus == this.syncStatus &&
-          other.version == this.version &&
-          other.deviceId == this.deviceId);
-}
-
-class MilestonesCompanion extends UpdateCompanion<Milestone> {
-  final Value<String> id;
-  final Value<String> projectId;
-  final Value<String> title;
-  final Value<DateTime?> dueDate;
-  final Value<bool> done;
-  final Value<String> linkedTaskIds;
-  final Value<DateTime> createdAt;
-  final Value<DateTime> updatedAt;
-  final Value<DateTime?> deletedAt;
-  final Value<SyncState> syncStatus;
-  final Value<int> version;
-  final Value<String> deviceId;
-  final Value<int> rowid;
-  const MilestonesCompanion({
-    this.id = const Value.absent(),
-    this.projectId = const Value.absent(),
-    this.title = const Value.absent(),
-    this.dueDate = const Value.absent(),
-    this.done = const Value.absent(),
-    this.linkedTaskIds = const Value.absent(),
-    this.createdAt = const Value.absent(),
-    this.updatedAt = const Value.absent(),
-    this.deletedAt = const Value.absent(),
-    this.syncStatus = const Value.absent(),
-    this.version = const Value.absent(),
-    this.deviceId = const Value.absent(),
-    this.rowid = const Value.absent(),
-  });
-  MilestonesCompanion.insert({
-    required String id,
-    required String projectId,
-    required String title,
-    this.dueDate = const Value.absent(),
-    this.done = const Value.absent(),
-    this.linkedTaskIds = const Value.absent(),
-    required DateTime createdAt,
-    required DateTime updatedAt,
-    this.deletedAt = const Value.absent(),
-    this.syncStatus = const Value.absent(),
-    this.version = const Value.absent(),
-    this.deviceId = const Value.absent(),
-    this.rowid = const Value.absent(),
-  }) : id = Value(id),
-       projectId = Value(projectId),
-       title = Value(title),
-       createdAt = Value(createdAt),
-       updatedAt = Value(updatedAt);
-  static Insertable<Milestone> custom({
-    Expression<String>? id,
-    Expression<String>? projectId,
-    Expression<String>? title,
-    Expression<DateTime>? dueDate,
-    Expression<bool>? done,
-    Expression<String>? linkedTaskIds,
-    Expression<DateTime>? createdAt,
-    Expression<DateTime>? updatedAt,
-    Expression<DateTime>? deletedAt,
-    Expression<String>? syncStatus,
-    Expression<int>? version,
-    Expression<String>? deviceId,
-    Expression<int>? rowid,
-  }) {
-    return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (projectId != null) 'project_id': projectId,
-      if (title != null) 'title': title,
-      if (dueDate != null) 'due_date': dueDate,
-      if (done != null) 'done': done,
-      if (linkedTaskIds != null) 'linked_task_ids': linkedTaskIds,
-      if (createdAt != null) 'created_at': createdAt,
-      if (updatedAt != null) 'updated_at': updatedAt,
-      if (deletedAt != null) 'deleted_at': deletedAt,
-      if (syncStatus != null) 'sync_status': syncStatus,
-      if (version != null) 'version': version,
-      if (deviceId != null) 'device_id': deviceId,
-      if (rowid != null) 'rowid': rowid,
-    });
-  }
-
-  MilestonesCompanion copyWith({
-    Value<String>? id,
-    Value<String>? projectId,
-    Value<String>? title,
-    Value<DateTime?>? dueDate,
-    Value<bool>? done,
-    Value<String>? linkedTaskIds,
-    Value<DateTime>? createdAt,
-    Value<DateTime>? updatedAt,
-    Value<DateTime?>? deletedAt,
-    Value<SyncState>? syncStatus,
-    Value<int>? version,
-    Value<String>? deviceId,
-    Value<int>? rowid,
-  }) {
-    return MilestonesCompanion(
-      id: id ?? this.id,
-      projectId: projectId ?? this.projectId,
-      title: title ?? this.title,
-      dueDate: dueDate ?? this.dueDate,
-      done: done ?? this.done,
-      linkedTaskIds: linkedTaskIds ?? this.linkedTaskIds,
-      createdAt: createdAt ?? this.createdAt,
-      updatedAt: updatedAt ?? this.updatedAt,
-      deletedAt: deletedAt ?? this.deletedAt,
-      syncStatus: syncStatus ?? this.syncStatus,
-      version: version ?? this.version,
-      deviceId: deviceId ?? this.deviceId,
-      rowid: rowid ?? this.rowid,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<String>(id.value);
-    }
-    if (projectId.present) {
-      map['project_id'] = Variable<String>(projectId.value);
-    }
-    if (title.present) {
-      map['title'] = Variable<String>(title.value);
-    }
-    if (dueDate.present) {
-      map['due_date'] = Variable<DateTime>(dueDate.value);
-    }
-    if (done.present) {
-      map['done'] = Variable<bool>(done.value);
-    }
-    if (linkedTaskIds.present) {
-      map['linked_task_ids'] = Variable<String>(linkedTaskIds.value);
-    }
-    if (createdAt.present) {
-      map['created_at'] = Variable<DateTime>(createdAt.value);
-    }
-    if (updatedAt.present) {
-      map['updated_at'] = Variable<DateTime>(updatedAt.value);
-    }
-    if (deletedAt.present) {
-      map['deleted_at'] = Variable<DateTime>(deletedAt.value);
-    }
-    if (syncStatus.present) {
-      map['sync_status'] = Variable<String>(
-        $MilestonesTable.$convertersyncStatus.toSql(syncStatus.value),
-      );
-    }
-    if (version.present) {
-      map['version'] = Variable<int>(version.value);
-    }
-    if (deviceId.present) {
-      map['device_id'] = Variable<String>(deviceId.value);
-    }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('MilestonesCompanion(')
-          ..write('id: $id, ')
-          ..write('projectId: $projectId, ')
-          ..write('title: $title, ')
-          ..write('dueDate: $dueDate, ')
-          ..write('done: $done, ')
-          ..write('linkedTaskIds: $linkedTaskIds, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('updatedAt: $updatedAt, ')
-          ..write('deletedAt: $deletedAt, ')
-          ..write('syncStatus: $syncStatus, ')
-          ..write('version: $version, ')
-          ..write('deviceId: $deviceId, ')
-          ..write('rowid: $rowid')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $ServersTable extends Servers with TableInfo<$ServersTable, ServerEntry> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $ServersTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<String> id = GeneratedColumn<String>(
-    'id',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _nameMeta = const VerificationMeta('name');
-  @override
-  late final GeneratedColumn<String> name = GeneratedColumn<String>(
-    'name',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _ipMeta = const VerificationMeta('ip');
-  @override
-  late final GeneratedColumn<String> ip = GeneratedColumn<String>(
-    'ip',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-    defaultValue: const Constant(''),
-  );
-  static const VerificationMeta _databaseNameMeta = const VerificationMeta(
-    'databaseName',
-  );
-  @override
-  late final GeneratedColumn<String> databaseName = GeneratedColumn<String>(
-    'database_name',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-    defaultValue: const Constant(''),
-  );
-  @override
-  late final GeneratedColumnWithTypeConverter<ServerPurpose, String> purpose =
-      GeneratedColumn<String>(
-        'purpose',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: Constant(ServerPurpose.other.name),
-      ).withConverter<ServerPurpose>($ServersTable.$converterpurpose);
-  @override
-  late final GeneratedColumnWithTypeConverter<ServerStatus, String> status =
-      GeneratedColumn<String>(
-        'status',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: Constant(ServerStatus.unknown.name),
-      ).withConverter<ServerStatus>($ServersTable.$converterstatus);
-  static const VerificationMeta _lastBackupMeta = const VerificationMeta(
-    'lastBackup',
-  );
-  @override
-  late final GeneratedColumn<DateTime> lastBackup = GeneratedColumn<DateTime>(
-    'last_backup',
-    aliasedName,
-    true,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _notesMeta = const VerificationMeta('notes');
-  @override
-  late final GeneratedColumn<String> notes = GeneratedColumn<String>(
-    'notes',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-    defaultValue: const Constant(''),
-  );
-  static const VerificationMeta _hasSecretMeta = const VerificationMeta(
-    'hasSecret',
-  );
-  @override
-  late final GeneratedColumn<bool> hasSecret = GeneratedColumn<bool>(
-    'has_secret',
-    aliasedName,
-    false,
-    type: DriftSqlType.bool,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'CHECK ("has_secret" IN (0, 1))',
-    ),
-    defaultValue: const Constant(false),
-  );
-  static const VerificationMeta _secretCipherMeta = const VerificationMeta(
-    'secretCipher',
-  );
-  @override
-  late final GeneratedColumn<String> secretCipher = GeneratedColumn<String>(
-    'secret_cipher',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _secretNonceMeta = const VerificationMeta(
-    'secretNonce',
-  );
-  @override
-  late final GeneratedColumn<String> secretNonce = GeneratedColumn<String>(
-    'secret_nonce',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _secretMacMeta = const VerificationMeta(
-    'secretMac',
-  );
-  @override
-  late final GeneratedColumn<String> secretMac = GeneratedColumn<String>(
-    'secret_mac',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _createdAtMeta = const VerificationMeta(
-    'createdAt',
-  );
-  @override
-  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-    'created_at',
-    aliasedName,
-    false,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
-    'updatedAt',
-  );
-  @override
-  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
-    'updated_at',
-    aliasedName,
-    false,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _deletedAtMeta = const VerificationMeta(
-    'deletedAt',
-  );
-  @override
-  late final GeneratedColumn<DateTime> deletedAt = GeneratedColumn<DateTime>(
-    'deleted_at',
-    aliasedName,
-    true,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: false,
-  );
-  @override
-  late final GeneratedColumnWithTypeConverter<SyncState, String> syncStatus =
-      GeneratedColumn<String>(
-        'sync_status',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: Constant(SyncState.pending.name),
-      ).withConverter<SyncState>($ServersTable.$convertersyncStatus);
-  static const VerificationMeta _versionMeta = const VerificationMeta(
-    'version',
-  );
-  @override
-  late final GeneratedColumn<int> version = GeneratedColumn<int>(
-    'version',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultValue: const Constant(1),
-  );
-  static const VerificationMeta _deviceIdMeta = const VerificationMeta(
-    'deviceId',
-  );
-  @override
-  late final GeneratedColumn<String> deviceId = GeneratedColumn<String>(
-    'device_id',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-    defaultValue: const Constant(''),
-  );
-  @override
-  List<GeneratedColumn> get $columns => [
-    id,
-    name,
-    ip,
-    databaseName,
-    purpose,
-    status,
-    lastBackup,
-    notes,
-    hasSecret,
-    secretCipher,
-    secretNonce,
-    secretMac,
-    createdAt,
-    updatedAt,
-    deletedAt,
-    syncStatus,
-    version,
-    deviceId,
-  ];
-  @override
-  String get aliasedName => _alias ?? actualTableName;
-  @override
-  String get actualTableName => $name;
-  static const String $name = 'servers';
-  @override
-  VerificationContext validateIntegrity(
-    Insertable<ServerEntry> instance, {
-    bool isInserting = false,
-  }) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    } else if (isInserting) {
-      context.missing(_idMeta);
-    }
-    if (data.containsKey('name')) {
-      context.handle(
-        _nameMeta,
-        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_nameMeta);
-    }
-    if (data.containsKey('ip')) {
-      context.handle(_ipMeta, ip.isAcceptableOrUnknown(data['ip']!, _ipMeta));
-    }
-    if (data.containsKey('database_name')) {
-      context.handle(
-        _databaseNameMeta,
-        databaseName.isAcceptableOrUnknown(
-          data['database_name']!,
-          _databaseNameMeta,
-        ),
-      );
-    }
-    if (data.containsKey('last_backup')) {
-      context.handle(
-        _lastBackupMeta,
-        lastBackup.isAcceptableOrUnknown(data['last_backup']!, _lastBackupMeta),
-      );
-    }
-    if (data.containsKey('notes')) {
-      context.handle(
-        _notesMeta,
-        notes.isAcceptableOrUnknown(data['notes']!, _notesMeta),
-      );
-    }
-    if (data.containsKey('has_secret')) {
-      context.handle(
-        _hasSecretMeta,
-        hasSecret.isAcceptableOrUnknown(data['has_secret']!, _hasSecretMeta),
-      );
-    }
-    if (data.containsKey('secret_cipher')) {
-      context.handle(
-        _secretCipherMeta,
-        secretCipher.isAcceptableOrUnknown(
-          data['secret_cipher']!,
-          _secretCipherMeta,
-        ),
-      );
-    }
-    if (data.containsKey('secret_nonce')) {
-      context.handle(
-        _secretNonceMeta,
-        secretNonce.isAcceptableOrUnknown(
-          data['secret_nonce']!,
-          _secretNonceMeta,
-        ),
-      );
-    }
-    if (data.containsKey('secret_mac')) {
-      context.handle(
-        _secretMacMeta,
-        secretMac.isAcceptableOrUnknown(data['secret_mac']!, _secretMacMeta),
-      );
-    }
-    if (data.containsKey('created_at')) {
-      context.handle(
-        _createdAtMeta,
-        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_createdAtMeta);
-    }
-    if (data.containsKey('updated_at')) {
-      context.handle(
-        _updatedAtMeta,
-        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_updatedAtMeta);
-    }
-    if (data.containsKey('deleted_at')) {
-      context.handle(
-        _deletedAtMeta,
-        deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta),
-      );
-    }
-    if (data.containsKey('version')) {
-      context.handle(
-        _versionMeta,
-        version.isAcceptableOrUnknown(data['version']!, _versionMeta),
-      );
-    }
-    if (data.containsKey('device_id')) {
-      context.handle(
-        _deviceIdMeta,
-        deviceId.isAcceptableOrUnknown(data['device_id']!, _deviceIdMeta),
-      );
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  ServerEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return ServerEntry(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}id'],
-      )!,
-      name: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}name'],
-      )!,
-      ip: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}ip'],
-      )!,
-      databaseName: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}database_name'],
-      )!,
-      purpose: $ServersTable.$converterpurpose.fromSql(
-        attachedDatabase.typeMapping.read(
-          DriftSqlType.string,
-          data['${effectivePrefix}purpose'],
-        )!,
-      ),
-      status: $ServersTable.$converterstatus.fromSql(
-        attachedDatabase.typeMapping.read(
-          DriftSqlType.string,
-          data['${effectivePrefix}status'],
-        )!,
-      ),
-      lastBackup: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}last_backup'],
-      ),
-      notes: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}notes'],
-      )!,
-      hasSecret: attachedDatabase.typeMapping.read(
-        DriftSqlType.bool,
-        data['${effectivePrefix}has_secret'],
-      )!,
-      secretCipher: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}secret_cipher'],
-      ),
-      secretNonce: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}secret_nonce'],
-      ),
-      secretMac: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}secret_mac'],
-      ),
-      createdAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}created_at'],
-      )!,
-      updatedAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}updated_at'],
-      )!,
-      deletedAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}deleted_at'],
-      ),
-      syncStatus: $ServersTable.$convertersyncStatus.fromSql(
-        attachedDatabase.typeMapping.read(
-          DriftSqlType.string,
-          data['${effectivePrefix}sync_status'],
-        )!,
-      ),
-      version: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}version'],
-      )!,
-      deviceId: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}device_id'],
-      )!,
-    );
-  }
-
-  @override
-  $ServersTable createAlias(String alias) {
-    return $ServersTable(attachedDatabase, alias);
-  }
-
-  static JsonTypeConverter2<ServerPurpose, String, String> $converterpurpose =
-      const EnumNameConverter<ServerPurpose>(ServerPurpose.values);
-  static JsonTypeConverter2<ServerStatus, String, String> $converterstatus =
-      const EnumNameConverter<ServerStatus>(ServerStatus.values);
-  static JsonTypeConverter2<SyncState, String, String> $convertersyncStatus =
-      const EnumNameConverter<SyncState>(SyncState.values);
-}
-
-class ServerEntry extends DataClass implements Insertable<ServerEntry> {
-  final String id;
-  final String name;
-  final String ip;
-  final String databaseName;
-  final ServerPurpose purpose;
-  final ServerStatus status;
-  final DateTime? lastBackup;
-  final String notes;
-  final bool hasSecret;
-  final String? secretCipher;
-  final String? secretNonce;
-  final String? secretMac;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final DateTime? deletedAt;
-  final SyncState syncStatus;
-  final int version;
-  final String deviceId;
-  const ServerEntry({
-    required this.id,
-    required this.name,
-    required this.ip,
-    required this.databaseName,
-    required this.purpose,
-    required this.status,
-    this.lastBackup,
-    required this.notes,
-    required this.hasSecret,
-    this.secretCipher,
-    this.secretNonce,
-    this.secretMac,
-    required this.createdAt,
-    required this.updatedAt,
-    this.deletedAt,
-    required this.syncStatus,
-    required this.version,
-    required this.deviceId,
-  });
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<String>(id);
-    map['name'] = Variable<String>(name);
-    map['ip'] = Variable<String>(ip);
-    map['database_name'] = Variable<String>(databaseName);
-    {
-      map['purpose'] = Variable<String>(
-        $ServersTable.$converterpurpose.toSql(purpose),
-      );
-    }
-    {
-      map['status'] = Variable<String>(
-        $ServersTable.$converterstatus.toSql(status),
-      );
-    }
-    if (!nullToAbsent || lastBackup != null) {
-      map['last_backup'] = Variable<DateTime>(lastBackup);
-    }
-    map['notes'] = Variable<String>(notes);
-    map['has_secret'] = Variable<bool>(hasSecret);
-    if (!nullToAbsent || secretCipher != null) {
-      map['secret_cipher'] = Variable<String>(secretCipher);
-    }
-    if (!nullToAbsent || secretNonce != null) {
-      map['secret_nonce'] = Variable<String>(secretNonce);
-    }
-    if (!nullToAbsent || secretMac != null) {
-      map['secret_mac'] = Variable<String>(secretMac);
-    }
-    map['created_at'] = Variable<DateTime>(createdAt);
-    map['updated_at'] = Variable<DateTime>(updatedAt);
-    if (!nullToAbsent || deletedAt != null) {
-      map['deleted_at'] = Variable<DateTime>(deletedAt);
-    }
-    {
-      map['sync_status'] = Variable<String>(
-        $ServersTable.$convertersyncStatus.toSql(syncStatus),
-      );
-    }
-    map['version'] = Variable<int>(version);
-    map['device_id'] = Variable<String>(deviceId);
-    return map;
-  }
-
-  ServersCompanion toCompanion(bool nullToAbsent) {
-    return ServersCompanion(
-      id: Value(id),
-      name: Value(name),
-      ip: Value(ip),
-      databaseName: Value(databaseName),
-      purpose: Value(purpose),
-      status: Value(status),
-      lastBackup: lastBackup == null && nullToAbsent
-          ? const Value.absent()
-          : Value(lastBackup),
-      notes: Value(notes),
-      hasSecret: Value(hasSecret),
-      secretCipher: secretCipher == null && nullToAbsent
-          ? const Value.absent()
-          : Value(secretCipher),
-      secretNonce: secretNonce == null && nullToAbsent
-          ? const Value.absent()
-          : Value(secretNonce),
-      secretMac: secretMac == null && nullToAbsent
-          ? const Value.absent()
-          : Value(secretMac),
-      createdAt: Value(createdAt),
-      updatedAt: Value(updatedAt),
-      deletedAt: deletedAt == null && nullToAbsent
-          ? const Value.absent()
-          : Value(deletedAt),
-      syncStatus: Value(syncStatus),
-      version: Value(version),
-      deviceId: Value(deviceId),
-    );
-  }
-
-  factory ServerEntry.fromJson(
-    Map<String, dynamic> json, {
-    ValueSerializer? serializer,
-  }) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return ServerEntry(
-      id: serializer.fromJson<String>(json['id']),
-      name: serializer.fromJson<String>(json['name']),
-      ip: serializer.fromJson<String>(json['ip']),
-      databaseName: serializer.fromJson<String>(json['databaseName']),
-      purpose: $ServersTable.$converterpurpose.fromJson(
-        serializer.fromJson<String>(json['purpose']),
-      ),
-      status: $ServersTable.$converterstatus.fromJson(
-        serializer.fromJson<String>(json['status']),
-      ),
-      lastBackup: serializer.fromJson<DateTime?>(json['lastBackup']),
-      notes: serializer.fromJson<String>(json['notes']),
-      hasSecret: serializer.fromJson<bool>(json['hasSecret']),
-      secretCipher: serializer.fromJson<String?>(json['secretCipher']),
-      secretNonce: serializer.fromJson<String?>(json['secretNonce']),
-      secretMac: serializer.fromJson<String?>(json['secretMac']),
-      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
-      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
-      deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
-      syncStatus: $ServersTable.$convertersyncStatus.fromJson(
-        serializer.fromJson<String>(json['syncStatus']),
-      ),
-      version: serializer.fromJson<int>(json['version']),
-      deviceId: serializer.fromJson<String>(json['deviceId']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<String>(id),
-      'name': serializer.toJson<String>(name),
-      'ip': serializer.toJson<String>(ip),
-      'databaseName': serializer.toJson<String>(databaseName),
-      'purpose': serializer.toJson<String>(
-        $ServersTable.$converterpurpose.toJson(purpose),
-      ),
-      'status': serializer.toJson<String>(
-        $ServersTable.$converterstatus.toJson(status),
-      ),
-      'lastBackup': serializer.toJson<DateTime?>(lastBackup),
-      'notes': serializer.toJson<String>(notes),
-      'hasSecret': serializer.toJson<bool>(hasSecret),
-      'secretCipher': serializer.toJson<String?>(secretCipher),
-      'secretNonce': serializer.toJson<String?>(secretNonce),
-      'secretMac': serializer.toJson<String?>(secretMac),
-      'createdAt': serializer.toJson<DateTime>(createdAt),
-      'updatedAt': serializer.toJson<DateTime>(updatedAt),
-      'deletedAt': serializer.toJson<DateTime?>(deletedAt),
-      'syncStatus': serializer.toJson<String>(
-        $ServersTable.$convertersyncStatus.toJson(syncStatus),
-      ),
-      'version': serializer.toJson<int>(version),
-      'deviceId': serializer.toJson<String>(deviceId),
-    };
-  }
-
-  ServerEntry copyWith({
-    String? id,
-    String? name,
-    String? ip,
-    String? databaseName,
-    ServerPurpose? purpose,
-    ServerStatus? status,
-    Value<DateTime?> lastBackup = const Value.absent(),
-    String? notes,
-    bool? hasSecret,
-    Value<String?> secretCipher = const Value.absent(),
-    Value<String?> secretNonce = const Value.absent(),
-    Value<String?> secretMac = const Value.absent(),
-    DateTime? createdAt,
-    DateTime? updatedAt,
-    Value<DateTime?> deletedAt = const Value.absent(),
-    SyncState? syncStatus,
-    int? version,
-    String? deviceId,
-  }) => ServerEntry(
-    id: id ?? this.id,
-    name: name ?? this.name,
-    ip: ip ?? this.ip,
-    databaseName: databaseName ?? this.databaseName,
-    purpose: purpose ?? this.purpose,
-    status: status ?? this.status,
-    lastBackup: lastBackup.present ? lastBackup.value : this.lastBackup,
-    notes: notes ?? this.notes,
-    hasSecret: hasSecret ?? this.hasSecret,
-    secretCipher: secretCipher.present ? secretCipher.value : this.secretCipher,
-    secretNonce: secretNonce.present ? secretNonce.value : this.secretNonce,
-    secretMac: secretMac.present ? secretMac.value : this.secretMac,
-    createdAt: createdAt ?? this.createdAt,
-    updatedAt: updatedAt ?? this.updatedAt,
-    deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
-    syncStatus: syncStatus ?? this.syncStatus,
-    version: version ?? this.version,
-    deviceId: deviceId ?? this.deviceId,
-  );
-  ServerEntry copyWithCompanion(ServersCompanion data) {
-    return ServerEntry(
-      id: data.id.present ? data.id.value : this.id,
-      name: data.name.present ? data.name.value : this.name,
-      ip: data.ip.present ? data.ip.value : this.ip,
-      databaseName: data.databaseName.present
-          ? data.databaseName.value
-          : this.databaseName,
-      purpose: data.purpose.present ? data.purpose.value : this.purpose,
-      status: data.status.present ? data.status.value : this.status,
-      lastBackup: data.lastBackup.present
-          ? data.lastBackup.value
-          : this.lastBackup,
-      notes: data.notes.present ? data.notes.value : this.notes,
-      hasSecret: data.hasSecret.present ? data.hasSecret.value : this.hasSecret,
-      secretCipher: data.secretCipher.present
-          ? data.secretCipher.value
-          : this.secretCipher,
-      secretNonce: data.secretNonce.present
-          ? data.secretNonce.value
-          : this.secretNonce,
-      secretMac: data.secretMac.present ? data.secretMac.value : this.secretMac,
-      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
-      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
-      deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
-      syncStatus: data.syncStatus.present
-          ? data.syncStatus.value
-          : this.syncStatus,
-      version: data.version.present ? data.version.value : this.version,
-      deviceId: data.deviceId.present ? data.deviceId.value : this.deviceId,
-    );
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('ServerEntry(')
-          ..write('id: $id, ')
-          ..write('name: $name, ')
-          ..write('ip: $ip, ')
-          ..write('databaseName: $databaseName, ')
-          ..write('purpose: $purpose, ')
-          ..write('status: $status, ')
-          ..write('lastBackup: $lastBackup, ')
-          ..write('notes: $notes, ')
-          ..write('hasSecret: $hasSecret, ')
-          ..write('secretCipher: $secretCipher, ')
-          ..write('secretNonce: $secretNonce, ')
-          ..write('secretMac: $secretMac, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('updatedAt: $updatedAt, ')
-          ..write('deletedAt: $deletedAt, ')
-          ..write('syncStatus: $syncStatus, ')
-          ..write('version: $version, ')
-          ..write('deviceId: $deviceId')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(
-    id,
-    name,
-    ip,
-    databaseName,
-    purpose,
-    status,
-    lastBackup,
-    notes,
-    hasSecret,
-    secretCipher,
-    secretNonce,
-    secretMac,
-    createdAt,
-    updatedAt,
-    deletedAt,
-    syncStatus,
-    version,
-    deviceId,
-  );
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is ServerEntry &&
-          other.id == this.id &&
-          other.name == this.name &&
-          other.ip == this.ip &&
-          other.databaseName == this.databaseName &&
-          other.purpose == this.purpose &&
-          other.status == this.status &&
-          other.lastBackup == this.lastBackup &&
-          other.notes == this.notes &&
-          other.hasSecret == this.hasSecret &&
-          other.secretCipher == this.secretCipher &&
-          other.secretNonce == this.secretNonce &&
-          other.secretMac == this.secretMac &&
-          other.createdAt == this.createdAt &&
-          other.updatedAt == this.updatedAt &&
-          other.deletedAt == this.deletedAt &&
-          other.syncStatus == this.syncStatus &&
-          other.version == this.version &&
-          other.deviceId == this.deviceId);
-}
-
-class ServersCompanion extends UpdateCompanion<ServerEntry> {
-  final Value<String> id;
-  final Value<String> name;
-  final Value<String> ip;
-  final Value<String> databaseName;
-  final Value<ServerPurpose> purpose;
-  final Value<ServerStatus> status;
-  final Value<DateTime?> lastBackup;
-  final Value<String> notes;
-  final Value<bool> hasSecret;
-  final Value<String?> secretCipher;
-  final Value<String?> secretNonce;
-  final Value<String?> secretMac;
-  final Value<DateTime> createdAt;
-  final Value<DateTime> updatedAt;
-  final Value<DateTime?> deletedAt;
-  final Value<SyncState> syncStatus;
-  final Value<int> version;
-  final Value<String> deviceId;
-  final Value<int> rowid;
-  const ServersCompanion({
-    this.id = const Value.absent(),
-    this.name = const Value.absent(),
-    this.ip = const Value.absent(),
-    this.databaseName = const Value.absent(),
-    this.purpose = const Value.absent(),
-    this.status = const Value.absent(),
-    this.lastBackup = const Value.absent(),
-    this.notes = const Value.absent(),
-    this.hasSecret = const Value.absent(),
-    this.secretCipher = const Value.absent(),
-    this.secretNonce = const Value.absent(),
-    this.secretMac = const Value.absent(),
-    this.createdAt = const Value.absent(),
-    this.updatedAt = const Value.absent(),
-    this.deletedAt = const Value.absent(),
-    this.syncStatus = const Value.absent(),
-    this.version = const Value.absent(),
-    this.deviceId = const Value.absent(),
-    this.rowid = const Value.absent(),
-  });
-  ServersCompanion.insert({
-    required String id,
-    required String name,
-    this.ip = const Value.absent(),
-    this.databaseName = const Value.absent(),
-    this.purpose = const Value.absent(),
-    this.status = const Value.absent(),
-    this.lastBackup = const Value.absent(),
-    this.notes = const Value.absent(),
-    this.hasSecret = const Value.absent(),
-    this.secretCipher = const Value.absent(),
-    this.secretNonce = const Value.absent(),
-    this.secretMac = const Value.absent(),
-    required DateTime createdAt,
-    required DateTime updatedAt,
-    this.deletedAt = const Value.absent(),
-    this.syncStatus = const Value.absent(),
-    this.version = const Value.absent(),
-    this.deviceId = const Value.absent(),
-    this.rowid = const Value.absent(),
-  }) : id = Value(id),
-       name = Value(name),
-       createdAt = Value(createdAt),
-       updatedAt = Value(updatedAt);
-  static Insertable<ServerEntry> custom({
-    Expression<String>? id,
-    Expression<String>? name,
-    Expression<String>? ip,
-    Expression<String>? databaseName,
-    Expression<String>? purpose,
-    Expression<String>? status,
-    Expression<DateTime>? lastBackup,
-    Expression<String>? notes,
-    Expression<bool>? hasSecret,
-    Expression<String>? secretCipher,
-    Expression<String>? secretNonce,
-    Expression<String>? secretMac,
-    Expression<DateTime>? createdAt,
-    Expression<DateTime>? updatedAt,
-    Expression<DateTime>? deletedAt,
-    Expression<String>? syncStatus,
-    Expression<int>? version,
-    Expression<String>? deviceId,
-    Expression<int>? rowid,
-  }) {
-    return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (name != null) 'name': name,
-      if (ip != null) 'ip': ip,
-      if (databaseName != null) 'database_name': databaseName,
-      if (purpose != null) 'purpose': purpose,
-      if (status != null) 'status': status,
-      if (lastBackup != null) 'last_backup': lastBackup,
-      if (notes != null) 'notes': notes,
-      if (hasSecret != null) 'has_secret': hasSecret,
-      if (secretCipher != null) 'secret_cipher': secretCipher,
-      if (secretNonce != null) 'secret_nonce': secretNonce,
-      if (secretMac != null) 'secret_mac': secretMac,
-      if (createdAt != null) 'created_at': createdAt,
-      if (updatedAt != null) 'updated_at': updatedAt,
-      if (deletedAt != null) 'deleted_at': deletedAt,
-      if (syncStatus != null) 'sync_status': syncStatus,
-      if (version != null) 'version': version,
-      if (deviceId != null) 'device_id': deviceId,
-      if (rowid != null) 'rowid': rowid,
-    });
-  }
-
-  ServersCompanion copyWith({
-    Value<String>? id,
-    Value<String>? name,
-    Value<String>? ip,
-    Value<String>? databaseName,
-    Value<ServerPurpose>? purpose,
-    Value<ServerStatus>? status,
-    Value<DateTime?>? lastBackup,
-    Value<String>? notes,
-    Value<bool>? hasSecret,
-    Value<String?>? secretCipher,
-    Value<String?>? secretNonce,
-    Value<String?>? secretMac,
-    Value<DateTime>? createdAt,
-    Value<DateTime>? updatedAt,
-    Value<DateTime?>? deletedAt,
-    Value<SyncState>? syncStatus,
-    Value<int>? version,
-    Value<String>? deviceId,
-    Value<int>? rowid,
-  }) {
-    return ServersCompanion(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      ip: ip ?? this.ip,
-      databaseName: databaseName ?? this.databaseName,
-      purpose: purpose ?? this.purpose,
-      status: status ?? this.status,
-      lastBackup: lastBackup ?? this.lastBackup,
-      notes: notes ?? this.notes,
-      hasSecret: hasSecret ?? this.hasSecret,
-      secretCipher: secretCipher ?? this.secretCipher,
-      secretNonce: secretNonce ?? this.secretNonce,
-      secretMac: secretMac ?? this.secretMac,
-      createdAt: createdAt ?? this.createdAt,
-      updatedAt: updatedAt ?? this.updatedAt,
-      deletedAt: deletedAt ?? this.deletedAt,
-      syncStatus: syncStatus ?? this.syncStatus,
-      version: version ?? this.version,
-      deviceId: deviceId ?? this.deviceId,
-      rowid: rowid ?? this.rowid,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<String>(id.value);
-    }
-    if (name.present) {
-      map['name'] = Variable<String>(name.value);
-    }
-    if (ip.present) {
-      map['ip'] = Variable<String>(ip.value);
-    }
-    if (databaseName.present) {
-      map['database_name'] = Variable<String>(databaseName.value);
-    }
-    if (purpose.present) {
-      map['purpose'] = Variable<String>(
-        $ServersTable.$converterpurpose.toSql(purpose.value),
-      );
-    }
-    if (status.present) {
-      map['status'] = Variable<String>(
-        $ServersTable.$converterstatus.toSql(status.value),
-      );
-    }
-    if (lastBackup.present) {
-      map['last_backup'] = Variable<DateTime>(lastBackup.value);
-    }
-    if (notes.present) {
-      map['notes'] = Variable<String>(notes.value);
-    }
-    if (hasSecret.present) {
-      map['has_secret'] = Variable<bool>(hasSecret.value);
-    }
-    if (secretCipher.present) {
-      map['secret_cipher'] = Variable<String>(secretCipher.value);
-    }
-    if (secretNonce.present) {
-      map['secret_nonce'] = Variable<String>(secretNonce.value);
-    }
-    if (secretMac.present) {
-      map['secret_mac'] = Variable<String>(secretMac.value);
-    }
-    if (createdAt.present) {
-      map['created_at'] = Variable<DateTime>(createdAt.value);
-    }
-    if (updatedAt.present) {
-      map['updated_at'] = Variable<DateTime>(updatedAt.value);
-    }
-    if (deletedAt.present) {
-      map['deleted_at'] = Variable<DateTime>(deletedAt.value);
-    }
-    if (syncStatus.present) {
-      map['sync_status'] = Variable<String>(
-        $ServersTable.$convertersyncStatus.toSql(syncStatus.value),
-      );
-    }
-    if (version.present) {
-      map['version'] = Variable<int>(version.value);
-    }
-    if (deviceId.present) {
-      map['device_id'] = Variable<String>(deviceId.value);
-    }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('ServersCompanion(')
-          ..write('id: $id, ')
-          ..write('name: $name, ')
-          ..write('ip: $ip, ')
-          ..write('databaseName: $databaseName, ')
-          ..write('purpose: $purpose, ')
-          ..write('status: $status, ')
-          ..write('lastBackup: $lastBackup, ')
-          ..write('notes: $notes, ')
-          ..write('hasSecret: $hasSecret, ')
-          ..write('secretCipher: $secretCipher, ')
-          ..write('secretNonce: $secretNonce, ')
-          ..write('secretMac: $secretMac, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('deletedAt: $deletedAt, ')
@@ -6991,567 +3591,6 @@ class DiagramsCompanion extends UpdateCompanion<Diagram> {
           ..write('documentJson: $documentJson, ')
           ..write('thumbnailBase64: $thumbnailBase64, ')
           ..write('searchText: $searchText, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('updatedAt: $updatedAt, ')
-          ..write('deletedAt: $deletedAt, ')
-          ..write('syncStatus: $syncStatus, ')
-          ..write('version: $version, ')
-          ..write('deviceId: $deviceId, ')
-          ..write('rowid: $rowid')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $StencilsTable extends Stencils with TableInfo<$StencilsTable, Stencil> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $StencilsTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<String> id = GeneratedColumn<String>(
-    'id',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _titleMeta = const VerificationMeta('title');
-  @override
-  late final GeneratedColumn<String> title = GeneratedColumn<String>(
-    'title',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _shapeJsonMeta = const VerificationMeta(
-    'shapeJson',
-  );
-  @override
-  late final GeneratedColumn<String> shapeJson = GeneratedColumn<String>(
-    'shape_json',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _createdAtMeta = const VerificationMeta(
-    'createdAt',
-  );
-  @override
-  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-    'created_at',
-    aliasedName,
-    false,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
-    'updatedAt',
-  );
-  @override
-  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
-    'updated_at',
-    aliasedName,
-    false,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _deletedAtMeta = const VerificationMeta(
-    'deletedAt',
-  );
-  @override
-  late final GeneratedColumn<DateTime> deletedAt = GeneratedColumn<DateTime>(
-    'deleted_at',
-    aliasedName,
-    true,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: false,
-  );
-  @override
-  late final GeneratedColumnWithTypeConverter<SyncState, String> syncStatus =
-      GeneratedColumn<String>(
-        'sync_status',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: Constant(SyncState.pending.name),
-      ).withConverter<SyncState>($StencilsTable.$convertersyncStatus);
-  static const VerificationMeta _versionMeta = const VerificationMeta(
-    'version',
-  );
-  @override
-  late final GeneratedColumn<int> version = GeneratedColumn<int>(
-    'version',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultValue: const Constant(1),
-  );
-  static const VerificationMeta _deviceIdMeta = const VerificationMeta(
-    'deviceId',
-  );
-  @override
-  late final GeneratedColumn<String> deviceId = GeneratedColumn<String>(
-    'device_id',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-    defaultValue: const Constant(''),
-  );
-  @override
-  List<GeneratedColumn> get $columns => [
-    id,
-    title,
-    shapeJson,
-    createdAt,
-    updatedAt,
-    deletedAt,
-    syncStatus,
-    version,
-    deviceId,
-  ];
-  @override
-  String get aliasedName => _alias ?? actualTableName;
-  @override
-  String get actualTableName => $name;
-  static const String $name = 'stencils';
-  @override
-  VerificationContext validateIntegrity(
-    Insertable<Stencil> instance, {
-    bool isInserting = false,
-  }) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    } else if (isInserting) {
-      context.missing(_idMeta);
-    }
-    if (data.containsKey('title')) {
-      context.handle(
-        _titleMeta,
-        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_titleMeta);
-    }
-    if (data.containsKey('shape_json')) {
-      context.handle(
-        _shapeJsonMeta,
-        shapeJson.isAcceptableOrUnknown(data['shape_json']!, _shapeJsonMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_shapeJsonMeta);
-    }
-    if (data.containsKey('created_at')) {
-      context.handle(
-        _createdAtMeta,
-        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_createdAtMeta);
-    }
-    if (data.containsKey('updated_at')) {
-      context.handle(
-        _updatedAtMeta,
-        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_updatedAtMeta);
-    }
-    if (data.containsKey('deleted_at')) {
-      context.handle(
-        _deletedAtMeta,
-        deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta),
-      );
-    }
-    if (data.containsKey('version')) {
-      context.handle(
-        _versionMeta,
-        version.isAcceptableOrUnknown(data['version']!, _versionMeta),
-      );
-    }
-    if (data.containsKey('device_id')) {
-      context.handle(
-        _deviceIdMeta,
-        deviceId.isAcceptableOrUnknown(data['device_id']!, _deviceIdMeta),
-      );
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  Stencil map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Stencil(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}id'],
-      )!,
-      title: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}title'],
-      )!,
-      shapeJson: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}shape_json'],
-      )!,
-      createdAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}created_at'],
-      )!,
-      updatedAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}updated_at'],
-      )!,
-      deletedAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}deleted_at'],
-      ),
-      syncStatus: $StencilsTable.$convertersyncStatus.fromSql(
-        attachedDatabase.typeMapping.read(
-          DriftSqlType.string,
-          data['${effectivePrefix}sync_status'],
-        )!,
-      ),
-      version: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}version'],
-      )!,
-      deviceId: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}device_id'],
-      )!,
-    );
-  }
-
-  @override
-  $StencilsTable createAlias(String alias) {
-    return $StencilsTable(attachedDatabase, alias);
-  }
-
-  static JsonTypeConverter2<SyncState, String, String> $convertersyncStatus =
-      const EnumNameConverter<SyncState>(SyncState.values);
-}
-
-class Stencil extends DataClass implements Insertable<Stencil> {
-  final String id;
-  final String title;
-  final String shapeJson;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final DateTime? deletedAt;
-  final SyncState syncStatus;
-  final int version;
-  final String deviceId;
-  const Stencil({
-    required this.id,
-    required this.title,
-    required this.shapeJson,
-    required this.createdAt,
-    required this.updatedAt,
-    this.deletedAt,
-    required this.syncStatus,
-    required this.version,
-    required this.deviceId,
-  });
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<String>(id);
-    map['title'] = Variable<String>(title);
-    map['shape_json'] = Variable<String>(shapeJson);
-    map['created_at'] = Variable<DateTime>(createdAt);
-    map['updated_at'] = Variable<DateTime>(updatedAt);
-    if (!nullToAbsent || deletedAt != null) {
-      map['deleted_at'] = Variable<DateTime>(deletedAt);
-    }
-    {
-      map['sync_status'] = Variable<String>(
-        $StencilsTable.$convertersyncStatus.toSql(syncStatus),
-      );
-    }
-    map['version'] = Variable<int>(version);
-    map['device_id'] = Variable<String>(deviceId);
-    return map;
-  }
-
-  StencilsCompanion toCompanion(bool nullToAbsent) {
-    return StencilsCompanion(
-      id: Value(id),
-      title: Value(title),
-      shapeJson: Value(shapeJson),
-      createdAt: Value(createdAt),
-      updatedAt: Value(updatedAt),
-      deletedAt: deletedAt == null && nullToAbsent
-          ? const Value.absent()
-          : Value(deletedAt),
-      syncStatus: Value(syncStatus),
-      version: Value(version),
-      deviceId: Value(deviceId),
-    );
-  }
-
-  factory Stencil.fromJson(
-    Map<String, dynamic> json, {
-    ValueSerializer? serializer,
-  }) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return Stencil(
-      id: serializer.fromJson<String>(json['id']),
-      title: serializer.fromJson<String>(json['title']),
-      shapeJson: serializer.fromJson<String>(json['shapeJson']),
-      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
-      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
-      deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
-      syncStatus: $StencilsTable.$convertersyncStatus.fromJson(
-        serializer.fromJson<String>(json['syncStatus']),
-      ),
-      version: serializer.fromJson<int>(json['version']),
-      deviceId: serializer.fromJson<String>(json['deviceId']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<String>(id),
-      'title': serializer.toJson<String>(title),
-      'shapeJson': serializer.toJson<String>(shapeJson),
-      'createdAt': serializer.toJson<DateTime>(createdAt),
-      'updatedAt': serializer.toJson<DateTime>(updatedAt),
-      'deletedAt': serializer.toJson<DateTime?>(deletedAt),
-      'syncStatus': serializer.toJson<String>(
-        $StencilsTable.$convertersyncStatus.toJson(syncStatus),
-      ),
-      'version': serializer.toJson<int>(version),
-      'deviceId': serializer.toJson<String>(deviceId),
-    };
-  }
-
-  Stencil copyWith({
-    String? id,
-    String? title,
-    String? shapeJson,
-    DateTime? createdAt,
-    DateTime? updatedAt,
-    Value<DateTime?> deletedAt = const Value.absent(),
-    SyncState? syncStatus,
-    int? version,
-    String? deviceId,
-  }) => Stencil(
-    id: id ?? this.id,
-    title: title ?? this.title,
-    shapeJson: shapeJson ?? this.shapeJson,
-    createdAt: createdAt ?? this.createdAt,
-    updatedAt: updatedAt ?? this.updatedAt,
-    deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
-    syncStatus: syncStatus ?? this.syncStatus,
-    version: version ?? this.version,
-    deviceId: deviceId ?? this.deviceId,
-  );
-  Stencil copyWithCompanion(StencilsCompanion data) {
-    return Stencil(
-      id: data.id.present ? data.id.value : this.id,
-      title: data.title.present ? data.title.value : this.title,
-      shapeJson: data.shapeJson.present ? data.shapeJson.value : this.shapeJson,
-      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
-      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
-      deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
-      syncStatus: data.syncStatus.present
-          ? data.syncStatus.value
-          : this.syncStatus,
-      version: data.version.present ? data.version.value : this.version,
-      deviceId: data.deviceId.present ? data.deviceId.value : this.deviceId,
-    );
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('Stencil(')
-          ..write('id: $id, ')
-          ..write('title: $title, ')
-          ..write('shapeJson: $shapeJson, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('updatedAt: $updatedAt, ')
-          ..write('deletedAt: $deletedAt, ')
-          ..write('syncStatus: $syncStatus, ')
-          ..write('version: $version, ')
-          ..write('deviceId: $deviceId')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(
-    id,
-    title,
-    shapeJson,
-    createdAt,
-    updatedAt,
-    deletedAt,
-    syncStatus,
-    version,
-    deviceId,
-  );
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is Stencil &&
-          other.id == this.id &&
-          other.title == this.title &&
-          other.shapeJson == this.shapeJson &&
-          other.createdAt == this.createdAt &&
-          other.updatedAt == this.updatedAt &&
-          other.deletedAt == this.deletedAt &&
-          other.syncStatus == this.syncStatus &&
-          other.version == this.version &&
-          other.deviceId == this.deviceId);
-}
-
-class StencilsCompanion extends UpdateCompanion<Stencil> {
-  final Value<String> id;
-  final Value<String> title;
-  final Value<String> shapeJson;
-  final Value<DateTime> createdAt;
-  final Value<DateTime> updatedAt;
-  final Value<DateTime?> deletedAt;
-  final Value<SyncState> syncStatus;
-  final Value<int> version;
-  final Value<String> deviceId;
-  final Value<int> rowid;
-  const StencilsCompanion({
-    this.id = const Value.absent(),
-    this.title = const Value.absent(),
-    this.shapeJson = const Value.absent(),
-    this.createdAt = const Value.absent(),
-    this.updatedAt = const Value.absent(),
-    this.deletedAt = const Value.absent(),
-    this.syncStatus = const Value.absent(),
-    this.version = const Value.absent(),
-    this.deviceId = const Value.absent(),
-    this.rowid = const Value.absent(),
-  });
-  StencilsCompanion.insert({
-    required String id,
-    required String title,
-    required String shapeJson,
-    required DateTime createdAt,
-    required DateTime updatedAt,
-    this.deletedAt = const Value.absent(),
-    this.syncStatus = const Value.absent(),
-    this.version = const Value.absent(),
-    this.deviceId = const Value.absent(),
-    this.rowid = const Value.absent(),
-  }) : id = Value(id),
-       title = Value(title),
-       shapeJson = Value(shapeJson),
-       createdAt = Value(createdAt),
-       updatedAt = Value(updatedAt);
-  static Insertable<Stencil> custom({
-    Expression<String>? id,
-    Expression<String>? title,
-    Expression<String>? shapeJson,
-    Expression<DateTime>? createdAt,
-    Expression<DateTime>? updatedAt,
-    Expression<DateTime>? deletedAt,
-    Expression<String>? syncStatus,
-    Expression<int>? version,
-    Expression<String>? deviceId,
-    Expression<int>? rowid,
-  }) {
-    return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (title != null) 'title': title,
-      if (shapeJson != null) 'shape_json': shapeJson,
-      if (createdAt != null) 'created_at': createdAt,
-      if (updatedAt != null) 'updated_at': updatedAt,
-      if (deletedAt != null) 'deleted_at': deletedAt,
-      if (syncStatus != null) 'sync_status': syncStatus,
-      if (version != null) 'version': version,
-      if (deviceId != null) 'device_id': deviceId,
-      if (rowid != null) 'rowid': rowid,
-    });
-  }
-
-  StencilsCompanion copyWith({
-    Value<String>? id,
-    Value<String>? title,
-    Value<String>? shapeJson,
-    Value<DateTime>? createdAt,
-    Value<DateTime>? updatedAt,
-    Value<DateTime?>? deletedAt,
-    Value<SyncState>? syncStatus,
-    Value<int>? version,
-    Value<String>? deviceId,
-    Value<int>? rowid,
-  }) {
-    return StencilsCompanion(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      shapeJson: shapeJson ?? this.shapeJson,
-      createdAt: createdAt ?? this.createdAt,
-      updatedAt: updatedAt ?? this.updatedAt,
-      deletedAt: deletedAt ?? this.deletedAt,
-      syncStatus: syncStatus ?? this.syncStatus,
-      version: version ?? this.version,
-      deviceId: deviceId ?? this.deviceId,
-      rowid: rowid ?? this.rowid,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<String>(id.value);
-    }
-    if (title.present) {
-      map['title'] = Variable<String>(title.value);
-    }
-    if (shapeJson.present) {
-      map['shape_json'] = Variable<String>(shapeJson.value);
-    }
-    if (createdAt.present) {
-      map['created_at'] = Variable<DateTime>(createdAt.value);
-    }
-    if (updatedAt.present) {
-      map['updated_at'] = Variable<DateTime>(updatedAt.value);
-    }
-    if (deletedAt.present) {
-      map['deleted_at'] = Variable<DateTime>(deletedAt.value);
-    }
-    if (syncStatus.present) {
-      map['sync_status'] = Variable<String>(
-        $StencilsTable.$convertersyncStatus.toSql(syncStatus.value),
-      );
-    }
-    if (version.present) {
-      map['version'] = Variable<int>(version.value);
-    }
-    if (deviceId.present) {
-      map['device_id'] = Variable<String>(deviceId.value);
-    }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('StencilsCompanion(')
-          ..write('id: $id, ')
-          ..write('title: $title, ')
-          ..write('shapeJson: $shapeJson, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('deletedAt: $deletedAt, ')
@@ -8774,6 +4813,62 @@ class $AttachmentsTable extends Attachments
     type: DriftSqlType.dateTime,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _deletedAtMeta = const VerificationMeta(
+    'deletedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> deletedAt = GeneratedColumn<DateTime>(
+    'deleted_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<SyncState, String> syncStatus =
+      GeneratedColumn<String>(
+        'sync_status',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: Constant(SyncState.pending.name),
+      ).withConverter<SyncState>($AttachmentsTable.$convertersyncStatus);
+  static const VerificationMeta _versionMeta = const VerificationMeta(
+    'version',
+  );
+  @override
+  late final GeneratedColumn<int> version = GeneratedColumn<int>(
+    'version',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(1),
+  );
+  static const VerificationMeta _deviceIdMeta = const VerificationMeta(
+    'deviceId',
+  );
+  @override
+  late final GeneratedColumn<String> deviceId = GeneratedColumn<String>(
+    'device_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -8784,6 +4879,11 @@ class $AttachmentsTable extends Attachments
     localPath,
     bytes,
     createdAt,
+    updatedAt,
+    deletedAt,
+    syncStatus,
+    version,
+    deviceId,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -8854,6 +4954,32 @@ class $AttachmentsTable extends Attachments
     } else if (isInserting) {
       context.missing(_createdAtMeta);
     }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    if (data.containsKey('deleted_at')) {
+      context.handle(
+        _deletedAtMeta,
+        deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta),
+      );
+    }
+    if (data.containsKey('version')) {
+      context.handle(
+        _versionMeta,
+        version.isAcceptableOrUnknown(data['version']!, _versionMeta),
+      );
+    }
+    if (data.containsKey('device_id')) {
+      context.handle(
+        _deviceIdMeta,
+        deviceId.isAcceptableOrUnknown(data['device_id']!, _deviceIdMeta),
+      );
+    }
     return context;
   }
 
@@ -8895,6 +5021,28 @@ class $AttachmentsTable extends Attachments
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_at'],
       )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+      deletedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}deleted_at'],
+      ),
+      syncStatus: $AttachmentsTable.$convertersyncStatus.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}sync_status'],
+        )!,
+      ),
+      version: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}version'],
+      )!,
+      deviceId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}device_id'],
+      )!,
     );
   }
 
@@ -8902,6 +5050,9 @@ class $AttachmentsTable extends Attachments
   $AttachmentsTable createAlias(String alias) {
     return $AttachmentsTable(attachedDatabase, alias);
   }
+
+  static JsonTypeConverter2<SyncState, String, String> $convertersyncStatus =
+      const EnumNameConverter<SyncState>(SyncState.values);
 }
 
 class Attachment extends DataClass implements Insertable<Attachment> {
@@ -8913,6 +5064,11 @@ class Attachment extends DataClass implements Insertable<Attachment> {
   final String localPath;
   final int bytes;
   final DateTime createdAt;
+  final DateTime updatedAt;
+  final DateTime? deletedAt;
+  final SyncState syncStatus;
+  final int version;
+  final String deviceId;
   const Attachment({
     required this.id,
     required this.entityType,
@@ -8922,6 +5078,11 @@ class Attachment extends DataClass implements Insertable<Attachment> {
     required this.localPath,
     required this.bytes,
     required this.createdAt,
+    required this.updatedAt,
+    this.deletedAt,
+    required this.syncStatus,
+    required this.version,
+    required this.deviceId,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -8934,6 +5095,17 @@ class Attachment extends DataClass implements Insertable<Attachment> {
     map['local_path'] = Variable<String>(localPath);
     map['bytes'] = Variable<int>(bytes);
     map['created_at'] = Variable<DateTime>(createdAt);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    if (!nullToAbsent || deletedAt != null) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt);
+    }
+    {
+      map['sync_status'] = Variable<String>(
+        $AttachmentsTable.$convertersyncStatus.toSql(syncStatus),
+      );
+    }
+    map['version'] = Variable<int>(version);
+    map['device_id'] = Variable<String>(deviceId);
     return map;
   }
 
@@ -8947,6 +5119,13 @@ class Attachment extends DataClass implements Insertable<Attachment> {
       localPath: Value(localPath),
       bytes: Value(bytes),
       createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+      deletedAt: deletedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deletedAt),
+      syncStatus: Value(syncStatus),
+      version: Value(version),
+      deviceId: Value(deviceId),
     );
   }
 
@@ -8964,6 +5143,13 @@ class Attachment extends DataClass implements Insertable<Attachment> {
       localPath: serializer.fromJson<String>(json['localPath']),
       bytes: serializer.fromJson<int>(json['bytes']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+      deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
+      syncStatus: $AttachmentsTable.$convertersyncStatus.fromJson(
+        serializer.fromJson<String>(json['syncStatus']),
+      ),
+      version: serializer.fromJson<int>(json['version']),
+      deviceId: serializer.fromJson<String>(json['deviceId']),
     );
   }
   @override
@@ -8978,6 +5164,13 @@ class Attachment extends DataClass implements Insertable<Attachment> {
       'localPath': serializer.toJson<String>(localPath),
       'bytes': serializer.toJson<int>(bytes),
       'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+      'deletedAt': serializer.toJson<DateTime?>(deletedAt),
+      'syncStatus': serializer.toJson<String>(
+        $AttachmentsTable.$convertersyncStatus.toJson(syncStatus),
+      ),
+      'version': serializer.toJson<int>(version),
+      'deviceId': serializer.toJson<String>(deviceId),
     };
   }
 
@@ -8990,6 +5183,11 @@ class Attachment extends DataClass implements Insertable<Attachment> {
     String? localPath,
     int? bytes,
     DateTime? createdAt,
+    DateTime? updatedAt,
+    Value<DateTime?> deletedAt = const Value.absent(),
+    SyncState? syncStatus,
+    int? version,
+    String? deviceId,
   }) => Attachment(
     id: id ?? this.id,
     entityType: entityType ?? this.entityType,
@@ -8999,6 +5197,11 @@ class Attachment extends DataClass implements Insertable<Attachment> {
     localPath: localPath ?? this.localPath,
     bytes: bytes ?? this.bytes,
     createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+    deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
+    syncStatus: syncStatus ?? this.syncStatus,
+    version: version ?? this.version,
+    deviceId: deviceId ?? this.deviceId,
   );
   Attachment copyWithCompanion(AttachmentsCompanion data) {
     return Attachment(
@@ -9012,6 +5215,13 @@ class Attachment extends DataClass implements Insertable<Attachment> {
       localPath: data.localPath.present ? data.localPath.value : this.localPath,
       bytes: data.bytes.present ? data.bytes.value : this.bytes,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
+      syncStatus: data.syncStatus.present
+          ? data.syncStatus.value
+          : this.syncStatus,
+      version: data.version.present ? data.version.value : this.version,
+      deviceId: data.deviceId.present ? data.deviceId.value : this.deviceId,
     );
   }
 
@@ -9025,7 +5235,12 @@ class Attachment extends DataClass implements Insertable<Attachment> {
           ..write('mimeType: $mimeType, ')
           ..write('localPath: $localPath, ')
           ..write('bytes: $bytes, ')
-          ..write('createdAt: $createdAt')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('syncStatus: $syncStatus, ')
+          ..write('version: $version, ')
+          ..write('deviceId: $deviceId')
           ..write(')'))
         .toString();
   }
@@ -9040,6 +5255,11 @@ class Attachment extends DataClass implements Insertable<Attachment> {
     localPath,
     bytes,
     createdAt,
+    updatedAt,
+    deletedAt,
+    syncStatus,
+    version,
+    deviceId,
   );
   @override
   bool operator ==(Object other) =>
@@ -9052,7 +5272,12 @@ class Attachment extends DataClass implements Insertable<Attachment> {
           other.mimeType == this.mimeType &&
           other.localPath == this.localPath &&
           other.bytes == this.bytes &&
-          other.createdAt == this.createdAt);
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt &&
+          other.deletedAt == this.deletedAt &&
+          other.syncStatus == this.syncStatus &&
+          other.version == this.version &&
+          other.deviceId == this.deviceId);
 }
 
 class AttachmentsCompanion extends UpdateCompanion<Attachment> {
@@ -9064,6 +5289,11 @@ class AttachmentsCompanion extends UpdateCompanion<Attachment> {
   final Value<String> localPath;
   final Value<int> bytes;
   final Value<DateTime> createdAt;
+  final Value<DateTime> updatedAt;
+  final Value<DateTime?> deletedAt;
+  final Value<SyncState> syncStatus;
+  final Value<int> version;
+  final Value<String> deviceId;
   final Value<int> rowid;
   const AttachmentsCompanion({
     this.id = const Value.absent(),
@@ -9074,6 +5304,11 @@ class AttachmentsCompanion extends UpdateCompanion<Attachment> {
     this.localPath = const Value.absent(),
     this.bytes = const Value.absent(),
     this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.deletedAt = const Value.absent(),
+    this.syncStatus = const Value.absent(),
+    this.version = const Value.absent(),
+    this.deviceId = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   AttachmentsCompanion.insert({
@@ -9085,13 +5320,19 @@ class AttachmentsCompanion extends UpdateCompanion<Attachment> {
     required String localPath,
     this.bytes = const Value.absent(),
     required DateTime createdAt,
+    required DateTime updatedAt,
+    this.deletedAt = const Value.absent(),
+    this.syncStatus = const Value.absent(),
+    this.version = const Value.absent(),
+    this.deviceId = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        entityType = Value(entityType),
        entityId = Value(entityId),
        fileName = Value(fileName),
        localPath = Value(localPath),
-       createdAt = Value(createdAt);
+       createdAt = Value(createdAt),
+       updatedAt = Value(updatedAt);
   static Insertable<Attachment> custom({
     Expression<String>? id,
     Expression<String>? entityType,
@@ -9101,6 +5342,11 @@ class AttachmentsCompanion extends UpdateCompanion<Attachment> {
     Expression<String>? localPath,
     Expression<int>? bytes,
     Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+    Expression<DateTime>? deletedAt,
+    Expression<String>? syncStatus,
+    Expression<int>? version,
+    Expression<String>? deviceId,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -9112,6 +5358,11 @@ class AttachmentsCompanion extends UpdateCompanion<Attachment> {
       if (localPath != null) 'local_path': localPath,
       if (bytes != null) 'bytes': bytes,
       if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (deletedAt != null) 'deleted_at': deletedAt,
+      if (syncStatus != null) 'sync_status': syncStatus,
+      if (version != null) 'version': version,
+      if (deviceId != null) 'device_id': deviceId,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -9125,6 +5376,11 @@ class AttachmentsCompanion extends UpdateCompanion<Attachment> {
     Value<String>? localPath,
     Value<int>? bytes,
     Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+    Value<DateTime?>? deletedAt,
+    Value<SyncState>? syncStatus,
+    Value<int>? version,
+    Value<String>? deviceId,
     Value<int>? rowid,
   }) {
     return AttachmentsCompanion(
@@ -9136,6 +5392,11 @@ class AttachmentsCompanion extends UpdateCompanion<Attachment> {
       localPath: localPath ?? this.localPath,
       bytes: bytes ?? this.bytes,
       createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      deletedAt: deletedAt ?? this.deletedAt,
+      syncStatus: syncStatus ?? this.syncStatus,
+      version: version ?? this.version,
+      deviceId: deviceId ?? this.deviceId,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -9167,6 +5428,23 @@ class AttachmentsCompanion extends UpdateCompanion<Attachment> {
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (deletedAt.present) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt.value);
+    }
+    if (syncStatus.present) {
+      map['sync_status'] = Variable<String>(
+        $AttachmentsTable.$convertersyncStatus.toSql(syncStatus.value),
+      );
+    }
+    if (version.present) {
+      map['version'] = Variable<int>(version.value);
+    }
+    if (deviceId.present) {
+      map['device_id'] = Variable<String>(deviceId.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -9184,6 +5462,11 @@ class AttachmentsCompanion extends UpdateCompanion<Attachment> {
           ..write('localPath: $localPath, ')
           ..write('bytes: $bytes, ')
           ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('syncStatus: $syncStatus, ')
+          ..write('version: $version, ')
+          ..write('deviceId: $deviceId, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -9404,13 +5687,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $FoldersTable folders = $FoldersTable(this);
   late final $TagsTable tags = $TagsTable(this);
   late final $NotesTable notes = $NotesTable(this);
-  late final $HowTosTable howTos = $HowTosTable(this);
   late final $TasksTable tasks = $TasksTable(this);
-  late final $ProjectsTable projects = $ProjectsTable(this);
-  late final $MilestonesTable milestones = $MilestonesTable(this);
-  late final $ServersTable servers = $ServersTable(this);
   late final $DiagramsTable diagrams = $DiagramsTable(this);
-  late final $StencilsTable stencils = $StencilsTable(this);
   late final $RevisionsTable revisions = $RevisionsTable(this);
   late final $SnapshotsTable snapshots = $SnapshotsTable(this);
   late final $SyncLogsTable syncLogs = $SyncLogsTable(this);
@@ -9424,13 +5702,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     folders,
     tags,
     notes,
-    howTos,
     tasks,
-    projects,
-    milestones,
-    servers,
     diagrams,
-    stencils,
     revisions,
     snapshots,
     syncLogs,
@@ -10353,390 +6626,6 @@ typedef $$NotesTableProcessedTableManager =
       Note,
       PrefetchHooks Function()
     >;
-typedef $$HowTosTableCreateCompanionBuilder = HowTosCompanion Function({
-  required String id,
-  required String title,
-  Value<String> category,
-  Value<HowToDifficulty> difficulty,
-  Value<String> stepsJson,
-  Value<String> tagsCsv,
-  Value<DateTime?> lastTested,
-  Value<String> relatedServerIds,
-  required DateTime createdAt,
-  required DateTime updatedAt,
-  Value<DateTime?> deletedAt,
-  Value<SyncState> syncStatus,
-  Value<int> version,
-  Value<String> deviceId,
-  Value<int> rowid,
-});
-typedef $$HowTosTableUpdateCompanionBuilder = HowTosCompanion Function({
-  Value<String> id,
-  Value<String> title,
-  Value<String> category,
-  Value<HowToDifficulty> difficulty,
-  Value<String> stepsJson,
-  Value<String> tagsCsv,
-  Value<DateTime?> lastTested,
-  Value<String> relatedServerIds,
-  Value<DateTime> createdAt,
-  Value<DateTime> updatedAt,
-  Value<DateTime?> deletedAt,
-  Value<SyncState> syncStatus,
-  Value<int> version,
-  Value<String> deviceId,
-  Value<int> rowid,
-});
-
-class $$HowTosTableFilterComposer
-    extends Composer<_$AppDatabase, $HowTosTable> {
-  $$HowTosTableFilterComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnFilters<String> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get title => $composableBuilder(
-    column: $table.title,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get category => $composableBuilder(
-    column: $table.category,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnWithTypeConverterFilters<HowToDifficulty, HowToDifficulty, String>
-  get difficulty => $composableBuilder(
-    column: $table.difficulty,
-    builder: (column) => ColumnWithTypeConverterFilters(column),
-  );
-
-  ColumnFilters<String> get stepsJson => $composableBuilder(
-    column: $table.stepsJson,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get tagsCsv => $composableBuilder(
-    column: $table.tagsCsv,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get lastTested => $composableBuilder(
-    column: $table.lastTested,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get relatedServerIds => $composableBuilder(
-    column: $table.relatedServerIds,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
-    column: $table.updatedAt,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get deletedAt => $composableBuilder(
-    column: $table.deletedAt,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnWithTypeConverterFilters<SyncState, SyncState, String> get syncStatus =>
-      $composableBuilder(
-        column: $table.syncStatus,
-        builder: (column) => ColumnWithTypeConverterFilters(column),
-      );
-
-  ColumnFilters<int> get version => $composableBuilder(
-    column: $table.version,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get deviceId => $composableBuilder(
-    column: $table.deviceId,
-    builder: (column) => ColumnFilters(column),
-  );
-}
-
-class $$HowTosTableOrderingComposer
-    extends Composer<_$AppDatabase, $HowTosTable> {
-  $$HowTosTableOrderingComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnOrderings<String> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get title => $composableBuilder(
-    column: $table.title,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get category => $composableBuilder(
-    column: $table.category,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get difficulty => $composableBuilder(
-    column: $table.difficulty,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get stepsJson => $composableBuilder(
-    column: $table.stepsJson,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get tagsCsv => $composableBuilder(
-    column: $table.tagsCsv,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get lastTested => $composableBuilder(
-    column: $table.lastTested,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get relatedServerIds => $composableBuilder(
-    column: $table.relatedServerIds,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
-    column: $table.updatedAt,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get deletedAt => $composableBuilder(
-    column: $table.deletedAt,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get syncStatus => $composableBuilder(
-    column: $table.syncStatus,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<int> get version => $composableBuilder(
-    column: $table.version,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get deviceId => $composableBuilder(
-    column: $table.deviceId,
-    builder: (column) => ColumnOrderings(column),
-  );
-}
-
-class $$HowTosTableAnnotationComposer
-    extends Composer<_$AppDatabase, $HowTosTable> {
-  $$HowTosTableAnnotationComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  GeneratedColumn<String> get id =>
-      $composableBuilder(column: $table.id, builder: (column) => column);
-
-  GeneratedColumn<String> get title =>
-      $composableBuilder(column: $table.title, builder: (column) => column);
-
-  GeneratedColumn<String> get category =>
-      $composableBuilder(column: $table.category, builder: (column) => column);
-
-  GeneratedColumnWithTypeConverter<HowToDifficulty, String> get difficulty =>
-      $composableBuilder(
-        column: $table.difficulty,
-        builder: (column) => column,
-      );
-
-  GeneratedColumn<String> get stepsJson =>
-      $composableBuilder(column: $table.stepsJson, builder: (column) => column);
-
-  GeneratedColumn<String> get tagsCsv =>
-      $composableBuilder(column: $table.tagsCsv, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get lastTested => $composableBuilder(
-    column: $table.lastTested,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<String> get relatedServerIds => $composableBuilder(
-    column: $table.relatedServerIds,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<DateTime> get createdAt =>
-      $composableBuilder(column: $table.createdAt, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get updatedAt =>
-      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get deletedAt =>
-      $composableBuilder(column: $table.deletedAt, builder: (column) => column);
-
-  GeneratedColumnWithTypeConverter<SyncState, String> get syncStatus =>
-      $composableBuilder(
-        column: $table.syncStatus,
-        builder: (column) => column,
-      );
-
-  GeneratedColumn<int> get version =>
-      $composableBuilder(column: $table.version, builder: (column) => column);
-
-  GeneratedColumn<String> get deviceId =>
-      $composableBuilder(column: $table.deviceId, builder: (column) => column);
-}
-
-class $$HowTosTableTableManager
-    extends
-        RootTableManager<
-          _$AppDatabase,
-          $HowTosTable,
-          HowTo,
-          $$HowTosTableFilterComposer,
-          $$HowTosTableOrderingComposer,
-          $$HowTosTableAnnotationComposer,
-          $$HowTosTableCreateCompanionBuilder,
-          $$HowTosTableUpdateCompanionBuilder,
-          (HowTo, BaseReferences<_$AppDatabase, $HowTosTable, HowTo>),
-          HowTo,
-          PrefetchHooks Function()
-        > {
-  $$HowTosTableTableManager(_$AppDatabase db, $HowTosTable table)
-    : super(
-        TableManagerState(
-          db: db,
-          table: table,
-          createFilteringComposer: () =>
-              $$HowTosTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$HowTosTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer: () =>
-              $$HowTosTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback:
-              ({
-                Value<String> id = const Value.absent(),
-                Value<String> title = const Value.absent(),
-                Value<String> category = const Value.absent(),
-                Value<HowToDifficulty> difficulty = const Value.absent(),
-                Value<String> stepsJson = const Value.absent(),
-                Value<String> tagsCsv = const Value.absent(),
-                Value<DateTime?> lastTested = const Value.absent(),
-                Value<String> relatedServerIds = const Value.absent(),
-                Value<DateTime> createdAt = const Value.absent(),
-                Value<DateTime> updatedAt = const Value.absent(),
-                Value<DateTime?> deletedAt = const Value.absent(),
-                Value<SyncState> syncStatus = const Value.absent(),
-                Value<int> version = const Value.absent(),
-                Value<String> deviceId = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => HowTosCompanion(
-                id: id,
-                title: title,
-                category: category,
-                difficulty: difficulty,
-                stepsJson: stepsJson,
-                tagsCsv: tagsCsv,
-                lastTested: lastTested,
-                relatedServerIds: relatedServerIds,
-                createdAt: createdAt,
-                updatedAt: updatedAt,
-                deletedAt: deletedAt,
-                syncStatus: syncStatus,
-                version: version,
-                deviceId: deviceId,
-                rowid: rowid,
-              ),
-          createCompanionCallback:
-              ({
-                required String id,
-                required String title,
-                Value<String> category = const Value.absent(),
-                Value<HowToDifficulty> difficulty = const Value.absent(),
-                Value<String> stepsJson = const Value.absent(),
-                Value<String> tagsCsv = const Value.absent(),
-                Value<DateTime?> lastTested = const Value.absent(),
-                Value<String> relatedServerIds = const Value.absent(),
-                required DateTime createdAt,
-                required DateTime updatedAt,
-                Value<DateTime?> deletedAt = const Value.absent(),
-                Value<SyncState> syncStatus = const Value.absent(),
-                Value<int> version = const Value.absent(),
-                Value<String> deviceId = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => HowTosCompanion.insert(
-                id: id,
-                title: title,
-                category: category,
-                difficulty: difficulty,
-                stepsJson: stepsJson,
-                tagsCsv: tagsCsv,
-                lastTested: lastTested,
-                relatedServerIds: relatedServerIds,
-                createdAt: createdAt,
-                updatedAt: updatedAt,
-                deletedAt: deletedAt,
-                syncStatus: syncStatus,
-                version: version,
-                deviceId: deviceId,
-                rowid: rowid,
-              ),
-          withReferenceMapper: (p0) => p0
-              .map(
-                (e) => (
-                  e.readTable<$HowTosTable, HowTo>(table),
-                  BaseReferences<_$AppDatabase, $HowTosTable, HowTo>(
-                    db,
-                    table,
-                    e,
-                  ),
-                ),
-              )
-              .toList(),
-          prefetchHooksCallback: null,
-        ),
-      );
-}
-
-typedef $$HowTosTableProcessedTableManager =
-    ProcessedTableManager<
-      _$AppDatabase,
-      $HowTosTable,
-      HowTo,
-      $$HowTosTableFilterComposer,
-      $$HowTosTableOrderingComposer,
-      $$HowTosTableAnnotationComposer,
-      $$HowTosTableCreateCompanionBuilder,
-      $$HowTosTableUpdateCompanionBuilder,
-      (HowTo, BaseReferences<_$AppDatabase, $HowTosTable, HowTo>),
-      HowTo,
-      PrefetchHooks Function()
-    >;
 typedef $$TasksTableCreateCompanionBuilder = TasksCompanion Function({
   required String id,
   required String title,
@@ -10746,9 +6635,7 @@ typedef $$TasksTableCreateCompanionBuilder = TasksCompanion Function({
   Value<DateTime?> dueDate,
   Value<DateTime?> reminderAt,
   Value<String> subtasksJson,
-  Value<String?> linkedServerId,
   Value<String?> linkedNoteId,
-  Value<String?> linkedDiagramId,
   Value<String> tagsCsv,
   Value<int> sortOrder,
   required DateTime createdAt,
@@ -10768,9 +6655,7 @@ typedef $$TasksTableUpdateCompanionBuilder = TasksCompanion Function({
   Value<DateTime?> dueDate,
   Value<DateTime?> reminderAt,
   Value<String> subtasksJson,
-  Value<String?> linkedServerId,
   Value<String?> linkedNoteId,
-  Value<String?> linkedDiagramId,
   Value<String> tagsCsv,
   Value<int> sortOrder,
   Value<DateTime> createdAt,
@@ -10832,18 +6717,8 @@ class $$TasksTableFilterComposer extends Composer<_$AppDatabase, $TasksTable> {
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get linkedServerId => $composableBuilder(
-    column: $table.linkedServerId,
-    builder: (column) => ColumnFilters(column),
-  );
-
   ColumnFilters<String> get linkedNoteId => $composableBuilder(
     column: $table.linkedNoteId,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get linkedDiagramId => $composableBuilder(
-    column: $table.linkedDiagramId,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -10938,18 +6813,8 @@ class $$TasksTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get linkedServerId => $composableBuilder(
-    column: $table.linkedServerId,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<String> get linkedNoteId => $composableBuilder(
     column: $table.linkedNoteId,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get linkedDiagramId => $composableBuilder(
-    column: $table.linkedDiagramId,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -11033,18 +6898,8 @@ class $$TasksTableAnnotationComposer
     builder: (column) => column,
   );
 
-  GeneratedColumn<String> get linkedServerId => $composableBuilder(
-    column: $table.linkedServerId,
-    builder: (column) => column,
-  );
-
   GeneratedColumn<String> get linkedNoteId => $composableBuilder(
     column: $table.linkedNoteId,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<String> get linkedDiagramId => $composableBuilder(
-    column: $table.linkedDiagramId,
     builder: (column) => column,
   );
 
@@ -11112,9 +6967,7 @@ class $$TasksTableTableManager
                 Value<DateTime?> dueDate = const Value.absent(),
                 Value<DateTime?> reminderAt = const Value.absent(),
                 Value<String> subtasksJson = const Value.absent(),
-                Value<String?> linkedServerId = const Value.absent(),
                 Value<String?> linkedNoteId = const Value.absent(),
-                Value<String?> linkedDiagramId = const Value.absent(),
                 Value<String> tagsCsv = const Value.absent(),
                 Value<int> sortOrder = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
@@ -11133,9 +6986,7 @@ class $$TasksTableTableManager
                 dueDate: dueDate,
                 reminderAt: reminderAt,
                 subtasksJson: subtasksJson,
-                linkedServerId: linkedServerId,
                 linkedNoteId: linkedNoteId,
-                linkedDiagramId: linkedDiagramId,
                 tagsCsv: tagsCsv,
                 sortOrder: sortOrder,
                 createdAt: createdAt,
@@ -11156,9 +7007,7 @@ class $$TasksTableTableManager
                 Value<DateTime?> dueDate = const Value.absent(),
                 Value<DateTime?> reminderAt = const Value.absent(),
                 Value<String> subtasksJson = const Value.absent(),
-                Value<String?> linkedServerId = const Value.absent(),
                 Value<String?> linkedNoteId = const Value.absent(),
-                Value<String?> linkedDiagramId = const Value.absent(),
                 Value<String> tagsCsv = const Value.absent(),
                 Value<int> sortOrder = const Value.absent(),
                 required DateTime createdAt,
@@ -11177,9 +7026,7 @@ class $$TasksTableTableManager
                 dueDate: dueDate,
                 reminderAt: reminderAt,
                 subtasksJson: subtasksJson,
-                linkedServerId: linkedServerId,
                 linkedNoteId: linkedNoteId,
-                linkedDiagramId: linkedDiagramId,
                 tagsCsv: tagsCsv,
                 sortOrder: sortOrder,
                 createdAt: createdAt,
@@ -11219,1174 +7066,6 @@ typedef $$TasksTableProcessedTableManager =
       $$TasksTableUpdateCompanionBuilder,
       (Task, BaseReferences<_$AppDatabase, $TasksTable, Task>),
       Task,
-      PrefetchHooks Function()
-    >;
-typedef $$ProjectsTableCreateCompanionBuilder = ProjectsCompanion Function({
-  required String id,
-  required String title,
-  Value<String> description,
-  Value<ProjectStatus> status,
-  Value<DateTime?> startDate,
-  Value<DateTime?> endDate,
-  Value<int> progress,
-  required DateTime createdAt,
-  required DateTime updatedAt,
-  Value<DateTime?> deletedAt,
-  Value<SyncState> syncStatus,
-  Value<int> version,
-  Value<String> deviceId,
-  Value<int> rowid,
-});
-typedef $$ProjectsTableUpdateCompanionBuilder = ProjectsCompanion Function({
-  Value<String> id,
-  Value<String> title,
-  Value<String> description,
-  Value<ProjectStatus> status,
-  Value<DateTime?> startDate,
-  Value<DateTime?> endDate,
-  Value<int> progress,
-  Value<DateTime> createdAt,
-  Value<DateTime> updatedAt,
-  Value<DateTime?> deletedAt,
-  Value<SyncState> syncStatus,
-  Value<int> version,
-  Value<String> deviceId,
-  Value<int> rowid,
-});
-
-class $$ProjectsTableFilterComposer
-    extends Composer<_$AppDatabase, $ProjectsTable> {
-  $$ProjectsTableFilterComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnFilters<String> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get title => $composableBuilder(
-    column: $table.title,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get description => $composableBuilder(
-    column: $table.description,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnWithTypeConverterFilters<ProjectStatus, ProjectStatus, String>
-  get status => $composableBuilder(
-    column: $table.status,
-    builder: (column) => ColumnWithTypeConverterFilters(column),
-  );
-
-  ColumnFilters<DateTime> get startDate => $composableBuilder(
-    column: $table.startDate,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get endDate => $composableBuilder(
-    column: $table.endDate,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<int> get progress => $composableBuilder(
-    column: $table.progress,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
-    column: $table.updatedAt,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get deletedAt => $composableBuilder(
-    column: $table.deletedAt,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnWithTypeConverterFilters<SyncState, SyncState, String> get syncStatus =>
-      $composableBuilder(
-        column: $table.syncStatus,
-        builder: (column) => ColumnWithTypeConverterFilters(column),
-      );
-
-  ColumnFilters<int> get version => $composableBuilder(
-    column: $table.version,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get deviceId => $composableBuilder(
-    column: $table.deviceId,
-    builder: (column) => ColumnFilters(column),
-  );
-}
-
-class $$ProjectsTableOrderingComposer
-    extends Composer<_$AppDatabase, $ProjectsTable> {
-  $$ProjectsTableOrderingComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnOrderings<String> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get title => $composableBuilder(
-    column: $table.title,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get description => $composableBuilder(
-    column: $table.description,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get status => $composableBuilder(
-    column: $table.status,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get startDate => $composableBuilder(
-    column: $table.startDate,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get endDate => $composableBuilder(
-    column: $table.endDate,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<int> get progress => $composableBuilder(
-    column: $table.progress,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
-    column: $table.updatedAt,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get deletedAt => $composableBuilder(
-    column: $table.deletedAt,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get syncStatus => $composableBuilder(
-    column: $table.syncStatus,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<int> get version => $composableBuilder(
-    column: $table.version,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get deviceId => $composableBuilder(
-    column: $table.deviceId,
-    builder: (column) => ColumnOrderings(column),
-  );
-}
-
-class $$ProjectsTableAnnotationComposer
-    extends Composer<_$AppDatabase, $ProjectsTable> {
-  $$ProjectsTableAnnotationComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  GeneratedColumn<String> get id =>
-      $composableBuilder(column: $table.id, builder: (column) => column);
-
-  GeneratedColumn<String> get title =>
-      $composableBuilder(column: $table.title, builder: (column) => column);
-
-  GeneratedColumn<String> get description => $composableBuilder(
-    column: $table.description,
-    builder: (column) => column,
-  );
-
-  GeneratedColumnWithTypeConverter<ProjectStatus, String> get status =>
-      $composableBuilder(column: $table.status, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get startDate =>
-      $composableBuilder(column: $table.startDate, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get endDate =>
-      $composableBuilder(column: $table.endDate, builder: (column) => column);
-
-  GeneratedColumn<int> get progress =>
-      $composableBuilder(column: $table.progress, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get createdAt =>
-      $composableBuilder(column: $table.createdAt, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get updatedAt =>
-      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get deletedAt =>
-      $composableBuilder(column: $table.deletedAt, builder: (column) => column);
-
-  GeneratedColumnWithTypeConverter<SyncState, String> get syncStatus =>
-      $composableBuilder(
-        column: $table.syncStatus,
-        builder: (column) => column,
-      );
-
-  GeneratedColumn<int> get version =>
-      $composableBuilder(column: $table.version, builder: (column) => column);
-
-  GeneratedColumn<String> get deviceId =>
-      $composableBuilder(column: $table.deviceId, builder: (column) => column);
-}
-
-class $$ProjectsTableTableManager
-    extends
-        RootTableManager<
-          _$AppDatabase,
-          $ProjectsTable,
-          Project,
-          $$ProjectsTableFilterComposer,
-          $$ProjectsTableOrderingComposer,
-          $$ProjectsTableAnnotationComposer,
-          $$ProjectsTableCreateCompanionBuilder,
-          $$ProjectsTableUpdateCompanionBuilder,
-          (Project, BaseReferences<_$AppDatabase, $ProjectsTable, Project>),
-          Project,
-          PrefetchHooks Function()
-        > {
-  $$ProjectsTableTableManager(_$AppDatabase db, $ProjectsTable table)
-    : super(
-        TableManagerState(
-          db: db,
-          table: table,
-          createFilteringComposer: () =>
-              $$ProjectsTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$ProjectsTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer: () =>
-              $$ProjectsTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback:
-              ({
-                Value<String> id = const Value.absent(),
-                Value<String> title = const Value.absent(),
-                Value<String> description = const Value.absent(),
-                Value<ProjectStatus> status = const Value.absent(),
-                Value<DateTime?> startDate = const Value.absent(),
-                Value<DateTime?> endDate = const Value.absent(),
-                Value<int> progress = const Value.absent(),
-                Value<DateTime> createdAt = const Value.absent(),
-                Value<DateTime> updatedAt = const Value.absent(),
-                Value<DateTime?> deletedAt = const Value.absent(),
-                Value<SyncState> syncStatus = const Value.absent(),
-                Value<int> version = const Value.absent(),
-                Value<String> deviceId = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => ProjectsCompanion(
-                id: id,
-                title: title,
-                description: description,
-                status: status,
-                startDate: startDate,
-                endDate: endDate,
-                progress: progress,
-                createdAt: createdAt,
-                updatedAt: updatedAt,
-                deletedAt: deletedAt,
-                syncStatus: syncStatus,
-                version: version,
-                deviceId: deviceId,
-                rowid: rowid,
-              ),
-          createCompanionCallback:
-              ({
-                required String id,
-                required String title,
-                Value<String> description = const Value.absent(),
-                Value<ProjectStatus> status = const Value.absent(),
-                Value<DateTime?> startDate = const Value.absent(),
-                Value<DateTime?> endDate = const Value.absent(),
-                Value<int> progress = const Value.absent(),
-                required DateTime createdAt,
-                required DateTime updatedAt,
-                Value<DateTime?> deletedAt = const Value.absent(),
-                Value<SyncState> syncStatus = const Value.absent(),
-                Value<int> version = const Value.absent(),
-                Value<String> deviceId = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => ProjectsCompanion.insert(
-                id: id,
-                title: title,
-                description: description,
-                status: status,
-                startDate: startDate,
-                endDate: endDate,
-                progress: progress,
-                createdAt: createdAt,
-                updatedAt: updatedAt,
-                deletedAt: deletedAt,
-                syncStatus: syncStatus,
-                version: version,
-                deviceId: deviceId,
-                rowid: rowid,
-              ),
-          withReferenceMapper: (p0) => p0
-              .map(
-                (e) => (
-                  e.readTable<$ProjectsTable, Project>(table),
-                  BaseReferences<_$AppDatabase, $ProjectsTable, Project>(
-                    db,
-                    table,
-                    e,
-                  ),
-                ),
-              )
-              .toList(),
-          prefetchHooksCallback: null,
-        ),
-      );
-}
-
-typedef $$ProjectsTableProcessedTableManager =
-    ProcessedTableManager<
-      _$AppDatabase,
-      $ProjectsTable,
-      Project,
-      $$ProjectsTableFilterComposer,
-      $$ProjectsTableOrderingComposer,
-      $$ProjectsTableAnnotationComposer,
-      $$ProjectsTableCreateCompanionBuilder,
-      $$ProjectsTableUpdateCompanionBuilder,
-      (Project, BaseReferences<_$AppDatabase, $ProjectsTable, Project>),
-      Project,
-      PrefetchHooks Function()
-    >;
-typedef $$MilestonesTableCreateCompanionBuilder = MilestonesCompanion Function({
-  required String id,
-  required String projectId,
-  required String title,
-  Value<DateTime?> dueDate,
-  Value<bool> done,
-  Value<String> linkedTaskIds,
-  required DateTime createdAt,
-  required DateTime updatedAt,
-  Value<DateTime?> deletedAt,
-  Value<SyncState> syncStatus,
-  Value<int> version,
-  Value<String> deviceId,
-  Value<int> rowid,
-});
-typedef $$MilestonesTableUpdateCompanionBuilder = MilestonesCompanion Function({
-  Value<String> id,
-  Value<String> projectId,
-  Value<String> title,
-  Value<DateTime?> dueDate,
-  Value<bool> done,
-  Value<String> linkedTaskIds,
-  Value<DateTime> createdAt,
-  Value<DateTime> updatedAt,
-  Value<DateTime?> deletedAt,
-  Value<SyncState> syncStatus,
-  Value<int> version,
-  Value<String> deviceId,
-  Value<int> rowid,
-});
-
-class $$MilestonesTableFilterComposer
-    extends Composer<_$AppDatabase, $MilestonesTable> {
-  $$MilestonesTableFilterComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnFilters<String> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get projectId => $composableBuilder(
-    column: $table.projectId,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get title => $composableBuilder(
-    column: $table.title,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get dueDate => $composableBuilder(
-    column: $table.dueDate,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<bool> get done => $composableBuilder(
-    column: $table.done,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get linkedTaskIds => $composableBuilder(
-    column: $table.linkedTaskIds,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
-    column: $table.updatedAt,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get deletedAt => $composableBuilder(
-    column: $table.deletedAt,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnWithTypeConverterFilters<SyncState, SyncState, String> get syncStatus =>
-      $composableBuilder(
-        column: $table.syncStatus,
-        builder: (column) => ColumnWithTypeConverterFilters(column),
-      );
-
-  ColumnFilters<int> get version => $composableBuilder(
-    column: $table.version,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get deviceId => $composableBuilder(
-    column: $table.deviceId,
-    builder: (column) => ColumnFilters(column),
-  );
-}
-
-class $$MilestonesTableOrderingComposer
-    extends Composer<_$AppDatabase, $MilestonesTable> {
-  $$MilestonesTableOrderingComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnOrderings<String> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get projectId => $composableBuilder(
-    column: $table.projectId,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get title => $composableBuilder(
-    column: $table.title,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get dueDate => $composableBuilder(
-    column: $table.dueDate,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<bool> get done => $composableBuilder(
-    column: $table.done,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get linkedTaskIds => $composableBuilder(
-    column: $table.linkedTaskIds,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
-    column: $table.updatedAt,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get deletedAt => $composableBuilder(
-    column: $table.deletedAt,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get syncStatus => $composableBuilder(
-    column: $table.syncStatus,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<int> get version => $composableBuilder(
-    column: $table.version,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get deviceId => $composableBuilder(
-    column: $table.deviceId,
-    builder: (column) => ColumnOrderings(column),
-  );
-}
-
-class $$MilestonesTableAnnotationComposer
-    extends Composer<_$AppDatabase, $MilestonesTable> {
-  $$MilestonesTableAnnotationComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  GeneratedColumn<String> get id =>
-      $composableBuilder(column: $table.id, builder: (column) => column);
-
-  GeneratedColumn<String> get projectId =>
-      $composableBuilder(column: $table.projectId, builder: (column) => column);
-
-  GeneratedColumn<String> get title =>
-      $composableBuilder(column: $table.title, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get dueDate =>
-      $composableBuilder(column: $table.dueDate, builder: (column) => column);
-
-  GeneratedColumn<bool> get done =>
-      $composableBuilder(column: $table.done, builder: (column) => column);
-
-  GeneratedColumn<String> get linkedTaskIds => $composableBuilder(
-    column: $table.linkedTaskIds,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<DateTime> get createdAt =>
-      $composableBuilder(column: $table.createdAt, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get updatedAt =>
-      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get deletedAt =>
-      $composableBuilder(column: $table.deletedAt, builder: (column) => column);
-
-  GeneratedColumnWithTypeConverter<SyncState, String> get syncStatus =>
-      $composableBuilder(
-        column: $table.syncStatus,
-        builder: (column) => column,
-      );
-
-  GeneratedColumn<int> get version =>
-      $composableBuilder(column: $table.version, builder: (column) => column);
-
-  GeneratedColumn<String> get deviceId =>
-      $composableBuilder(column: $table.deviceId, builder: (column) => column);
-}
-
-class $$MilestonesTableTableManager
-    extends
-        RootTableManager<
-          _$AppDatabase,
-          $MilestonesTable,
-          Milestone,
-          $$MilestonesTableFilterComposer,
-          $$MilestonesTableOrderingComposer,
-          $$MilestonesTableAnnotationComposer,
-          $$MilestonesTableCreateCompanionBuilder,
-          $$MilestonesTableUpdateCompanionBuilder,
-          (
-            Milestone,
-            BaseReferences<_$AppDatabase, $MilestonesTable, Milestone>,
-          ),
-          Milestone,
-          PrefetchHooks Function()
-        > {
-  $$MilestonesTableTableManager(_$AppDatabase db, $MilestonesTable table)
-    : super(
-        TableManagerState(
-          db: db,
-          table: table,
-          createFilteringComposer: () =>
-              $$MilestonesTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$MilestonesTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer: () =>
-              $$MilestonesTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback:
-              ({
-                Value<String> id = const Value.absent(),
-                Value<String> projectId = const Value.absent(),
-                Value<String> title = const Value.absent(),
-                Value<DateTime?> dueDate = const Value.absent(),
-                Value<bool> done = const Value.absent(),
-                Value<String> linkedTaskIds = const Value.absent(),
-                Value<DateTime> createdAt = const Value.absent(),
-                Value<DateTime> updatedAt = const Value.absent(),
-                Value<DateTime?> deletedAt = const Value.absent(),
-                Value<SyncState> syncStatus = const Value.absent(),
-                Value<int> version = const Value.absent(),
-                Value<String> deviceId = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => MilestonesCompanion(
-                id: id,
-                projectId: projectId,
-                title: title,
-                dueDate: dueDate,
-                done: done,
-                linkedTaskIds: linkedTaskIds,
-                createdAt: createdAt,
-                updatedAt: updatedAt,
-                deletedAt: deletedAt,
-                syncStatus: syncStatus,
-                version: version,
-                deviceId: deviceId,
-                rowid: rowid,
-              ),
-          createCompanionCallback:
-              ({
-                required String id,
-                required String projectId,
-                required String title,
-                Value<DateTime?> dueDate = const Value.absent(),
-                Value<bool> done = const Value.absent(),
-                Value<String> linkedTaskIds = const Value.absent(),
-                required DateTime createdAt,
-                required DateTime updatedAt,
-                Value<DateTime?> deletedAt = const Value.absent(),
-                Value<SyncState> syncStatus = const Value.absent(),
-                Value<int> version = const Value.absent(),
-                Value<String> deviceId = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => MilestonesCompanion.insert(
-                id: id,
-                projectId: projectId,
-                title: title,
-                dueDate: dueDate,
-                done: done,
-                linkedTaskIds: linkedTaskIds,
-                createdAt: createdAt,
-                updatedAt: updatedAt,
-                deletedAt: deletedAt,
-                syncStatus: syncStatus,
-                version: version,
-                deviceId: deviceId,
-                rowid: rowid,
-              ),
-          withReferenceMapper: (p0) => p0
-              .map(
-                (e) => (
-                  e.readTable<$MilestonesTable, Milestone>(table),
-                  BaseReferences<_$AppDatabase, $MilestonesTable, Milestone>(
-                    db,
-                    table,
-                    e,
-                  ),
-                ),
-              )
-              .toList(),
-          prefetchHooksCallback: null,
-        ),
-      );
-}
-
-typedef $$MilestonesTableProcessedTableManager =
-    ProcessedTableManager<
-      _$AppDatabase,
-      $MilestonesTable,
-      Milestone,
-      $$MilestonesTableFilterComposer,
-      $$MilestonesTableOrderingComposer,
-      $$MilestonesTableAnnotationComposer,
-      $$MilestonesTableCreateCompanionBuilder,
-      $$MilestonesTableUpdateCompanionBuilder,
-      (Milestone, BaseReferences<_$AppDatabase, $MilestonesTable, Milestone>),
-      Milestone,
-      PrefetchHooks Function()
-    >;
-typedef $$ServersTableCreateCompanionBuilder = ServersCompanion Function({
-  required String id,
-  required String name,
-  Value<String> ip,
-  Value<String> databaseName,
-  Value<ServerPurpose> purpose,
-  Value<ServerStatus> status,
-  Value<DateTime?> lastBackup,
-  Value<String> notes,
-  Value<bool> hasSecret,
-  Value<String?> secretCipher,
-  Value<String?> secretNonce,
-  Value<String?> secretMac,
-  required DateTime createdAt,
-  required DateTime updatedAt,
-  Value<DateTime?> deletedAt,
-  Value<SyncState> syncStatus,
-  Value<int> version,
-  Value<String> deviceId,
-  Value<int> rowid,
-});
-typedef $$ServersTableUpdateCompanionBuilder = ServersCompanion Function({
-  Value<String> id,
-  Value<String> name,
-  Value<String> ip,
-  Value<String> databaseName,
-  Value<ServerPurpose> purpose,
-  Value<ServerStatus> status,
-  Value<DateTime?> lastBackup,
-  Value<String> notes,
-  Value<bool> hasSecret,
-  Value<String?> secretCipher,
-  Value<String?> secretNonce,
-  Value<String?> secretMac,
-  Value<DateTime> createdAt,
-  Value<DateTime> updatedAt,
-  Value<DateTime?> deletedAt,
-  Value<SyncState> syncStatus,
-  Value<int> version,
-  Value<String> deviceId,
-  Value<int> rowid,
-});
-
-class $$ServersTableFilterComposer
-    extends Composer<_$AppDatabase, $ServersTable> {
-  $$ServersTableFilterComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnFilters<String> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get name => $composableBuilder(
-    column: $table.name,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get ip => $composableBuilder(
-    column: $table.ip,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get databaseName => $composableBuilder(
-    column: $table.databaseName,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnWithTypeConverterFilters<ServerPurpose, ServerPurpose, String>
-  get purpose => $composableBuilder(
-    column: $table.purpose,
-    builder: (column) => ColumnWithTypeConverterFilters(column),
-  );
-
-  ColumnWithTypeConverterFilters<ServerStatus, ServerStatus, String>
-  get status => $composableBuilder(
-    column: $table.status,
-    builder: (column) => ColumnWithTypeConverterFilters(column),
-  );
-
-  ColumnFilters<DateTime> get lastBackup => $composableBuilder(
-    column: $table.lastBackup,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get notes => $composableBuilder(
-    column: $table.notes,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<bool> get hasSecret => $composableBuilder(
-    column: $table.hasSecret,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get secretCipher => $composableBuilder(
-    column: $table.secretCipher,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get secretNonce => $composableBuilder(
-    column: $table.secretNonce,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get secretMac => $composableBuilder(
-    column: $table.secretMac,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
-    column: $table.updatedAt,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get deletedAt => $composableBuilder(
-    column: $table.deletedAt,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnWithTypeConverterFilters<SyncState, SyncState, String> get syncStatus =>
-      $composableBuilder(
-        column: $table.syncStatus,
-        builder: (column) => ColumnWithTypeConverterFilters(column),
-      );
-
-  ColumnFilters<int> get version => $composableBuilder(
-    column: $table.version,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get deviceId => $composableBuilder(
-    column: $table.deviceId,
-    builder: (column) => ColumnFilters(column),
-  );
-}
-
-class $$ServersTableOrderingComposer
-    extends Composer<_$AppDatabase, $ServersTable> {
-  $$ServersTableOrderingComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnOrderings<String> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get name => $composableBuilder(
-    column: $table.name,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get ip => $composableBuilder(
-    column: $table.ip,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get databaseName => $composableBuilder(
-    column: $table.databaseName,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get purpose => $composableBuilder(
-    column: $table.purpose,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get status => $composableBuilder(
-    column: $table.status,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get lastBackup => $composableBuilder(
-    column: $table.lastBackup,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get notes => $composableBuilder(
-    column: $table.notes,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<bool> get hasSecret => $composableBuilder(
-    column: $table.hasSecret,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get secretCipher => $composableBuilder(
-    column: $table.secretCipher,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get secretNonce => $composableBuilder(
-    column: $table.secretNonce,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get secretMac => $composableBuilder(
-    column: $table.secretMac,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
-    column: $table.updatedAt,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get deletedAt => $composableBuilder(
-    column: $table.deletedAt,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get syncStatus => $composableBuilder(
-    column: $table.syncStatus,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<int> get version => $composableBuilder(
-    column: $table.version,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get deviceId => $composableBuilder(
-    column: $table.deviceId,
-    builder: (column) => ColumnOrderings(column),
-  );
-}
-
-class $$ServersTableAnnotationComposer
-    extends Composer<_$AppDatabase, $ServersTable> {
-  $$ServersTableAnnotationComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  GeneratedColumn<String> get id =>
-      $composableBuilder(column: $table.id, builder: (column) => column);
-
-  GeneratedColumn<String> get name =>
-      $composableBuilder(column: $table.name, builder: (column) => column);
-
-  GeneratedColumn<String> get ip =>
-      $composableBuilder(column: $table.ip, builder: (column) => column);
-
-  GeneratedColumn<String> get databaseName => $composableBuilder(
-    column: $table.databaseName,
-    builder: (column) => column,
-  );
-
-  GeneratedColumnWithTypeConverter<ServerPurpose, String> get purpose =>
-      $composableBuilder(column: $table.purpose, builder: (column) => column);
-
-  GeneratedColumnWithTypeConverter<ServerStatus, String> get status =>
-      $composableBuilder(column: $table.status, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get lastBackup => $composableBuilder(
-    column: $table.lastBackup,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<String> get notes =>
-      $composableBuilder(column: $table.notes, builder: (column) => column);
-
-  GeneratedColumn<bool> get hasSecret =>
-      $composableBuilder(column: $table.hasSecret, builder: (column) => column);
-
-  GeneratedColumn<String> get secretCipher => $composableBuilder(
-    column: $table.secretCipher,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<String> get secretNonce => $composableBuilder(
-    column: $table.secretNonce,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<String> get secretMac =>
-      $composableBuilder(column: $table.secretMac, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get createdAt =>
-      $composableBuilder(column: $table.createdAt, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get updatedAt =>
-      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get deletedAt =>
-      $composableBuilder(column: $table.deletedAt, builder: (column) => column);
-
-  GeneratedColumnWithTypeConverter<SyncState, String> get syncStatus =>
-      $composableBuilder(
-        column: $table.syncStatus,
-        builder: (column) => column,
-      );
-
-  GeneratedColumn<int> get version =>
-      $composableBuilder(column: $table.version, builder: (column) => column);
-
-  GeneratedColumn<String> get deviceId =>
-      $composableBuilder(column: $table.deviceId, builder: (column) => column);
-}
-
-class $$ServersTableTableManager
-    extends
-        RootTableManager<
-          _$AppDatabase,
-          $ServersTable,
-          ServerEntry,
-          $$ServersTableFilterComposer,
-          $$ServersTableOrderingComposer,
-          $$ServersTableAnnotationComposer,
-          $$ServersTableCreateCompanionBuilder,
-          $$ServersTableUpdateCompanionBuilder,
-          (
-            ServerEntry,
-            BaseReferences<_$AppDatabase, $ServersTable, ServerEntry>,
-          ),
-          ServerEntry,
-          PrefetchHooks Function()
-        > {
-  $$ServersTableTableManager(_$AppDatabase db, $ServersTable table)
-    : super(
-        TableManagerState(
-          db: db,
-          table: table,
-          createFilteringComposer: () =>
-              $$ServersTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$ServersTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer: () =>
-              $$ServersTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback:
-              ({
-                Value<String> id = const Value.absent(),
-                Value<String> name = const Value.absent(),
-                Value<String> ip = const Value.absent(),
-                Value<String> databaseName = const Value.absent(),
-                Value<ServerPurpose> purpose = const Value.absent(),
-                Value<ServerStatus> status = const Value.absent(),
-                Value<DateTime?> lastBackup = const Value.absent(),
-                Value<String> notes = const Value.absent(),
-                Value<bool> hasSecret = const Value.absent(),
-                Value<String?> secretCipher = const Value.absent(),
-                Value<String?> secretNonce = const Value.absent(),
-                Value<String?> secretMac = const Value.absent(),
-                Value<DateTime> createdAt = const Value.absent(),
-                Value<DateTime> updatedAt = const Value.absent(),
-                Value<DateTime?> deletedAt = const Value.absent(),
-                Value<SyncState> syncStatus = const Value.absent(),
-                Value<int> version = const Value.absent(),
-                Value<String> deviceId = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => ServersCompanion(
-                id: id,
-                name: name,
-                ip: ip,
-                databaseName: databaseName,
-                purpose: purpose,
-                status: status,
-                lastBackup: lastBackup,
-                notes: notes,
-                hasSecret: hasSecret,
-                secretCipher: secretCipher,
-                secretNonce: secretNonce,
-                secretMac: secretMac,
-                createdAt: createdAt,
-                updatedAt: updatedAt,
-                deletedAt: deletedAt,
-                syncStatus: syncStatus,
-                version: version,
-                deviceId: deviceId,
-                rowid: rowid,
-              ),
-          createCompanionCallback:
-              ({
-                required String id,
-                required String name,
-                Value<String> ip = const Value.absent(),
-                Value<String> databaseName = const Value.absent(),
-                Value<ServerPurpose> purpose = const Value.absent(),
-                Value<ServerStatus> status = const Value.absent(),
-                Value<DateTime?> lastBackup = const Value.absent(),
-                Value<String> notes = const Value.absent(),
-                Value<bool> hasSecret = const Value.absent(),
-                Value<String?> secretCipher = const Value.absent(),
-                Value<String?> secretNonce = const Value.absent(),
-                Value<String?> secretMac = const Value.absent(),
-                required DateTime createdAt,
-                required DateTime updatedAt,
-                Value<DateTime?> deletedAt = const Value.absent(),
-                Value<SyncState> syncStatus = const Value.absent(),
-                Value<int> version = const Value.absent(),
-                Value<String> deviceId = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => ServersCompanion.insert(
-                id: id,
-                name: name,
-                ip: ip,
-                databaseName: databaseName,
-                purpose: purpose,
-                status: status,
-                lastBackup: lastBackup,
-                notes: notes,
-                hasSecret: hasSecret,
-                secretCipher: secretCipher,
-                secretNonce: secretNonce,
-                secretMac: secretMac,
-                createdAt: createdAt,
-                updatedAt: updatedAt,
-                deletedAt: deletedAt,
-                syncStatus: syncStatus,
-                version: version,
-                deviceId: deviceId,
-                rowid: rowid,
-              ),
-          withReferenceMapper: (p0) => p0
-              .map(
-                (e) => (
-                  e.readTable<$ServersTable, ServerEntry>(table),
-                  BaseReferences<_$AppDatabase, $ServersTable, ServerEntry>(
-                    db,
-                    table,
-                    e,
-                  ),
-                ),
-              )
-              .toList(),
-          prefetchHooksCallback: null,
-        ),
-      );
-}
-
-typedef $$ServersTableProcessedTableManager =
-    ProcessedTableManager<
-      _$AppDatabase,
-      $ServersTable,
-      ServerEntry,
-      $$ServersTableFilterComposer,
-      $$ServersTableOrderingComposer,
-      $$ServersTableAnnotationComposer,
-      $$ServersTableCreateCompanionBuilder,
-      $$ServersTableUpdateCompanionBuilder,
-      (ServerEntry, BaseReferences<_$AppDatabase, $ServersTable, ServerEntry>),
-      ServerEntry,
       PrefetchHooks Function()
     >;
 typedef $$DiagramsTableCreateCompanionBuilder = DiagramsCompanion Function({
@@ -12752,287 +7431,6 @@ typedef $$DiagramsTableProcessedTableManager =
       $$DiagramsTableUpdateCompanionBuilder,
       (Diagram, BaseReferences<_$AppDatabase, $DiagramsTable, Diagram>),
       Diagram,
-      PrefetchHooks Function()
-    >;
-typedef $$StencilsTableCreateCompanionBuilder = StencilsCompanion Function({
-  required String id,
-  required String title,
-  required String shapeJson,
-  required DateTime createdAt,
-  required DateTime updatedAt,
-  Value<DateTime?> deletedAt,
-  Value<SyncState> syncStatus,
-  Value<int> version,
-  Value<String> deviceId,
-  Value<int> rowid,
-});
-typedef $$StencilsTableUpdateCompanionBuilder = StencilsCompanion Function({
-  Value<String> id,
-  Value<String> title,
-  Value<String> shapeJson,
-  Value<DateTime> createdAt,
-  Value<DateTime> updatedAt,
-  Value<DateTime?> deletedAt,
-  Value<SyncState> syncStatus,
-  Value<int> version,
-  Value<String> deviceId,
-  Value<int> rowid,
-});
-
-class $$StencilsTableFilterComposer
-    extends Composer<_$AppDatabase, $StencilsTable> {
-  $$StencilsTableFilterComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnFilters<String> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get title => $composableBuilder(
-    column: $table.title,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get shapeJson => $composableBuilder(
-    column: $table.shapeJson,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
-    column: $table.updatedAt,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get deletedAt => $composableBuilder(
-    column: $table.deletedAt,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnWithTypeConverterFilters<SyncState, SyncState, String> get syncStatus =>
-      $composableBuilder(
-        column: $table.syncStatus,
-        builder: (column) => ColumnWithTypeConverterFilters(column),
-      );
-
-  ColumnFilters<int> get version => $composableBuilder(
-    column: $table.version,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get deviceId => $composableBuilder(
-    column: $table.deviceId,
-    builder: (column) => ColumnFilters(column),
-  );
-}
-
-class $$StencilsTableOrderingComposer
-    extends Composer<_$AppDatabase, $StencilsTable> {
-  $$StencilsTableOrderingComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnOrderings<String> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get title => $composableBuilder(
-    column: $table.title,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get shapeJson => $composableBuilder(
-    column: $table.shapeJson,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
-    column: $table.updatedAt,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get deletedAt => $composableBuilder(
-    column: $table.deletedAt,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get syncStatus => $composableBuilder(
-    column: $table.syncStatus,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<int> get version => $composableBuilder(
-    column: $table.version,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get deviceId => $composableBuilder(
-    column: $table.deviceId,
-    builder: (column) => ColumnOrderings(column),
-  );
-}
-
-class $$StencilsTableAnnotationComposer
-    extends Composer<_$AppDatabase, $StencilsTable> {
-  $$StencilsTableAnnotationComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  GeneratedColumn<String> get id =>
-      $composableBuilder(column: $table.id, builder: (column) => column);
-
-  GeneratedColumn<String> get title =>
-      $composableBuilder(column: $table.title, builder: (column) => column);
-
-  GeneratedColumn<String> get shapeJson =>
-      $composableBuilder(column: $table.shapeJson, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get createdAt =>
-      $composableBuilder(column: $table.createdAt, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get updatedAt =>
-      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get deletedAt =>
-      $composableBuilder(column: $table.deletedAt, builder: (column) => column);
-
-  GeneratedColumnWithTypeConverter<SyncState, String> get syncStatus =>
-      $composableBuilder(
-        column: $table.syncStatus,
-        builder: (column) => column,
-      );
-
-  GeneratedColumn<int> get version =>
-      $composableBuilder(column: $table.version, builder: (column) => column);
-
-  GeneratedColumn<String> get deviceId =>
-      $composableBuilder(column: $table.deviceId, builder: (column) => column);
-}
-
-class $$StencilsTableTableManager
-    extends
-        RootTableManager<
-          _$AppDatabase,
-          $StencilsTable,
-          Stencil,
-          $$StencilsTableFilterComposer,
-          $$StencilsTableOrderingComposer,
-          $$StencilsTableAnnotationComposer,
-          $$StencilsTableCreateCompanionBuilder,
-          $$StencilsTableUpdateCompanionBuilder,
-          (Stencil, BaseReferences<_$AppDatabase, $StencilsTable, Stencil>),
-          Stencil,
-          PrefetchHooks Function()
-        > {
-  $$StencilsTableTableManager(_$AppDatabase db, $StencilsTable table)
-    : super(
-        TableManagerState(
-          db: db,
-          table: table,
-          createFilteringComposer: () =>
-              $$StencilsTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$StencilsTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer: () =>
-              $$StencilsTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback:
-              ({
-                Value<String> id = const Value.absent(),
-                Value<String> title = const Value.absent(),
-                Value<String> shapeJson = const Value.absent(),
-                Value<DateTime> createdAt = const Value.absent(),
-                Value<DateTime> updatedAt = const Value.absent(),
-                Value<DateTime?> deletedAt = const Value.absent(),
-                Value<SyncState> syncStatus = const Value.absent(),
-                Value<int> version = const Value.absent(),
-                Value<String> deviceId = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => StencilsCompanion(
-                id: id,
-                title: title,
-                shapeJson: shapeJson,
-                createdAt: createdAt,
-                updatedAt: updatedAt,
-                deletedAt: deletedAt,
-                syncStatus: syncStatus,
-                version: version,
-                deviceId: deviceId,
-                rowid: rowid,
-              ),
-          createCompanionCallback:
-              ({
-                required String id,
-                required String title,
-                required String shapeJson,
-                required DateTime createdAt,
-                required DateTime updatedAt,
-                Value<DateTime?> deletedAt = const Value.absent(),
-                Value<SyncState> syncStatus = const Value.absent(),
-                Value<int> version = const Value.absent(),
-                Value<String> deviceId = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => StencilsCompanion.insert(
-                id: id,
-                title: title,
-                shapeJson: shapeJson,
-                createdAt: createdAt,
-                updatedAt: updatedAt,
-                deletedAt: deletedAt,
-                syncStatus: syncStatus,
-                version: version,
-                deviceId: deviceId,
-                rowid: rowid,
-              ),
-          withReferenceMapper: (p0) => p0
-              .map(
-                (e) => (
-                  e.readTable<$StencilsTable, Stencil>(table),
-                  BaseReferences<_$AppDatabase, $StencilsTable, Stencil>(
-                    db,
-                    table,
-                    e,
-                  ),
-                ),
-              )
-              .toList(),
-          prefetchHooksCallback: null,
-        ),
-      );
-}
-
-typedef $$StencilsTableProcessedTableManager =
-    ProcessedTableManager<
-      _$AppDatabase,
-      $StencilsTable,
-      Stencil,
-      $$StencilsTableFilterComposer,
-      $$StencilsTableOrderingComposer,
-      $$StencilsTableAnnotationComposer,
-      $$StencilsTableCreateCompanionBuilder,
-      $$StencilsTableUpdateCompanionBuilder,
-      (Stencil, BaseReferences<_$AppDatabase, $StencilsTable, Stencil>),
-      Stencil,
       PrefetchHooks Function()
     >;
 typedef $$RevisionsTableCreateCompanionBuilder = RevisionsCompanion Function({
@@ -13671,6 +8069,11 @@ typedef $$AttachmentsTableCreateCompanionBuilder =
       required String localPath,
       Value<int> bytes,
       required DateTime createdAt,
+      required DateTime updatedAt,
+      Value<DateTime?> deletedAt,
+      Value<SyncState> syncStatus,
+      Value<int> version,
+      Value<String> deviceId,
       Value<int> rowid,
     });
 typedef $$AttachmentsTableUpdateCompanionBuilder =
@@ -13683,6 +8086,11 @@ typedef $$AttachmentsTableUpdateCompanionBuilder =
       Value<String> localPath,
       Value<int> bytes,
       Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+      Value<DateTime?> deletedAt,
+      Value<SyncState> syncStatus,
+      Value<int> version,
+      Value<String> deviceId,
       Value<int> rowid,
     });
 
@@ -13732,6 +8140,32 @@ class $$AttachmentsTableFilterComposer
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
     column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<SyncState, SyncState, String> get syncStatus =>
+      $composableBuilder(
+        column: $table.syncStatus,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
+  ColumnFilters<int> get version => $composableBuilder(
+    column: $table.version,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get deviceId => $composableBuilder(
+    column: $table.deviceId,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -13784,6 +8218,31 @@ class $$AttachmentsTableOrderingComposer
     column: $table.createdAt,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get syncStatus => $composableBuilder(
+    column: $table.syncStatus,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get version => $composableBuilder(
+    column: $table.version,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get deviceId => $composableBuilder(
+    column: $table.deviceId,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$AttachmentsTableAnnotationComposer
@@ -13820,6 +8279,24 @@ class $$AttachmentsTableAnnotationComposer
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get deletedAt =>
+      $composableBuilder(column: $table.deletedAt, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<SyncState, String> get syncStatus =>
+      $composableBuilder(
+        column: $table.syncStatus,
+        builder: (column) => column,
+      );
+
+  GeneratedColumn<int> get version =>
+      $composableBuilder(column: $table.version, builder: (column) => column);
+
+  GeneratedColumn<String> get deviceId =>
+      $composableBuilder(column: $table.deviceId, builder: (column) => column);
 }
 
 class $$AttachmentsTableTableManager
@@ -13861,6 +8338,11 @@ class $$AttachmentsTableTableManager
                 Value<String> localPath = const Value.absent(),
                 Value<int> bytes = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<DateTime?> deletedAt = const Value.absent(),
+                Value<SyncState> syncStatus = const Value.absent(),
+                Value<int> version = const Value.absent(),
+                Value<String> deviceId = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => AttachmentsCompanion(
                 id: id,
@@ -13871,6 +8353,11 @@ class $$AttachmentsTableTableManager
                 localPath: localPath,
                 bytes: bytes,
                 createdAt: createdAt,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                syncStatus: syncStatus,
+                version: version,
+                deviceId: deviceId,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -13883,6 +8370,11 @@ class $$AttachmentsTableTableManager
                 required String localPath,
                 Value<int> bytes = const Value.absent(),
                 required DateTime createdAt,
+                required DateTime updatedAt,
+                Value<DateTime?> deletedAt = const Value.absent(),
+                Value<SyncState> syncStatus = const Value.absent(),
+                Value<int> version = const Value.absent(),
+                Value<String> deviceId = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => AttachmentsCompanion.insert(
                 id: id,
@@ -13893,6 +8385,11 @@ class $$AttachmentsTableTableManager
                 localPath: localPath,
                 bytes: bytes,
                 createdAt: createdAt,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                syncStatus: syncStatus,
+                version: version,
+                deviceId: deviceId,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -14085,20 +8582,10 @@ class $AppDatabaseManager {
   $$TagsTableTableManager get tags => $$TagsTableTableManager(_db, _db.tags);
   $$NotesTableTableManager get notes =>
       $$NotesTableTableManager(_db, _db.notes);
-  $$HowTosTableTableManager get howTos =>
-      $$HowTosTableTableManager(_db, _db.howTos);
   $$TasksTableTableManager get tasks =>
       $$TasksTableTableManager(_db, _db.tasks);
-  $$ProjectsTableTableManager get projects =>
-      $$ProjectsTableTableManager(_db, _db.projects);
-  $$MilestonesTableTableManager get milestones =>
-      $$MilestonesTableTableManager(_db, _db.milestones);
-  $$ServersTableTableManager get servers =>
-      $$ServersTableTableManager(_db, _db.servers);
   $$DiagramsTableTableManager get diagrams =>
       $$DiagramsTableTableManager(_db, _db.diagrams);
-  $$StencilsTableTableManager get stencils =>
-      $$StencilsTableTableManager(_db, _db.stencils);
   $$RevisionsTableTableManager get revisions =>
       $$RevisionsTableTableManager(_db, _db.revisions);
   $$SnapshotsTableTableManager get snapshots =>

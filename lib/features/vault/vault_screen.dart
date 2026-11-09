@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/providers.dart';
 import '../../app/theme.dart';
-import '../../core/constants.dart';
 import '../../widgets/common.dart';
 
 class VaultScreen extends ConsumerStatefulWidget {
@@ -164,7 +163,7 @@ class _VaultScreenState extends ConsumerState<VaultScreen> {
                     const SizedBox(height: 8),
                     Text(
                       setupMode
-                          ? 'Your notes, secrets and diagrams are encrypted with a key derived from this password. '
+                          ? 'Your notes, tasks and pictures are encrypted with a key derived from this password. '
                                 'The password is never stored or sent anywhere.'
                           : 'Enter your vault password to decrypt your workspace.',
                       style: context.theme.textTheme.bodyMedium?.copyWith(
@@ -302,7 +301,7 @@ class _VaultScreenState extends ConsumerState<VaultScreen> {
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
-                            'AES-256-GCM · Argon2id · local-first. ${AppInfo.publisher}',
+                            'AES-256-GCM · Argon2id · local-first.',
                             style: context.theme.textTheme.bodySmall?.copyWith(
                               color: colors.onSurface.withValues(alpha: 0.5),
                             ),

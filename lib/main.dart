@@ -25,11 +25,20 @@ Future<void> main() async {
     await settings.set('deviceId', deviceId);
   }
 
+  // Older versions shipped example notes, tasks and an IT workspace. Remove
+  // the untouched demo rows once so the app opens clean.
+  if (await settings.get('demo.cleaned') != 'true') {
+    try {
+      await db.removeDemoContent();
+      await settings.set('demo.cleaned', 'true');
+    } catch (_) {}
+  }
+
   try {
     await db.purgeExpiredTrash();
   } catch (_) {}
 
-  unawaitedPlatformInit();
+  unawaitedPlatformInit(settings);
 
   runApp(
     ProviderScope(
@@ -43,9 +52,15 @@ Future<void> main() async {
   );
 }
 
-void unawaitedPlatformInit() {
-  PlatformService.instance.initDesktop();
+void unawaitedPlatformInit(SettingsRepository settings) {
+  PlatformService.instance.initDesktop(
+    onOpen: PlatformService.instance.showWindow,
+    onQuit: PlatformService.instance.quit,
+  );
   PlatformService.instance.initNotifications();
+  settings.getBool('minimizeToTray').then((value) {
+    PlatformService.instance.minimizeToTray = value;
+  });
 }
 
 Future<void> _acquireSingleInstanceLock() async {

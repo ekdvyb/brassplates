@@ -54,3 +54,8 @@ android/key.properties
 
 # Internal planning prompt
 /BRASSPLATES_Master_Prompt.md
+
+# Local build toolchain and artifacts
+/.tools/
+/dist/
+/.freebuff/

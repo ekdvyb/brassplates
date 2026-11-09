@@ -1,9 +1,9 @@
 [Desktop Entry]
 Name=BRASSPLATES
-Comment=Local-first encrypted personal IT workspace
+Comment=Local-first notes and to-do app
 Exec=/usr/bin/brassplates
 Icon=brassplates
 Terminal=false
 Type=Application
-Categories=Utility;Office;Development;
+Categories=Utility;Office;
 StartupWMClass=com.zerobug.brassplates

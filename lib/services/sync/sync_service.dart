@@ -1,7 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:crypto/crypto.dart';
+import 'package:cryptography/cryptography.dart';
 import 'package:drift/drift.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../core/utils.dart';
@@ -58,13 +62,9 @@ class SyncService {
     'folders',
     'tags',
     'notes',
-    'how_tos',
     'tasks',
-    'projects',
-    'milestones',
-    'servers',
     'diagrams',
-    'stencils',
+    'attachments',
   ];
 
   Future<String> _encrypt(String clear) async {
@@ -97,8 +97,15 @@ class SyncService {
         DateTime.fromMillisecondsSinceEpoch(0, isUtc: true);
   }
 
+  /// Content hash. Fields that legitimately differ per device are ignored.
   String _hash(Map<String, dynamic> row) {
-    final keys = row.keys.toList()..sort();
+    final keys = row.keys
+        .where(
+          (key) =>
+              key != 'local_path' && key != 'device_id' && key != 'sync_status',
+        )
+        .toList()
+      ..sort();
     final canonical = {for (final key in keys) key: row[key]};
     return sha256.convert(utf8.encode(jsonEncode(canonical))).toString();
   }
@@ -106,7 +113,7 @@ class SyncService {
   bool _deleted(Map<String, dynamic> row) => row['deleted_at'] != null;
 
   String _titleColumn(String table) =>
-      (table == 'servers' || table == 'folders' || table == 'tags')
+      (table == 'folders' || table == 'tags' || table == 'attachments')
       ? 'name'
       : 'title';
 
@@ -150,6 +157,9 @@ class SyncService {
     final payload = utf8.encode(jsonEncode({'table': table, 'data': row}));
     final encrypted = await _crypto.encryptBytes(payload, key);
     await provider.writeBytes('$table/${_rowId(row)}.bpv', encrypted);
+    if (table == 'attachments') {
+      await _uploadAttachmentFile(row, key);
+    }
   }
 
   Future<Map<String, dynamic>?> _download(String table, String id) async {
@@ -158,7 +168,53 @@ class SyncService {
     final key = await vault.dataKeyForBackup();
     final clear = await _crypto.decryptBytes(bytes, key);
     final decoded = jsonDecode(utf8.decode(clear)) as Map<String, dynamic>;
-    return Map<String, dynamic>.from(decoded['data'] as Map);
+    final row = Map<String, dynamic>.from(decoded['data'] as Map);
+    if (table == 'attachments') {
+      await _downloadAttachmentFile(id, row, key);
+    }
+    return row;
+  }
+
+  Future<void> _uploadAttachmentFile(
+    Map<String, dynamic> row,
+    SecretKey key,
+  ) async {
+    try {
+      final path = row['local_path'] as String?;
+      if (path == null || path.isEmpty) return;
+      final file = File(path);
+      if (!await file.exists()) return;
+      final encrypted = await _crypto.encryptBytes(
+        await file.readAsBytes(),
+        key,
+      );
+      await provider.writeBytes('files/${_rowId(row)}.bpv', encrypted);
+    } catch (_) {
+      // A missing picture should not abort the whole sync.
+    }
+  }
+
+  Future<void> _downloadAttachmentFile(
+    String id,
+    Map<String, dynamic> row,
+    SecretKey key,
+  ) async {
+    final bytes = await provider.readBytes('files/$id.bpv');
+    if (bytes == null) return;
+    final dir = await _attachmentDir();
+    final fileName = (row['file_name'] as String?) ?? 'picture';
+    final extension = p.extension(fileName);
+    final target = File(p.join(dir.path, '$id$extension'));
+    final clear = await _crypto.decryptBytes(bytes, key);
+    await target.writeAsBytes(clear, flush: true);
+    row['local_path'] = target.path;
+  }
+
+  Future<Directory> _attachmentDir() async {
+    final support = await getApplicationSupportDirectory();
+    final dir = Directory(p.join(support.path, 'attachments'));
+    await dir.create(recursive: true);
+    return dir;
   }
 
   Future<void> _insertRow(String table, Map<String, dynamic> row) async {
@@ -193,6 +249,18 @@ class SyncService {
     final original = row[titleColumn]?.toString() ?? 'Untitled';
     final stamp = DateTime.now().toUtc().toIso8601String().split('T').first;
     copy[titleColumn] = 'Conflict - $stamp - $original';
+    if (table == 'attachments') {
+      final source = row['local_path'] as String?;
+      if (source != null) {
+        final dir = await _attachmentDir();
+        final extension = p.extension(source);
+        final target = File(p.join(dir.path, '${copy['id']}$extension'));
+        try {
+          await File(source).copy(target.path);
+          copy['local_path'] = target.path;
+        } catch (_) {}
+      }
+    }
     await _insertRow(table, copy);
   }
 

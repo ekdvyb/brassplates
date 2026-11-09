@@ -69,32 +69,6 @@ class Notes extends Table {
   TextColumn get deviceId => text().withDefault(const Constant(''))();
 }
 
-@DataClassName('HowTo')
-class HowTos extends Table {
-  @override
-  String get tableName => 'how_tos';
-  @override
-  Set<Column> get primaryKey => {id};
-
-  TextColumn get id => text()();
-  TextColumn get title => text()();
-  TextColumn get category => text().withDefault(const Constant('Servers'))();
-  TextColumn get difficulty => textEnum<HowToDifficulty>().withDefault(
-    Constant(HowToDifficulty.easy.name),
-  )();
-  TextColumn get stepsJson => text().withDefault(const Constant('[]'))();
-  TextColumn get tagsCsv => text().withDefault(const Constant(''))();
-  DateTimeColumn get lastTested => dateTime().nullable()();
-  TextColumn get relatedServerIds => text().withDefault(const Constant('[]'))();
-  DateTimeColumn get createdAt => dateTime()();
-  DateTimeColumn get updatedAt => dateTime()();
-  DateTimeColumn get deletedAt => dateTime().nullable()();
-  TextColumn get syncStatus =>
-      textEnum<SyncState>().withDefault(Constant(SyncState.pending.name))();
-  IntColumn get version => integer().withDefault(const Constant(1))();
-  TextColumn get deviceId => text().withDefault(const Constant(''))();
-}
-
 @DataClassName('Task')
 class Tasks extends Table {
   @override
@@ -113,90 +87,9 @@ class Tasks extends Table {
   DateTimeColumn get dueDate => dateTime().nullable()();
   DateTimeColumn get reminderAt => dateTime().nullable()();
   TextColumn get subtasksJson => text().withDefault(const Constant('[]'))();
-  TextColumn get linkedServerId => text().nullable()();
   TextColumn get linkedNoteId => text().nullable()();
-  TextColumn get linkedDiagramId => text().nullable()();
   TextColumn get tagsCsv => text().withDefault(const Constant(''))();
   IntColumn get sortOrder => integer().withDefault(const Constant(0))();
-  DateTimeColumn get createdAt => dateTime()();
-  DateTimeColumn get updatedAt => dateTime()();
-  DateTimeColumn get deletedAt => dateTime().nullable()();
-  TextColumn get syncStatus =>
-      textEnum<SyncState>().withDefault(Constant(SyncState.pending.name))();
-  IntColumn get version => integer().withDefault(const Constant(1))();
-  TextColumn get deviceId => text().withDefault(const Constant(''))();
-}
-
-@DataClassName('Project')
-class Projects extends Table {
-  @override
-  String get tableName => 'projects';
-  @override
-  Set<Column> get primaryKey => {id};
-
-  TextColumn get id => text()();
-  TextColumn get title => text()();
-  TextColumn get description => text().withDefault(const Constant(''))();
-  TextColumn get status => textEnum<ProjectStatus>().withDefault(
-    Constant(ProjectStatus.active.name),
-  )();
-  DateTimeColumn get startDate => dateTime().nullable()();
-  DateTimeColumn get endDate => dateTime().nullable()();
-  IntColumn get progress => integer().withDefault(const Constant(0))();
-  DateTimeColumn get createdAt => dateTime()();
-  DateTimeColumn get updatedAt => dateTime()();
-  DateTimeColumn get deletedAt => dateTime().nullable()();
-  TextColumn get syncStatus =>
-      textEnum<SyncState>().withDefault(Constant(SyncState.pending.name))();
-  IntColumn get version => integer().withDefault(const Constant(1))();
-  TextColumn get deviceId => text().withDefault(const Constant(''))();
-}
-
-@DataClassName('Milestone')
-class Milestones extends Table {
-  @override
-  String get tableName => 'milestones';
-  @override
-  Set<Column> get primaryKey => {id};
-
-  TextColumn get id => text()();
-  TextColumn get projectId => text()();
-  TextColumn get title => text()();
-  DateTimeColumn get dueDate => dateTime().nullable()();
-  BoolColumn get done => boolean().withDefault(const Constant(false))();
-  TextColumn get linkedTaskIds => text().withDefault(const Constant('[]'))();
-  DateTimeColumn get createdAt => dateTime()();
-  DateTimeColumn get updatedAt => dateTime()();
-  DateTimeColumn get deletedAt => dateTime().nullable()();
-  TextColumn get syncStatus =>
-      textEnum<SyncState>().withDefault(Constant(SyncState.pending.name))();
-  IntColumn get version => integer().withDefault(const Constant(1))();
-  TextColumn get deviceId => text().withDefault(const Constant(''))();
-}
-
-@DataClassName('ServerEntry')
-class Servers extends Table {
-  @override
-  String get tableName => 'servers';
-  @override
-  Set<Column> get primaryKey => {id};
-
-  TextColumn get id => text()();
-  TextColumn get name => text()();
-  TextColumn get ip => text().withDefault(const Constant(''))();
-  TextColumn get databaseName => text().withDefault(const Constant(''))();
-  TextColumn get purpose => textEnum<ServerPurpose>().withDefault(
-    Constant(ServerPurpose.other.name),
-  )();
-  TextColumn get status => textEnum<ServerStatus>().withDefault(
-    Constant(ServerStatus.unknown.name),
-  )();
-  DateTimeColumn get lastBackup => dateTime().nullable()();
-  TextColumn get notes => text().withDefault(const Constant(''))();
-  BoolColumn get hasSecret => boolean().withDefault(const Constant(false))();
-  TextColumn get secretCipher => text().nullable()();
-  TextColumn get secretNonce => text().nullable()();
-  TextColumn get secretMac => text().nullable()();
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get updatedAt => dateTime()();
   DateTimeColumn get deletedAt => dateTime().nullable()();
@@ -221,25 +114,6 @@ class Diagrams extends Table {
   TextColumn get documentJson => text().withDefault(const Constant('{}'))();
   TextColumn get thumbnailBase64 => text().nullable()();
   TextColumn get searchText => text().withDefault(const Constant(''))();
-  DateTimeColumn get createdAt => dateTime()();
-  DateTimeColumn get updatedAt => dateTime()();
-  DateTimeColumn get deletedAt => dateTime().nullable()();
-  TextColumn get syncStatus =>
-      textEnum<SyncState>().withDefault(Constant(SyncState.pending.name))();
-  IntColumn get version => integer().withDefault(const Constant(1))();
-  TextColumn get deviceId => text().withDefault(const Constant(''))();
-}
-
-@DataClassName('Stencil')
-class Stencils extends Table {
-  @override
-  String get tableName => 'stencils';
-  @override
-  Set<Column> get primaryKey => {id};
-
-  TextColumn get id => text()();
-  TextColumn get title => text()();
-  TextColumn get shapeJson => text()();
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get updatedAt => dateTime()();
   DateTimeColumn get deletedAt => dateTime().nullable()();
@@ -308,6 +182,12 @@ class Attachments extends Table {
   TextColumn get localPath => text()();
   IntColumn get bytes => integer().withDefault(const Constant(0))();
   DateTimeColumn get createdAt => dateTime()();
+  DateTimeColumn get updatedAt => dateTime()();
+  DateTimeColumn get deletedAt => dateTime().nullable()();
+  TextColumn get syncStatus =>
+      textEnum<SyncState>().withDefault(Constant(SyncState.pending.name))();
+  IntColumn get version => integer().withDefault(const Constant(1))();
+  TextColumn get deviceId => text().withDefault(const Constant(''))();
 }
 
 @DataClassName('AppSetting')
@@ -326,13 +206,8 @@ class AppSettings extends Table {
     Folders,
     Tags,
     Notes,
-    HowTos,
     Tasks,
-    Projects,
-    Milestones,
-    Servers,
     Diagrams,
-    Stencils,
     Revisions,
     Snapshots,
     SyncLogs,
@@ -346,13 +221,54 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.e);
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
     onCreate: (m) async {
       await m.createAll();
       await _createSearchIndex();
+    },
+    onUpgrade: (m, from, to) async {
+      if (from < 2) {
+        // BRASSPLATES used to bundle server inventory, how-tos, planning and
+        // diagrams. They are gone; drop their tables so no company data stays.
+        await customStatement('DROP TRIGGER IF EXISTS how_tos_ai');
+        await customStatement('DROP TRIGGER IF EXISTS how_tos_au');
+        await customStatement('DROP TRIGGER IF EXISTS how_tos_ad');
+        await customStatement('DROP TRIGGER IF EXISTS projects_ai');
+        await customStatement('DROP TRIGGER IF EXISTS projects_au');
+        await customStatement('DROP TRIGGER IF EXISTS projects_ad');
+        await customStatement('DROP TRIGGER IF EXISTS servers_ai');
+        await customStatement('DROP TRIGGER IF EXISTS servers_au');
+        await customStatement('DROP TRIGGER IF EXISTS servers_ad');
+        for (final table in [
+          'how_tos',
+          'projects',
+          'milestones',
+          'servers',
+          'stencils',
+        ]) {
+          await customStatement('DROP TABLE IF EXISTS "$table"');
+        }
+        await customStatement(
+          "DELETE FROM search_fts WHERE entity_type IN "
+          "('how_tos','projects','servers')",
+        );
+        await m.addColumn(attachments, attachments.updatedAt);
+        await m.addColumn(attachments, attachments.deletedAt);
+        await m.addColumn(attachments, attachments.syncStatus);
+        await m.addColumn(attachments, attachments.version);
+        await m.addColumn(attachments, attachments.deviceId);
+      }
+      if (from < 3) {
+        // Diagrams are back. A v1 database still has its old diagrams table,
+        // so only create it for databases upgraded from schema v2.
+        final existing = await customSelect(
+          "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'diagrams'",
+        ).get();
+        if (existing.isEmpty) await m.createTable(diagrams);
+      }
     },
     beforeOpen: (details) async {
       await customStatement('PRAGMA foreign_keys = ON');
@@ -404,11 +320,27 @@ class AppDatabase extends _$AppDatabase {
     }
 
     await trigger('notes', 'notes', 'title', 'plain_text');
-    await trigger('how_tos', 'how_tos', 'title', 'steps_json');
     await trigger('tasks', 'tasks', 'title', 'description');
-    await trigger('projects', 'projects', 'title', 'description');
-    await trigger('servers', 'servers', 'name', 'database_name');
-    await trigger('diagrams', 'diagrams', 'title', 'search_text');
+  }
+
+  /// Removes the example content that older versions of the app installed.
+  ///
+  /// Only rows that still match the shipped demo values are removed, so a note
+  /// the user edited or created is never touched.
+  Future<void> removeDemoContent() async {
+    await customStatement('''
+      DELETE FROM notes
+      WHERE title = 'Welcome to BRASSPLATES'
+        AND (content_delta LIKE '%encrypted IT workspace%'
+             OR tags_csv = '#Servers,#Diagrams')
+    ''');
+    await customStatement('''
+      DELETE FROM tasks
+      WHERE (title = 'Audit hard-coded connection strings'
+             AND tags_csv = '#SQL,#Network')
+         OR (title = 'Draft Vault migration runbook' AND tags_csv = '#Servers')
+         OR (title = 'Verify FDMS backups' AND tags_csv = '#FDMS')
+    ''');
   }
 
   /// Removes tombstones older than [retention] and keeps the database tidy.
@@ -421,27 +353,17 @@ class AppDatabase extends _$AppDatabase {
               t.deletedAt.isNotNull() & t.deletedAt.isSmallerThanValue(cutoff),
         ))
         .go();
-    await (delete(howTos)..where(
-          (t) =>
-              t.deletedAt.isNotNull() & t.deletedAt.isSmallerThanValue(cutoff),
-        ))
-        .go();
     await (delete(tasks)..where(
           (t) =>
               t.deletedAt.isNotNull() & t.deletedAt.isSmallerThanValue(cutoff),
         ))
         .go();
-    await (delete(projects)..where(
-          (t) =>
-              t.deletedAt.isNotNull() & t.deletedAt.isSmallerThanValue(cutoff),
-        ))
-        .go();
-    await (delete(servers)..where(
-          (t) =>
-              t.deletedAt.isNotNull() & t.deletedAt.isSmallerThanValue(cutoff),
-        ))
-        .go();
     await (delete(diagrams)..where(
+          (t) =>
+              t.deletedAt.isNotNull() & t.deletedAt.isSmallerThanValue(cutoff),
+        ))
+        .go();
+    await (delete(attachments)..where(
           (t) =>
               t.deletedAt.isNotNull() & t.deletedAt.isSmallerThanValue(cutoff),
         ))

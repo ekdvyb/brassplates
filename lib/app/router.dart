@@ -4,13 +4,9 @@ import 'package:go_router/go_router.dart';
 import '../features/dashboard/dashboard_screen.dart';
 import '../features/diagrams/diagram_editor_screen.dart';
 import '../features/diagrams/diagrams_screen.dart';
-import '../features/howto/howto_detail_screen.dart';
-import '../features/howto/howto_screen.dart';
 import '../features/notes/note_editor_screen.dart';
 import '../features/notes/notes_screen.dart';
-import '../features/planning/planning_screen.dart';
 import '../features/search/search_screen.dart';
-import '../features/servers/servers_screen.dart';
 import '../features/settings/settings_screen.dart';
 import '../features/tasks/tasks_screen.dart';
 import '../features/trash/trash_screen.dart';
@@ -40,29 +36,6 @@ final routerProvider = Provider<GoRouter>((ref) {
             ],
           ),
           GoRoute(
-            path: '/howto',
-            builder: (context, state) => const HowToScreen(),
-            routes: [
-              GoRoute(
-                path: ':id',
-                builder: (context, state) =>
-                    HowToDetailScreen(howToId: state.pathParameters['id']!),
-              ),
-            ],
-          ),
-          GoRoute(
-            path: '/tasks',
-            builder: (context, state) => const TasksScreen(),
-          ),
-          GoRoute(
-            path: '/planning',
-            builder: (context, state) => const PlanningScreen(),
-          ),
-          GoRoute(
-            path: '/servers',
-            builder: (context, state) => const ServersScreen(),
-          ),
-          GoRoute(
             path: '/diagrams',
             builder: (context, state) => const DiagramsScreen(),
             routes: [
@@ -72,6 +45,10 @@ final routerProvider = Provider<GoRouter>((ref) {
                     DiagramEditorScreen(diagramId: state.pathParameters['id']!),
               ),
             ],
+          ),
+          GoRoute(
+            path: '/tasks',
+            builder: (context, state) => const TasksScreen(),
           ),
           GoRoute(
             path: '/search',

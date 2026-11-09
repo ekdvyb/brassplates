@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
@@ -7,23 +5,20 @@ import 'package:path_provider/path_provider.dart';
 
 import '../data/db/database.dart';
 import '../data/models/enums.dart';
+import '../data/repositories/attachments_repository.dart';
 import '../data/repositories/dashboard_repository.dart';
 import '../data/repositories/diagrams_repository.dart';
-import '../data/repositories/howto_repository.dart';
 import '../data/repositories/library_repository.dart';
 import '../data/repositories/notes_repository.dart';
-import '../data/repositories/planning_repository.dart';
-import '../data/repositories/servers_repository.dart';
 import '../data/repositories/settings_repository.dart';
 import '../data/repositories/tasks_repository.dart';
 import '../data/repositories/trash_repository.dart';
 import '../services/backup/backup_service.dart';
 import '../services/crypto/vault_service.dart';
 import '../services/search/search_service.dart';
-import '../services/seed/seed_service.dart';
 import '../services/snapshot/snapshot_service.dart';
-import '../services/sync/google_drive_provider.dart';
 import '../services/sync/sync_provider.dart';
+import '../services/platform/platform_service.dart';
 import '../services/sync/sync_service.dart';
 
 final databaseProvider = Provider<AppDatabase>((ref) {
@@ -43,33 +38,20 @@ final notesRepositoryProvider = Provider<NotesRepository>(
       NotesRepository(ref.watch(databaseProvider), ref.watch(deviceIdProvider)),
 );
 
-final howToRepositoryProvider = Provider<HowToRepository>(
-  (ref) =>
-      HowToRepository(ref.watch(databaseProvider), ref.watch(deviceIdProvider)),
-);
-
 final tasksRepositoryProvider = Provider<TasksRepository>(
   (ref) =>
       TasksRepository(ref.watch(databaseProvider), ref.watch(deviceIdProvider)),
 );
 
-final planningRepositoryProvider = Provider<PlanningRepository>(
-  (ref) => PlanningRepository(
-    ref.watch(databaseProvider),
-    ref.watch(deviceIdProvider),
-  ),
-);
-
-final serversRepositoryProvider = Provider<ServersRepository>(
-  (ref) => ServersRepository(
-    ref.watch(databaseProvider),
-    ref.watch(deviceIdProvider),
-    ref.watch(vaultServiceProvider),
-  ),
-);
-
 final diagramsRepositoryProvider = Provider<DiagramsRepository>(
   (ref) => DiagramsRepository(
+    ref.watch(databaseProvider),
+    ref.watch(deviceIdProvider),
+  ),
+);
+
+final attachmentsRepositoryProvider = Provider<AttachmentsRepository>(
+  (ref) => AttachmentsRepository(
     ref.watch(databaseProvider),
     ref.watch(deviceIdProvider),
   ),
@@ -106,21 +88,6 @@ final backupServiceProvider = Provider<BackupService>(
     snapshots: ref.watch(snapshotServiceProvider),
   ),
 );
-
-final seedServiceProvider = Provider<SeedService>((ref) {
-  return SeedService(
-    db: ref.watch(databaseProvider),
-    settings: ref.watch(settingsRepositoryProvider),
-    notes: ref.watch(notesRepositoryProvider),
-    howTos: ref.watch(howToRepositoryProvider),
-    tasks: ref.watch(tasksRepositoryProvider),
-    planning: ref.watch(planningRepositoryProvider),
-    servers: ref.watch(serversRepositoryProvider),
-    diagrams: ref.watch(diagramsRepositoryProvider),
-    library: ref.watch(libraryRepositoryProvider),
-    deviceId: ref.watch(deviceIdProvider),
-  );
-});
 
 class VaultState {
   const VaultState({
@@ -217,7 +184,6 @@ class VaultNotifier extends Notifier<VaultState> {
   }
 
   Future<void> _afterUnlock() async {
-    await ref.read(seedServiceProvider).seedIfNeeded();
     await ref.read(snapshotServiceProvider).maybeDailySnapshot();
   }
 
@@ -250,41 +216,37 @@ class AppSettingsState {
   const AppSettingsState({
     this.themeMode = ThemeMode.system,
     this.fontScale = 1,
-    this.canvasDark = false,
     this.autoLockMinutes = 10,
     this.biometricLock = false,
     this.launchAtStartup = false,
-    this.minimizeToTray = true,
-    this.encryptedDatabase = false,
+    this.minimizeToTray = false,
+    this.canvasDark = false,
   });
 
   final ThemeMode themeMode;
   final double fontScale;
-  final bool canvasDark;
   final int autoLockMinutes;
   final bool biometricLock;
   final bool launchAtStartup;
   final bool minimizeToTray;
-  final bool encryptedDatabase;
+  final bool canvasDark;
 
   AppSettingsState copyWith({
     ThemeMode? themeMode,
     double? fontScale,
-    bool? canvasDark,
     int? autoLockMinutes,
     bool? biometricLock,
     bool? launchAtStartup,
     bool? minimizeToTray,
-    bool? encryptedDatabase,
+    bool? canvasDark,
   }) => AppSettingsState(
     themeMode: themeMode ?? this.themeMode,
     fontScale: fontScale ?? this.fontScale,
-    canvasDark: canvasDark ?? this.canvasDark,
     autoLockMinutes: autoLockMinutes ?? this.autoLockMinutes,
     biometricLock: biometricLock ?? this.biometricLock,
     launchAtStartup: launchAtStartup ?? this.launchAtStartup,
     minimizeToTray: minimizeToTray ?? this.minimizeToTray,
-    encryptedDatabase: encryptedDatabase ?? this.encryptedDatabase,
+    canvasDark: canvasDark ?? this.canvasDark,
   );
 }
 
@@ -300,11 +262,12 @@ class AppSettingsNotifier extends Notifier<AppSettingsState> {
   Future<void> _load() async {
     final theme = await _repo.get('theme');
     final scale = await _repo.getDouble('fontScale', fallback: 1);
-    final canvasDark = await _repo.getBool('canvasDark');
     final autoLock = await _repo.getInt('autoLockMinutes', fallback: 10);
     final biometric = await _repo.getBool('biometricLock');
     final startup = await _repo.getBool('launchAtStartup');
-    final tray = await _repo.getBool('minimizeToTray', fallback: true);
+    final tray = await _repo.getBool('minimizeToTray');
+    PlatformService.instance.minimizeToTray = tray;
+    final canvasDark = await _repo.getBool('diagramCanvasDark');
     state = AppSettingsState(
       themeMode: switch (theme) {
         'light' => ThemeMode.light,
@@ -312,11 +275,11 @@ class AppSettingsNotifier extends Notifier<AppSettingsState> {
         _ => ThemeMode.system,
       },
       fontScale: scale == 0 ? 1 : scale,
-      canvasDark: canvasDark,
       autoLockMinutes: autoLock == 0 ? 10 : autoLock,
       biometricLock: biometric,
       launchAtStartup: startup,
       minimizeToTray: tray,
+      canvasDark: canvasDark,
     );
   }
 
@@ -328,11 +291,6 @@ class AppSettingsNotifier extends Notifier<AppSettingsState> {
   Future<void> setFontScale(double value) async {
     state = state.copyWith(fontScale: value);
     await _repo.set('fontScale', value.toString());
-  }
-
-  Future<void> setCanvasDark(bool value) async {
-    state = state.copyWith(canvasDark: value);
-    await _repo.set('canvasDark', value.toString());
   }
 
   Future<void> setAutoLockMinutes(int value) async {
@@ -352,7 +310,13 @@ class AppSettingsNotifier extends Notifier<AppSettingsState> {
 
   Future<void> setMinimizeToTray(bool value) async {
     state = state.copyWith(minimizeToTray: value);
+    PlatformService.instance.minimizeToTray = value;
     await _repo.set('minimizeToTray', value.toString());
+  }
+
+  Future<void> setCanvasDark(bool value) async {
+    state = state.copyWith(canvasDark: value);
+    await _repo.set('diagramCanvasDark', value.toString());
   }
 }
 
@@ -408,6 +372,17 @@ class SyncStatusNotifier extends Notifier<SyncStatusState> {
   }
 
   Future<void> run() async {
+    final kind =
+        await ref.read(settingsRepositoryProvider).get('sync.provider') ??
+        'none';
+    if (kind != SyncProviderKind.localFolder.name) {
+      state = SyncStatusState(
+        lastSync: state.lastSync,
+        pending: state.pending,
+        message: 'Choose a sync folder in Settings first.',
+      );
+      return;
+    }
     state = SyncStatusState(
       lastSync: state.lastSync,
       pending: state.pending,
@@ -416,14 +391,6 @@ class SyncStatusNotifier extends Notifier<SyncStatusState> {
     );
     try {
       final service = await ref.read(syncServiceProvider.future);
-      if (service == null) {
-        state = SyncStatusState(
-          lastSync: state.lastSync,
-          pending: state.pending,
-          message: 'No sync provider configured.',
-        );
-        return;
-      }
       final result = await service.sync();
       final stamp = DateTime.now();
       if (result.ok) {
@@ -460,7 +427,7 @@ final syncStatusProvider =
       SyncStatusNotifier.new,
     );
 
-final syncServiceProvider = FutureProvider<SyncService?>((ref) async {
+final syncServiceProvider = FutureProvider<SyncService>((ref) async {
   final settings = ref.watch(settingsRepositoryProvider);
   final vault = ref.watch(vaultServiceProvider);
   final kindRaw = await settings.get('sync.provider') ?? 'none';
@@ -469,10 +436,10 @@ final syncServiceProvider = FutureProvider<SyncService?>((ref) async {
     orElse: () => SyncProviderKind.none,
   );
 
-  SyncProvider? provider;
+  final SyncProvider provider;
   switch (kind) {
     case SyncProviderKind.none:
-      provider = null;
+      provider = MemorySyncProvider();
     case SyncProviderKind.localFolder:
       var path = await settings.get('sync.local.path');
       if (path == null || path.isEmpty) {
@@ -480,47 +447,15 @@ final syncServiceProvider = FutureProvider<SyncService?>((ref) async {
         path = p.join(dir.path, 'sync');
       }
       provider = LocalFolderProvider(path);
-    case SyncProviderKind.webdav:
-    case SyncProviderKind.nextcloud:
-      final url = await settings.get('sync.webdav.url');
-      final user = await settings.get('sync.webdav.user');
-      final encrypted = await settings.get('sync.webdav.password');
-      String? password;
-      if (encrypted != null && encrypted.isNotEmpty) {
-        try {
-          final envelope = jsonDecode(encrypted) as Map<String, dynamic>;
-          password = await vault.decryptSecret(
-            SecretEnvelope.fromColumns(
-              envelope['cipher'] as String,
-              envelope['nonce'] as String,
-              envelope['mac'] as String,
-            ),
-          );
-        } catch (_) {
-          password = null;
-        }
-      }
-      if (url == null || url.isEmpty) {
-        provider = null;
-      } else {
-        provider = WebDavSyncProvider(
-          url: url,
-          username: user ?? '',
-          password: password ?? '',
-          kind: kind,
-          label: kind == SyncProviderKind.nextcloud ? 'Nextcloud' : 'WebDAV',
-        );
-      }
-    case SyncProviderKind.googleDrive:
-      provider = GoogleDriveSyncProvider();
   }
 
-  final snapshots = ref.watch(snapshotServiceProvider);
   return SyncService(
     db: ref.watch(databaseProvider),
-    provider: provider ?? MemorySyncProvider(),
+    provider: provider,
     vault: vault,
-    snapshots: snapshots,
+    snapshots: ref.watch(snapshotServiceProvider),
     deviceId: ref.watch(deviceIdProvider),
   );
 });
+
+

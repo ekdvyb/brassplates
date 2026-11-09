@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -26,9 +26,6 @@ class SettingsScreen extends ConsumerStatefulWidget {
 }
 
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
-  final _webdavUrl = TextEditingController();
-  final _webdavUser = TextEditingController();
-  final _webdavPassword = TextEditingController();
   final _localPath = TextEditingController();
   SyncProviderKind _syncKind = SyncProviderKind.none;
   bool _loadedSync = false;
@@ -43,9 +40,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
   @override
   void dispose() {
-    _webdavUrl.dispose();
-    _webdavUser.dispose();
-    _webdavPassword.dispose();
     _localPath.dispose();
     super.dispose();
   }
@@ -57,14 +51,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       (value) => value.name == raw,
       orElse: () => SyncProviderKind.none,
     );
-    final url = await settings.get('sync.webdav.url') ?? '';
-    final user = await settings.get('sync.webdav.user') ?? '';
     final path = await settings.get('sync.local.path') ?? '';
     if (!mounted) return;
     setState(() {
       _syncKind = kind;
-      _webdavUrl.text = url;
-      _webdavUser.text = user;
       _localPath.text = path;
       _loadedSync = true;
     });
@@ -82,7 +72,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       children: [
         const SectionHeader(
           title: 'Settings',
-          subtitle: 'Make BRASSPLATES yours. Everything is stored locally.',
+          subtitle: 'Notes and tasks. Everything is stored locally.',
         ),
         const SizedBox(height: 18),
         _Section(
@@ -137,15 +127,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   ),
                 ),
               ],
-            ),
-            SwitchListTile(
-              dense: true,
-              contentPadding: EdgeInsets.zero,
-              title: const Text('Dark diagram canvas'),
-              subtitle: const Text('Default background for Diagrams Studio'),
-              value: settings.canvasDark,
-              onChanged: (value) =>
-                  ref.read(appSettingsProvider.notifier).setCanvasDark(value),
             ),
           ],
         ),
@@ -248,9 +229,20 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         ),
         const SizedBox(height: 14),
         _Section(
-          title: 'Sync',
+          title: 'Sync between devices',
           icon: Icons.sync_outlined,
           children: [
+            Text(
+              'Choose a folder that is already synced by a service you trust — '
+              'Google Drive, OneDrive, Dropbox, Syncthing or a network share. '
+              'BRASSPLATES writes only encrypted files there, so the provider '
+              'never sees your notes. Point your phone and laptop at the same '
+              'folder to keep them together.',
+              style: context.theme.textTheme.bodySmall?.copyWith(
+                color: context.colors.onSurface.withValues(alpha: 0.65),
+              ),
+            ),
+            const SizedBox(height: 12),
             if (!_loadedSync)
               const Padding(
                 padding: EdgeInsets.all(16),
@@ -259,63 +251,25 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             else ...[
               Row(
                 children: [
-                  const SizedBox(width: 110, child: Text('Provider')),
+                  const SizedBox(width: 110, child: Text('Sync')),
                   const SizedBox(width: 10),
                   DropdownButton<SyncProviderKind>(
                     value: _syncKind,
-                    items: [
-                      for (final kind in SyncProviderKind.values)
-                        DropdownMenuItem(
-                          value: kind,
-                          child: Text(_syncLabel(kind)),
-                        ),
+                    items: const [
+                      DropdownMenuItem(
+                        value: SyncProviderKind.none,
+                        child: Text('Off'),
+                      ),
+                      DropdownMenuItem(
+                        value: SyncProviderKind.localFolder,
+                        child: Text('Synced folder'),
+                      ),
                     ],
                     onChanged: (value) =>
                         setState(() => _syncKind = value ?? _syncKind),
                   ),
                 ],
               ),
-              if (_syncKind == SyncProviderKind.webdav ||
-                  _syncKind == SyncProviderKind.nextcloud) ...[
-                const SizedBox(height: 10),
-                TextField(
-                  controller: _webdavUrl,
-                  decoration: const InputDecoration(
-                    labelText: 'WebDAV URL',
-                    hintText:
-                        'https://cloud.example.com/remote.php/dav/files/user',
-                    border: OutlineInputBorder(),
-                    isDense: true,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _webdavUser,
-                        decoration: const InputDecoration(
-                          labelText: 'Username',
-                          border: OutlineInputBorder(),
-                          isDense: true,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: TextField(
-                        controller: _webdavPassword,
-                        obscureText: true,
-                        decoration: const InputDecoration(
-                          labelText: 'Password (stored encrypted)',
-                          border: OutlineInputBorder(),
-                          isDense: true,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
               if (_syncKind == SyncProviderKind.localFolder) ...[
                 const SizedBox(height: 10),
                 Row(
@@ -325,6 +279,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         controller: _localPath,
                         decoration: const InputDecoration(
                           labelText: 'Sync folder',
+                          hintText: 'e.g. ~/Google Drive/BRASSPLATES',
                           border: OutlineInputBorder(),
                           isDense: true,
                         ),
@@ -342,17 +297,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     ),
                   ],
                 ),
-              ],
-              if (_syncKind == SyncProviderKind.googleDrive)
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Text(
-                    'Google Drive uses the private app data folder only. You will be asked to sign in on first sync.',
-                    style: context.theme.textTheme.bodySmall?.copyWith(
-                      color: context.colors.onSurface.withValues(alpha: 0.6),
-                    ),
+                const SizedBox(height: 6),
+                Text(
+                  'Tip: create a BRASSPLATES folder inside your cloud folder on '
+                  'both devices. Large pictures are included.',
+                  style: context.theme.textTheme.bodySmall?.copyWith(
+                    color: context.colors.onSurface.withValues(alpha: 0.55),
                   ),
                 ),
+              ],
               const SizedBox(height: 12),
               Wrap(
                 spacing: 8,
@@ -371,8 +324,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                             height: 14,
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
-                        : const Icon(Icons.network_check, size: 16),
-                    label: const Text('Test connection'),
+                        : const Icon(Icons.folder_open, size: 16),
+                    label: const Text('Test folder'),
                   ),
                   OutlinedButton.icon(
                     onPressed: syncStatus.syncing
@@ -405,7 +358,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           icon: Icons.backup_outlined,
           children: [
             Text(
-              'Snapshots are transactionally consistent copies of the database, created daily and before every restore.',
+              'An encrypted backup contains your notes, tasks and pictures. '
+              'Save it to your cloud folder, a USB drive or send it to yourself.',
               style: context.theme.textTheme.bodySmall?.copyWith(
                 color: context.colors.onSurface.withValues(alpha: 0.6),
               ),
@@ -419,11 +373,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   onPressed: _exportEncrypted,
                   icon: const Icon(Icons.lock_outline, size: 16),
                   label: const Text('Export encrypted backup'),
-                ),
-                OutlinedButton.icon(
-                  onPressed: _exportPlain,
-                  icon: const Icon(Icons.download_outlined, size: 16),
-                  label: const Text('Export plain backup'),
                 ),
                 OutlinedButton.icon(
                   onPressed: _importBackup,
@@ -581,10 +530,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             const BrandMark(size: 40),
             const SizedBox(height: 10),
             Text('${AppInfo.name} ${AppInfo.version}'),
-            Text(AppInfo.publisher, style: const TextStyle(fontSize: 12)),
             const SizedBox(height: 4),
             Text(
-              'Local-first, encrypted workspace for IT teams. Your data stays on your device first.',
+              AppInfo.description,
               style: context.theme.textTheme.bodySmall?.copyWith(
                 color: context.colors.onSurface.withValues(alpha: 0.6),
               ),
@@ -603,14 +551,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       ],
     );
   }
-
-  String _syncLabel(SyncProviderKind kind) => switch (kind) {
-    SyncProviderKind.none => 'Off',
-    SyncProviderKind.localFolder => 'Local folder',
-    SyncProviderKind.webdav => 'WebDAV',
-    SyncProviderKind.nextcloud => 'Nextcloud',
-    SyncProviderKind.googleDrive => 'Google Drive',
-  };
 
   String _bytes(int value) {
     if (value < 1024) return '$value B';
@@ -739,27 +679,16 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   }
 
   Future<void> _saveSync() async {
+    final path = _localPath.text.trim();
+    if (_syncKind == SyncProviderKind.localFolder && path.isEmpty) {
+      showAppSnack(context, 'Choose a sync folder first.', error: true);
+      return;
+    }
     setState(() => _savingSync = true);
     final settings = ref.read(settingsRepositoryProvider);
     try {
       await settings.set('sync.provider', _syncKind.name);
-      await settings.set('sync.webdav.url', _webdavUrl.text.trim());
-      await settings.set('sync.webdav.user', _webdavUser.text.trim());
-      await settings.set('sync.local.path', _localPath.text.trim());
-      if (_webdavPassword.text.isNotEmpty) {
-        final envelope = await ref
-            .read(vaultServiceProvider)
-            .encryptSecret(_webdavPassword.text);
-        await settings.set(
-          'sync.webdav.password',
-          jsonEncode({
-            'cipher': envelope.cipher,
-            'nonce': envelope.nonce,
-            'mac': envelope.mac,
-          }),
-        );
-        _webdavPassword.clear();
-      }
+      await settings.set('sync.local.path', path);
       ref.invalidate(syncServiceProvider);
       await ref.read(syncStatusProvider.notifier).refresh();
       if (mounted) showAppSnack(context, 'Sync settings saved.');
@@ -780,23 +709,19 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     setState(() => _testing = true);
     try {
       final service = await ref.read(syncServiceProvider.future);
-      if (service == null) {
-        if (mounted) {
-          showAppSnack(context, 'No sync provider configured.', error: true);
-        }
-        return;
-      }
       final ok = await service.provider.test();
       if (mounted) {
         showAppSnack(
           context,
-          ok ? 'Connection successful.' : 'Connection test failed.',
+          ok
+              ? 'Sync folder is writable.'
+              : 'Could not write to that folder. Check the path and permissions.',
           error: !ok,
         );
       }
     } catch (error) {
       if (mounted) {
-        showAppSnack(context, 'Connection failed: $error', error: true);
+        showAppSnack(context, 'Folder check failed: $error', error: true);
       }
     } finally {
       if (mounted) setState(() => _testing = false);
@@ -808,12 +733,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       final bytes = await ref
           .read(backupServiceProvider)
           .exportBytes(encrypt: true);
-      await FilePicker.saveFile(
+      final path = await FilePicker.saveFile(
         dialogTitle: 'Export encrypted backup',
         fileName:
             'brassplates-backup-${DateTime.now().toIso8601String().split('T').first}.bpbackup',
         bytes: Uint8List.fromList(bytes),
       );
+      if (path == null) return;
+      // Also drop a copy in the sync folder when one is configured.
+      await _copyToSyncFolder(bytes);
       if (mounted) {
         showAppSnack(context, 'Encrypted backup exported.');
       }
@@ -824,28 +752,23 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     }
   }
 
-  Future<void> _exportPlain() async {
-    final ok = await confirmDialog(
-      context,
-      title: 'Export without encryption?',
-      message: 'A plain backup contains your notes, secrets and metadata in readable form. Only use it on trusted storage.',
-      confirmLabel: 'Export plain',
-      destructive: true,
-    );
-    if (!ok) return;
+  Future<void> _copyToSyncFolder(List<int> bytes) async {
     try {
-      final bytes = await ref.read(backupServiceProvider).exportBytes();
-      await FilePicker.saveFile(
-        dialogTitle: 'Export backup',
-        fileName:
-            'brassplates-backup-${DateTime.now().toIso8601String().split('T').first}.bpbackup',
-        bytes: Uint8List.fromList(bytes),
-      );
-      if (mounted) showAppSnack(context, 'Backup exported.');
-    } catch (error) {
-      if (mounted) {
-        showAppSnack(context, 'Export failed: $error', error: true);
-      }
+      if (_syncKind != SyncProviderKind.localFolder) return;
+      final path = _localPath.text.trim();
+      if (path.isEmpty) return;
+      final dir = Directory('$path${Platform.pathSeparator}backups');
+      await dir.create(recursive: true);
+      final stamp = DateTime.now()
+          .toIso8601String()
+          .replaceAll(':', '-')
+          .split('.')
+          .first;
+      await File(
+        '${dir.path}${Platform.pathSeparator}brassplates-$stamp.bpbackup',
+      ).writeAsBytes(bytes, flush: true);
+    } catch (_) {
+      // The manual export already succeeded; the extra copy is best effort.
     }
   }
 
@@ -882,7 +805,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     if (merge == null) return;
     if (!mounted) return;
     final password = TextEditingController();
-    final needsPassword = await showDialog<bool>(
+    final proceed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Backup password'),
@@ -905,7 +828,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         ],
       ),
     );
-    if (needsPassword != true) return;
+    if (proceed != true) return;
     try {
       final count = await ref
           .read(backupServiceProvider)
@@ -918,10 +841,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           );
       ref.invalidate(_snapshotsProvider);
       if (mounted) {
-        showAppSnack(
-          context,
-          'Imported $count records. Restart the app to see everything.',
-        );
+        showAppSnack(context, 'Imported $count records.');
       }
     } catch (error) {
       if (mounted) {
@@ -998,7 +918,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final ok = await confirmDialog(
       context,
       title: 'Purge old trash?',
-      message: 'Items deleted more than 30 days ago will be permanently removed. This cannot be undone.',
+      message:
+          'Items deleted more than 30 days ago will be permanently removed. This cannot be undone.',
       confirmLabel: 'Purge',
       destructive: true,
     );

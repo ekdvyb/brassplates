@@ -4,9 +4,9 @@ platform: linux
 version: ${VERSION}
 section: utils
 priority: optional
-maintainer: ZEROBUG INC
-description: BRASSPLATES - local-first encrypted personal IT workspace
-vendor: ZEROBUG INC
+maintainer: BRASSPLATES
+description: BRASSPLATES - local-first notes and to-do app
+vendor: BRASSPLATES
 homepage: https://github.com/ekdvyb/brassplates
 license: Proprietary
 overrides:
@@ -17,7 +17,7 @@ overrides:
   rpm:
     depends:
       - gtk3
-      - libappindicator-gtk3
+      - libayatana-appindicator-gtk3
 contents:
   - src: build/linux/x64/release/bundle
     dst: /opt/brassplates

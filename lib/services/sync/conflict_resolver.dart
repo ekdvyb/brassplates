@@ -47,6 +47,9 @@ class ConflictResolver {
     if (local.updatedAt.isBefore(remote.updatedAt)) {
       return local.pending ? SyncAction.conflict : SyncAction.pull;
     }
-    return SyncAction.conflict;
+    // Timestamps are stored with second precision, so two quick edits can
+    // carry the same stamp. The pending flag tells us which side still has an
+    // unsynced change; prefer it instead of creating a pointless conflict.
+    return local.pending ? SyncAction.push : SyncAction.pull;
   }
 }

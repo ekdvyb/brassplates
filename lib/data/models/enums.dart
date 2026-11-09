@@ -5,14 +5,6 @@ enum TaskStatus { todo, doing, done }
 
 enum TaskPriority { high, medium, low }
 
-enum ProjectStatus { planned, active, onHold, done }
-
-enum ServerPurpose { fdms, trading, other }
-
-enum ServerStatus { online, offline, unknown }
-
-enum HowToDifficulty { easy, medium, hard }
-
 enum DiagramShapeType {
   rectangle,
   ellipse,
@@ -46,7 +38,7 @@ enum DiagramShapeType {
 
 enum ConnectorKind { straight, elbow, curve }
 
-enum SyncProviderKind { none, webdav, nextcloud, googleDrive, localFolder }
+enum SyncProviderKind { none, localFolder }
 
 extension TaskPriorityX on TaskPriority {
   String get label => switch (this) {
@@ -61,30 +53,6 @@ extension TaskStatusX on TaskStatus {
     TaskStatus.todo => 'To Do',
     TaskStatus.doing => 'Doing',
     TaskStatus.done => 'Done',
-  };
-}
-
-extension ServerPurposeX on ServerPurpose {
-  String get label => switch (this) {
-    ServerPurpose.fdms => 'FDMS',
-    ServerPurpose.trading => 'Trading',
-    ServerPurpose.other => 'Other',
-  };
-}
-
-extension ServerStatusX on ServerStatus {
-  String get label => switch (this) {
-    ServerStatus.online => 'Online',
-    ServerStatus.offline => 'Offline',
-    ServerStatus.unknown => 'Unknown',
-  };
-}
-
-extension HowToDifficultyX on HowToDifficulty {
-  String get label => switch (this) {
-    HowToDifficulty.easy => 'Easy',
-    HowToDifficulty.medium => 'Medium',
-    HowToDifficulty.hard => 'Hard',
   };
 }
 

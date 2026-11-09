@@ -89,7 +89,7 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "ZEROBUG INC" "\0"
+            VALUE "CompanyName", "BRASSPLATES" "\0"
             VALUE "FileDescription", "BRASSPLATES" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "brassplates" "\0"

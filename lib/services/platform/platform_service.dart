@@ -18,7 +18,7 @@ class SharedContent {
   final List<String> filePaths;
 }
 
-class PlatformService with TrayListener {
+class PlatformService with TrayListener, legacy.WindowListener {
   PlatformService._();
   static final PlatformService instance = PlatformService._();
 
@@ -29,11 +29,13 @@ class PlatformService with TrayListener {
   final _localAuth = LocalAuthentication();
   final _notifications = FlutterLocalNotificationsPlugin();
 
+  /// When true the window close button hides to the tray instead of quitting.
+  bool minimizeToTray = false;
+
   Future<void> initDesktop({
     VoidCallback? onOpen,
     VoidCallback? onQuit,
     VoidCallback? onQuickNote,
-    VoidCallback? onQuickDiagram,
   }) async {
     if (!isDesktop) return;
     try {
@@ -48,8 +50,9 @@ class PlatformService with TrayListener {
         await legacy.windowManager.show();
         await legacy.windowManager.setPreventClose(true);
       });
+      legacy.windowManager.addListener(this);
       trayManager.addListener(this);
-      await _setupTray(onOpen, onQuit, onQuickNote, onQuickDiagram);
+      await _setupTray(onOpen, onQuit, onQuickNote);
       LaunchAtStartup.instance.setup(
         appName: AppInfo.name,
         appPath: Platform.resolvedExecutable,
@@ -77,7 +80,6 @@ class PlatformService with TrayListener {
     VoidCallback? onOpen,
     VoidCallback? onQuit,
     VoidCallback? onQuickNote,
-    VoidCallback? onQuickDiagram,
   ) async {
     try {
       final icon = Platform.isWindows
@@ -87,10 +89,7 @@ class PlatformService with TrayListener {
       await trayManager.setToolTip(AppInfo.name);
       final menu = Menu(
         items: [
-          MenuItem(key: 'open', label: 'Open ${AppInfo.name}'),
-          MenuItem.separator(),
-          MenuItem(key: 'note', label: 'New note'),
-          MenuItem(key: 'diagram', label: 'New diagram'),
+          MenuItem(key: 'open', label: 'Show ${AppInfo.name}'),
           MenuItem.separator(),
           MenuItem(key: 'quit', label: 'Quit'),
         ],
@@ -98,8 +97,6 @@ class PlatformService with TrayListener {
       await trayManager.setContextMenu(menu);
       _trayActions = {
         'open': onOpen,
-        'note': onQuickNote,
-        'diagram': onQuickDiagram,
         'quit': onQuit,
       };
     } catch (_) {}
@@ -107,10 +104,46 @@ class PlatformService with TrayListener {
 
   Map<String, VoidCallback?> _trayActions = {};
 
-  @override
-  void onTrayIconMouseDown() async {
+  Future<void> showWindow() async {
     await legacy.windowManager.show();
     await legacy.windowManager.focus();
+  }
+
+  Future<void> toggleWindow() async {
+    if (await legacy.windowManager.isVisible()) {
+      await legacy.windowManager.hide();
+    } else {
+      await showWindow();
+    }
+  }
+
+  Future<void> quit() async {
+    try {
+      await HotKeyManager.instance.unregisterAll();
+    } catch (_) {}
+    try {
+      trayManager.removeListener(this);
+      await trayManager.destroy();
+    } catch (_) {}
+    try {
+      await legacy.windowManager.setPreventClose(false);
+      await legacy.windowManager.destroy();
+    } catch (_) {}
+    exit(0);
+  }
+
+  @override
+  void onWindowClose() {
+    if (minimizeToTray) {
+      legacy.windowManager.hide();
+    } else {
+      quit();
+    }
+  }
+
+  @override
+  void onTrayIconMouseDown() {
+    toggleWindow();
   }
 
   @override
@@ -120,8 +153,7 @@ class PlatformService with TrayListener {
       action?.call();
       return;
     }
-    await legacy.windowManager.show();
-    await legacy.windowManager.focus();
+    await showWindow();
     action?.call();
   }
 

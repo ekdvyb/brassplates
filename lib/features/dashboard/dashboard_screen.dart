@@ -8,6 +8,7 @@ import '../../core/utils.dart';
 import '../../data/db/database.dart';
 import '../../data/models/enums.dart';
 import '../../widgets/common.dart';
+import '../tasks/tasks_screen.dart';
 
 final _statsProvider = FutureProvider.autoDispose(
   (ref) => ref.watch(dashboardRepositoryProvider).stats(),
@@ -34,11 +35,6 @@ final _upcomingTasksProvider = FutureProvider.autoDispose((ref) async {
   return tasks.take(6).toList();
 });
 
-final _recentDiagramsProvider = FutureProvider.autoDispose((ref) async {
-  final diagrams = await ref.watch(diagramsRepositoryProvider).activeList();
-  return diagrams.take(5).toList();
-});
-
 final _lastSnapshotProvider = FutureProvider.autoDispose((ref) async {
   final snapshots = await ref.watch(snapshotServiceProvider).list();
   return snapshots.isEmpty ? null : snapshots.first;
@@ -60,7 +56,6 @@ class DashboardScreen extends ConsumerWidget {
     final pinned = ref.watch(_pinnedNotesProvider);
     final recent = ref.watch(_recentNotesProvider);
     final tasks = ref.watch(_upcomingTasksProvider);
-    final diagrams = ref.watch(_recentDiagramsProvider);
     final snapshot = ref.watch(_lastSnapshotProvider);
 
     return RefreshIndicator(
@@ -69,7 +64,6 @@ class DashboardScreen extends ConsumerWidget {
         ref.invalidate(_pinnedNotesProvider);
         ref.invalidate(_recentNotesProvider);
         ref.invalidate(_upcomingTasksProvider);
-        ref.invalidate(_recentDiagramsProvider);
         ref.invalidate(_lastSnapshotProvider);
       },
       child: ListView(
@@ -89,7 +83,7 @@ class DashboardScreen extends ConsumerWidget {
                       ),
                     ),
                     Text(
-                      'Your workspace at a glance',
+                      'Your notes and tasks',
                       style: context.theme.textTheme.headlineMedium?.copyWith(
                         fontWeight: FontWeight.w800,
                       ),
@@ -108,19 +102,20 @@ class DashboardScreen extends ConsumerWidget {
           LayoutBuilder(
             builder: (context, constraints) {
               final columns = constraints.maxWidth > 1100
-                  ? 6
+                  ? 4
                   : constraints.maxWidth > 760
-                  ? 3
+                  ? 4
                   : 2;
               final width =
                   (constraints.maxWidth - (columns - 1) * 12) / columns;
+              Widget stat(Widget child) =>
+                  SizedBox(width: width, child: child);
               return Wrap(
                 spacing: 12,
                 runSpacing: 12,
                 children: [
-                  SizedBox(
-                    width: width,
-                    child: stats.when(
+                  stat(
+                    stats.when(
                       data: (value) => StatCard(
                         label: 'Notes',
                         value: '${value.notes}',
@@ -131,23 +126,8 @@ class DashboardScreen extends ConsumerWidget {
                       error: (_, _) => const _StatSkeleton(label: 'Notes'),
                     ),
                   ),
-                  SizedBox(
-                    width: width,
-                    child: stats.when(
-                      data: (value) => StatCard(
-                        label: 'How-tos',
-                        value: '${value.howTos}',
-                        icon: Icons.menu_book_outlined,
-                        color: BrandColors.success,
-                        onTap: () => context.go('/howto'),
-                      ),
-                      loading: () => const _StatSkeleton(),
-                      error: (_, _) => const _StatSkeleton(label: 'How-tos'),
-                    ),
-                  ),
-                  SizedBox(
-                    width: width,
-                    child: stats.when(
+                  stat(
+                    stats.when(
                       data: (value) => StatCard(
                         label: 'Open tasks',
                         value: '${value.openTasks}',
@@ -159,44 +139,30 @@ class DashboardScreen extends ConsumerWidget {
                       error: (_, _) => const _StatSkeleton(label: 'Tasks'),
                     ),
                   ),
-                  SizedBox(
-                    width: width,
-                    child: stats.when(
+                  stat(
+                    stats.when(
                       data: (value) => StatCard(
-                        label: 'Servers online',
-                        value: '${value.serversOnline}/${value.serversTotal}',
-                        icon: Icons.dns_outlined,
-                        color: BrandColors.danger,
-                        onTap: () => context.go('/servers'),
+                        label: 'Done',
+                        value: '${value.doneTasks}',
+                        icon: Icons.task_alt,
+                        color: BrandColors.success,
+                        onTap: () => context.go('/tasks'),
                       ),
                       loading: () => const _StatSkeleton(),
-                      error: (_, _) => const _StatSkeleton(label: 'Servers'),
+                      error: (_, _) => const _StatSkeleton(label: 'Done'),
                     ),
                   ),
-                  SizedBox(
-                    width: width,
-                    child: stats.when(
-                      data: (value) => StatCard(
-                        label: 'Diagrams',
-                        value: '${value.diagrams}',
-                        icon: Icons.account_tree_outlined,
-                        color: BrandColors.info,
-                        onTap: () => context.go('/diagrams'),
-                      ),
-                      loading: () => const _StatSkeleton(),
-                      error: (_, _) => const _StatSkeleton(label: 'Diagrams'),
-                    ),
-                  ),
-                  SizedBox(
-                    width: width,
-                    child: snapshot.when(
+                  stat(
+                    snapshot.when(
                       data: (value) => StatCard(
                         label: value == null
                             ? 'No snapshot yet'
-                            : 'Last snapshot ${timeAgo(value.createdAt)}',
-                        value: 'Protected',
+                            : 'Snapshot ${timeAgo(value.createdAt)}',
+                        value: stats.value == null
+                            ? 'Protected'
+                            : '${stats.value!.pictures} pictures',
                         icon: Icons.verified_user_outlined,
-                        color: BrandColors.success,
+                        color: BrandColors.info,
                         onTap: () => context.go('/settings'),
                       ),
                       loading: () => const _StatSkeleton(),
@@ -208,7 +174,10 @@ class DashboardScreen extends ConsumerWidget {
             },
           ),
           const SizedBox(height: 20),
-          _QuickActions(onNewNote: () => _newNote(context, ref)),
+          _QuickActions(
+            onNewNote: () => _newNote(context, ref),
+            onNewTask: () => showTaskEditor(context, ref),
+          ),
           const SizedBox(height: 20),
           LayoutBuilder(
             builder: (context, constraints) {
@@ -249,55 +218,6 @@ class DashboardScreen extends ConsumerWidget {
                           : Column(
                               children: [
                                 for (final note in notes) _NoteTile(note: note),
-                              ],
-                            ),
-                      loading: () =>
-                          const Center(child: CircularProgressIndicator()),
-                      error: (error, _) => _EmptyHint(
-                        icon: Icons.error_outline,
-                        text: error.toString(),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  _Card(
-                    title: 'Recent diagrams',
-                    icon: Icons.account_tree_outlined,
-                    action: TextButton(
-                      onPressed: () => context.go('/diagrams'),
-                      child: const Text('All diagrams'),
-                    ),
-                    child: diagrams.when(
-                      data: (rows) => rows.isEmpty
-                          ? const _EmptyHint(
-                              icon: Icons.account_tree_outlined,
-                              text: 'Build your first network or workflow diagram.',
-                            )
-                          : Column(
-                              children: [
-                                for (final diagram in rows)
-                                  ListTile(
-                                    dense: true,
-                                    contentPadding: EdgeInsets.zero,
-                                    leading: const Icon(
-                                      Icons.schema_outlined,
-                                      size: 20,
-                                    ),
-                                    title: Text(
-                                      diagram.title,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    subtitle: Text(
-                                      'Updated ${timeAgo(diagram.updatedAt)}',
-                                    ),
-                                    trailing: const Icon(
-                                      Icons.chevron_right,
-                                      size: 18,
-                                    ),
-                                    onTap: () =>
-                                        context.go('/diagrams/${diagram.id}'),
-                                  ),
                               ],
                             ),
                       loading: () =>
@@ -356,7 +276,7 @@ class DashboardScreen extends ConsumerWidget {
           const SizedBox(height: 28),
           Center(
             child: Text(
-              'Every change is saved locally. Snapshots run daily.',
+              'Everything is saved locally. Sync only through your own folder.',
               style: context.theme.textTheme.bodySmall?.copyWith(
                 color: context.colors.onSurface.withValues(alpha: 0.45),
               ),
@@ -496,9 +416,10 @@ class _TaskTile extends ConsumerWidget {
 }
 
 class _QuickActions extends StatelessWidget {
-  const _QuickActions({required this.onNewNote});
+  const _QuickActions({required this.onNewNote, required this.onNewTask});
 
   final VoidCallback onNewNote;
+  final VoidCallback onNewTask;
 
   @override
   Widget build(BuildContext context) {
@@ -512,14 +433,9 @@ class _QuickActions extends StatelessWidget {
           label: const Text('New note'),
         ),
         OutlinedButton.icon(
-          onPressed: () => context.go('/howto'),
-          icon: const Icon(Icons.menu_book_outlined),
-          label: const Text('How-to library'),
-        ),
-        OutlinedButton.icon(
-          onPressed: () => context.go('/servers'),
-          icon: const Icon(Icons.dns_outlined),
-          label: const Text('Server inventory'),
+          onPressed: onNewTask,
+          icon: const Icon(Icons.add_task),
+          label: const Text('New task'),
         ),
         OutlinedButton.icon(
           onPressed: () => context.go('/search'),

@@ -16,29 +16,14 @@ class BrandMark extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          width: size,
-          height: size,
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [BrandColors.brassLight, BrandColors.brass],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+        AppLogo(
+          size: size,
+          shadow: [
+            BoxShadow(
+              color: BrandColors.brass.withValues(alpha: 0.25),
+              blurRadius: 10,
             ),
-            borderRadius: BorderRadius.circular(size * 0.24),
-            boxShadow: [
-              BoxShadow(
-                color: BrandColors.brass.withValues(alpha: 0.25),
-                blurRadius: 10,
-              ),
-            ],
-          ),
-          alignment: Alignment.center,
-          child: Icon(
-            Icons.grid_view_rounded,
-            color: BrandColors.charcoal,
-            size: size * 0.56,
-          ),
+          ],
         ),
         if (showText) ...[
           const SizedBox(width: 10),
@@ -55,7 +40,7 @@ class BrandMark extends StatelessWidget {
                 ),
               ),
               Text(
-                AppInfo.publisher,
+                'NOTES & TASKS',
                 style: TextStyle(
                   fontSize: size * 0.22,
                   letterSpacing: 1.5,
@@ -68,6 +53,99 @@ class BrandMark extends StatelessWidget {
       ],
     );
   }
+}
+
+/// The BRASSPLATES mark: a note sheet with a check badge.
+class AppLogo extends StatelessWidget {
+  const AppLogo({super.key, this.size = 36, this.shadow = const []});
+
+  final double size;
+  final List<BoxShadow> shadow;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(size * 0.22),
+        boxShadow: shadow,
+      ),
+      child: CustomPaint(painter: const _LogoPainter()),
+    );
+  }
+}
+
+class _LogoPainter extends CustomPainter {
+  const _LogoPainter();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final s = size.width / 1024;
+    double x(double v) => v * s;
+    final rect = Rect.fromLTWH(0, 0, size.width, size.height);
+
+    final background = Paint()
+      ..shader = const LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [Color(0xFFE2C080), Color(0xFFA5742C)],
+      ).createShader(rect);
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(rect, Radius.circular(x(224))),
+      background,
+    );
+
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromLTRB(x(268), x(190), x(760), x(834)),
+        Radius.circular(x(58)),
+      ),
+      Paint()..color = const Color(0xFF191816),
+    );
+
+    final fold = Path()
+      ..moveTo(x(646), x(190))
+      ..lineTo(x(760), x(190))
+      ..lineTo(x(760), x(304))
+      ..close();
+    canvas.drawPath(fold, Paint()..color = const Color(0xFF2F2B27));
+
+    final line = Paint()..color = const Color(0xFFD9B26A);
+    void textLine(double left, double right, double top) {
+      canvas.drawRRect(
+        RRect.fromRectAndRadius(
+          Rect.fromLTRB(x(left), x(top), x(right), x(top + 32)),
+          Radius.circular(x(16)),
+        ),
+        line,
+      );
+    }
+
+    textLine(346, 682, 356);
+    textLine(346, 682, 452);
+    textLine(346, 590, 548);
+
+    canvas.drawCircle(
+      Offset(x(712), x(736)),
+      x(126),
+      Paint()..color = const Color(0xFFF6EFE1),
+    );
+    final check = Paint()
+      ..color = const Color(0xFF191816)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = x(34)
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
+    final checkPath = Path()
+      ..moveTo(x(642), x(734))
+      ..lineTo(x(692), x(784))
+      ..lineTo(x(786), x(680));
+    canvas.drawPath(checkPath, check);
+  }
+
+  @override
+  bool shouldRepaint(covariant _LogoPainter oldDelegate) => false;
 }
 
 class SectionHeader extends StatelessWidget {

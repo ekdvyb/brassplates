@@ -19,11 +19,7 @@ class SearchHit {
 
   String get label => switch (entityType) {
     'notes' => 'Note',
-    'how_tos' => 'How-To',
     'tasks' => 'Task',
-    'projects' => 'Project',
-    'servers' => 'Server',
-    'diagrams' => 'Diagram',
     _ => entityType,
   };
 }
@@ -82,28 +78,8 @@ class SearchService {
     ''');
     await db.customStatement('''
       INSERT INTO search_fts(entity_type, entity_id, title, body, deleted)
-      SELECT 'how_tos', id, title, steps_json,
-        CASE WHEN deleted_at IS NULL THEN 0 ELSE 1 END FROM how_tos
-    ''');
-    await db.customStatement('''
-      INSERT INTO search_fts(entity_type, entity_id, title, body, deleted)
       SELECT 'tasks', id, title, description,
         CASE WHEN deleted_at IS NULL THEN 0 ELSE 1 END FROM tasks
-    ''');
-    await db.customStatement('''
-      INSERT INTO search_fts(entity_type, entity_id, title, body, deleted)
-      SELECT 'projects', id, title, description,
-        CASE WHEN deleted_at IS NULL THEN 0 ELSE 1 END FROM projects
-    ''');
-    await db.customStatement('''
-      INSERT INTO search_fts(entity_type, entity_id, title, body, deleted)
-      SELECT 'servers', id, name, database_name,
-        CASE WHEN deleted_at IS NULL THEN 0 ELSE 1 END FROM servers
-    ''');
-    await db.customStatement('''
-      INSERT INTO search_fts(entity_type, entity_id, title, body, deleted)
-      SELECT 'diagrams', id, title, search_text,
-        CASE WHEN deleted_at IS NULL THEN 0 ELSE 1 END FROM diagrams
     ''');
   }
 }

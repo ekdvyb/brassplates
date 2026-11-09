@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -7,12 +8,19 @@ import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../app/providers.dart';
 import '../../app/theme.dart';
 import '../../core/utils.dart';
 import '../../data/db/database.dart';
 import '../../widgets/common.dart';
+
+final _noteAttachmentsProvider = StreamProvider.autoDispose
+    .family<List<Attachment>, String>(
+      (ref, noteId) =>
+          ref.watch(attachmentsRepositoryProvider).watchFor('note', noteId),
+    );
 
 class NoteEditorScreen extends ConsumerStatefulWidget {
   const NoteEditorScreen({super.key, required this.noteId});
@@ -281,6 +289,276 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
     if (mounted) showAppSnack(context, 'Markdown copied to clipboard.');
   }
 
+  Future<void> _addPictures() async {
+    final note = _note;
+    if (note == null) return;
+    final picked = await FilePicker.pickFiles(
+      dialogTitle: 'Attach pictures',
+      type: FileType.image,
+    );
+    if (picked.isEmpty) return;
+    var added = 0;
+    for (final file in picked) {
+      var path = file.path;
+      if (path == null) {
+        try {
+          final bytes = await file.readAsBytes();
+          final temp = File(
+            '${Directory.systemTemp.path}${Platform.pathSeparator}${file.name}',
+          );
+          await temp.writeAsBytes(bytes, flush: true);
+          path = temp.path;
+        } catch (_) {
+          continue;
+        }
+      }
+      try {
+        await ref
+            .read(attachmentsRepositoryProvider)
+            .addFile(
+              entityType: 'note',
+              entityId: note.id,
+              sourcePath: path,
+            );
+        added++;
+      } catch (error) {
+        if (mounted) {
+          showAppSnack(context, 'Could not attach ${file.name}: $error', error: true);
+        }
+      }
+    }
+    ref.invalidate(_noteAttachmentsProvider(note.id));
+    if (added > 0 && mounted) {
+      showAppSnack(context, added == 1 ? 'Picture attached.' : '$added pictures attached.');
+    }
+  }
+
+  Future<void> _removePicture(Attachment attachment) async {
+    final ok = await confirmDialog(
+      context,
+      title: 'Remove picture?',
+      message: 'The picture is deleted from this note and from the device.',
+      confirmLabel: 'Remove',
+      destructive: true,
+    );
+    if (!ok) return;
+    await ref.read(attachmentsRepositoryProvider).delete(attachment);
+    ref.invalidate(_noteAttachmentsProvider(widget.noteId));
+  }
+
+  void _viewPicture(Attachment attachment) {
+    showDialog<void>(
+      context: context,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: Stack(
+          children: [
+            InteractiveViewer(
+              child: Image.file(
+                File(attachment.localPath),
+                errorBuilder: (_, _, _) => const Card(
+                  child: Padding(
+                    padding: EdgeInsets.all(24),
+                    child: Text('This picture is missing on disk.'),
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              right: 8,
+              top: 8,
+              child: IconButton.filledTonal(
+                tooltip: 'Close',
+                onPressed: () => Navigator.pop(context),
+                icon: const Icon(Icons.close),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Builds one self-contained HTML file, with the pictures embedded, so the
+  /// note can be emailed or shared and still show its images everywhere.
+  Future<String?> _saveHtmlCopy() async {
+    final note = _note;
+    final controller = _controller;
+    if (note == null || controller == null) return null;
+    final attachments = await ref
+        .read(attachmentsRepositoryProvider)
+        .listFor('note', note.id);
+
+    final body = StringBuffer();
+    for (final paragraph in controller.document
+        .toPlainText()
+        .split(RegExp(r'\n+'))) {
+      final trimmed = paragraph.trim();
+      if (trimmed.isEmpty) continue;
+      body.writeln('<p>${_escapeHtml(trimmed).replaceAll('\n', '<br>')}</p>');
+    }
+    for (final attachment in attachments) {
+      try {
+        final bytes = await File(attachment.localPath).readAsBytes();
+        final data = base64Encode(bytes);
+        body.writeln(
+          '<figure><img src="data:${attachment.mimeType};base64,$data" '
+          'alt="${_escapeHtml(attachment.fileName)}">'
+          '<figcaption>${_escapeHtml(attachment.fileName)}</figcaption></figure>',
+        );
+      } catch (_) {
+        // Skip a picture that is missing on disk.
+      }
+    }
+
+    final html = '''<!doctype html>
+<html><head><meta charset="utf-8">
+<title>${_escapeHtml(_title.text)}</title>
+<style>
+body{font-family:system-ui,Segoe UI,Arial,sans-serif;max-width:760px;margin:40px auto;padding:0 20px;color:#1b1a18;line-height:1.55}
+h1{font-size:30px;margin-bottom:4px}
+.meta{color:#8a7a63;font-size:13px;margin-bottom:24px}
+figure{margin:20px 0}
+img{max-width:100%;border-radius:10px}
+figcaption{color:#8a7a63;font-size:12px}
+</style></head>
+<body>
+<h1>${_escapeHtml(_title.text)}</h1>
+<div class="meta">BRASSPLATES · ${formatDateTime(note.updatedAt)}</div>
+${body.toString()}
+</body></html>'''.trim();
+
+    final fileName =
+        '${_safeFileName(_title.text.isEmpty ? 'note' : _title.text)}.html';
+    final saved = await FilePicker.saveFile(
+      dialogTitle: 'Save note to share',
+      fileName: fileName,
+      mimeType: 'text/html',
+      bytes: Uint8List.fromList(utf8.encode(html)),
+    );
+    if (saved == null) return null;
+    return saved.scheme == 'file' ? saved.toFilePath() : saved.toString();
+  }
+
+  Future<void> _shareOrEmail({required bool email}) async {
+    final controller = _controller;
+    if (controller == null) return;
+    String? path;
+    try {
+      path = await _saveHtmlCopy();
+    } catch (error) {
+      if (mounted) {
+        showAppSnack(context, 'Could not save the note: $error', error: true);
+      }
+      return;
+    }
+    if (path == null) return;
+    if (!email) {
+      if (mounted) {
+        showAppSnack(
+          context,
+          'Saved $path — send it with mail, chat or any app.',
+        );
+      }
+      return;
+    }
+
+    final subjectText = _title.text.isEmpty
+        ? 'Note from BRASSPLATES'
+        : _title.text;
+    final bodyText =
+        '${controller.document.toPlainText()}\n\n'
+        'The note with pictures is attached as ${path.split(Platform.pathSeparator).last}.';
+
+    // On Linux, xdg-email opens the user's mail composer with the file
+    // attached, so the pictures travel with the message.
+    if (Platform.isLinux) {
+      try {
+        final result = await Process.run('xdg-email', [
+          '--subject',
+          subjectText,
+          '--body',
+          bodyText,
+          '--attach',
+          path,
+        ]);
+        if (result.exitCode == 0) {
+          if (mounted) {
+            showAppSnack(
+              context,
+              'Email draft opened with the note and pictures attached.',
+            );
+          }
+          return;
+        }
+      } catch (_) {
+        // Fall through to a plain mailto link.
+      }
+    }
+
+    final subject = Uri.encodeComponent(subjectText);
+    final body = Uri.encodeComponent(bodyText);
+    final uri = Uri.parse('mailto:?subject=$subject&body=$body');
+    if (!await launchUrl(uri) && mounted) {
+      showAppSnack(
+        context,
+        'No email app found. The share file was saved to $path.',
+        error: true,
+      );
+      return;
+    }
+    if (mounted) {
+      showAppSnack(
+        context,
+        'Email draft opened. Attach ${path.split(Platform.pathSeparator).last} to include the pictures.',
+      );
+    }
+  }
+
+  String _escapeHtml(String value) => value
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;');
+
+  String _safeFileName(String value) =>
+      value.replaceAll(RegExp(r'[^A-Za-z0-9 _-]+'), '').trim().isEmpty
+      ? 'note'
+      : value.replaceAll(RegExp(r'[^A-Za-z0-9 _-]+'), '').trim();
+
+  Widget _buildToolbar(bool compact) {
+    final toolbar = quill.QuillSimpleToolbar(
+      controller: _controller!,
+      config: quill.QuillSimpleToolbarConfig(
+        multiRowsDisplay: !compact,
+        showFontFamily: true,
+        showFontSize: true,
+        showInlineCode: true,
+        showSubscript: true,
+        showSuperscript: true,
+        showColorButton: true,
+        showBackgroundColorButton: true,
+        showClearFormat: true,
+        showAlignmentButtons: !compact,
+        showSearchButton: false,
+        showUndo: true,
+        showRedo: true,
+      ),
+    );
+    if (!compact) return toolbar;
+    // Narrow windows: keep every control reachable by scrolling sideways
+    // instead of hiding the toolbar completely.
+    return Container(
+      height: 46,
+      alignment: Alignment.centerLeft,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: toolbar,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_loading) {
@@ -340,6 +618,11 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
                   ),
                 ),
                 IconButton(
+                  tooltip: 'Attach pictures',
+                  onPressed: _addPictures,
+                  icon: const Icon(Icons.add_photo_alternate_outlined),
+                ),
+                IconButton(
                   tooltip: 'Version history',
                   onPressed: _showHistory,
                   icon: const Icon(Icons.history),
@@ -348,6 +631,10 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
                   tooltip: 'More',
                   onSelected: (value) {
                     switch (value) {
+                      case 'email':
+                        _shareOrEmail(email: true);
+                      case 'share':
+                        _shareOrEmail(email: false);
                       case 'export':
                         _exportMarkdown();
                       case 'copy':
@@ -357,6 +644,14 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
                     }
                   },
                   itemBuilder: (context) => const [
+                    PopupMenuItem(
+                      value: 'email',
+                      child: Text('Email note'),
+                    ),
+                    PopupMenuItem(
+                      value: 'share',
+                      child: Text('Share / save copy with pictures'),
+                    ),
                     PopupMenuItem(
                       value: 'export',
                       child: Text('Export Markdown'),
@@ -409,19 +704,13 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
                       ),
                     ),
                     const SizedBox(height: 4),
-                    if (!compact)
-                      quill.QuillSimpleToolbar(
-                        controller: _controller!,
-                        config: const quill.QuillSimpleToolbarConfig(
-                          showFontFamily: false,
-                          showFontSize: false,
-                          showSubscript: false,
-                          showSuperscript: false,
-                          showSearchButton: false,
-                          showInlineCode: false,
-                          multiRowsDisplay: false,
-                        ),
-                      ),
+                    _AttachmentStrip(
+                      noteId: widget.noteId,
+                      onAdd: _addPictures,
+                      onView: _viewPicture,
+                      onRemove: _removePicture,
+                    ),
+                    _buildToolbar(compact),
                     const Divider(height: 1),
                     Expanded(
                       child: quill.QuillEditor.basic(
@@ -472,6 +761,88 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _AttachmentStrip extends ConsumerWidget {
+  const _AttachmentStrip({
+    required this.noteId,
+    required this.onAdd,
+    required this.onView,
+    required this.onRemove,
+  });
+
+  final String noteId;
+  final Future<void> Function() onAdd;
+  final void Function(Attachment attachment) onView;
+  final Future<void> Function(Attachment attachment) onRemove;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final rows = ref.watch(_noteAttachmentsProvider(noteId));
+    return rows.maybeWhen(
+      data: (attachments) {
+        if (attachments.isEmpty) return const SizedBox.shrink();
+        return SizedBox(
+          height: 92,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
+            itemCount: attachments.length + 1,
+            separatorBuilder: (_, _) => const SizedBox(width: 8),
+            itemBuilder: (context, index) {
+              if (index == attachments.length) {
+                return OutlinedButton.icon(
+                  onPressed: () => onAdd(),
+                  icon: const Icon(Icons.add_photo_alternate_outlined, size: 16),
+                  label: const Text('Add'),
+                );
+              }
+              final attachment = attachments[index];
+              return Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: InkWell(
+                      onTap: () => onView(attachment),
+                      child: Image.file(
+                        File(attachment.localPath),
+                        width: 84,
+                        height: 84,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, _, _) => Container(
+                          width: 84,
+                          height: 84,
+                          color: context.colors.surfaceContainerHighest,
+                          alignment: Alignment.center,
+                          child: const Icon(Icons.broken_image_outlined),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 2,
+                    right: 2,
+                    child: IconButton.filledTonal(
+                      tooltip: 'Remove picture',
+                      visualDensity: VisualDensity.compact,
+                      constraints: const BoxConstraints(
+                        minWidth: 28,
+                        minHeight: 28,
+                      ),
+                      padding: EdgeInsets.zero,
+                      onPressed: () => onRemove(attachment),
+                      icon: const Icon(Icons.close, size: 14),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        );
+      },
+      orElse: () => const SizedBox.shrink(),
     );
   }
 }

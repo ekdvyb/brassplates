@@ -1,8 +1,6 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:path/path.dart' as p;
-import 'package:webdav_client/webdav_client.dart' as webdav;
 
 import '../../data/models/enums.dart';
 
@@ -18,6 +16,10 @@ abstract class SyncProvider {
   Future<void> close();
 }
 
+/// Syncs through a normal folder.
+///
+/// Point this at a Google Drive, OneDrive or Syncthing folder and the cloud
+/// client does the transport. BRASSPLATES itself never talks to a server.
 class LocalFolderProvider implements SyncProvider {
   LocalFolderProvider(this.rootPath);
 
@@ -27,7 +29,7 @@ class LocalFolderProvider implements SyncProvider {
   SyncProviderKind get kind => SyncProviderKind.localFolder;
 
   @override
-  String get label => 'Local folder';
+  String get label => 'Sync folder';
 
   File _file(String path) => File(p.join(rootPath, path));
 
@@ -65,83 +67,6 @@ class LocalFolderProvider implements SyncProvider {
   @override
   Future<void> ensureDir(String path) async {
     await Directory(p.join(rootPath, path)).create(recursive: true);
-  }
-
-  @override
-  Future<void> close() async {}
-}
-
-class WebDavSyncProvider implements SyncProvider {
-  WebDavSyncProvider({
-    required this.url,
-    required this.username,
-    required this.password,
-    this.kind = SyncProviderKind.webdav,
-    this.label = 'WebDAV',
-  }) {
-    _client = webdav.newClient(url, user: username, password: password);
-    _client.setConnectTimeout(20000);
-    _client.setReceiveTimeout(60000);
-    _client.setSendTimeout(60000);
-  }
-
-  final String url;
-  final String username;
-  final String password;
-
-  @override
-  final SyncProviderKind kind;
-
-  @override
-  final String label;
-
-  late final webdav.Client _client;
-
-  String _remote(String path) => '/BrassPlates/data/$path';
-
-  @override
-  Future<bool> test() async {
-    try {
-      await _client.ping();
-      return true;
-    } catch (_) {
-      return false;
-    }
-  }
-
-  @override
-  Future<List<int>?> readBytes(String path) async {
-    try {
-      return await _client.read(_remote(path));
-    } catch (_) {
-      return null;
-    }
-  }
-
-  @override
-  Future<void> writeBytes(String path, List<int> bytes) async {
-    await ensureDir(p.dirname(path));
-    await _client.write(_remote(path), Uint8List.fromList(bytes));
-  }
-
-  @override
-  Future<bool> exists(String path) async {
-    try {
-      await _client.readProps(_remote(path));
-      return true;
-    } catch (_) {
-      return false;
-    }
-  }
-
-  @override
-  Future<void> ensureDir(String path) async {
-    final clean = path.replaceAll('\\', '/');
-    if (clean.isEmpty || clean == '.') {
-      await _client.mkdirAll('/BrassPlates/data');
-      return;
-    }
-    await _client.mkdirAll('/BrassPlates/data/$clean');
   }
 
   @override
